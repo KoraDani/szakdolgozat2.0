@@ -1,0 +1,13 @@
+<div class="wrapper">
+  <div class="card-switch">
+    <div class="flip-card__front">
+      <form [formGroup]="registerGroup" class="flip-card__form"  (ngSubmit)="saveUser()">
+        <input class="flip-card__input" placeholder="Name" type="text" formControlName="username" >
+        <input class="flip-card__input" name="email" placeholder="Email" type="email" formControlName="email" >
+        <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="pwd1" >
+        <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2" >
+        <button class="flip-card__btn">Confirm!</button>
+      </form>
+    </div>
+  </div>
+</div>

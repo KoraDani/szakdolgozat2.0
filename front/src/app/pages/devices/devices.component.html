@@ -1,0 +1,55 @@
+<!--<div class="flex-container div-margin">-->
+<!--  <div class="flip-card__front" *ngFor="let temp of temps">-->
+<!--       <label>{{temp.szoba}}</label>-->
+<!--    <div class="">-->
+<!--      <label>Hőmérséklet:{{temp.temperature}}</label><br>-->
+<!--      <label>Páratartalom:{{temp.humy}}<br></label>-->
+<!--      Valami:<label class="switch">-->
+<!--        <input class="toggle" type="checkbox">-->
+<!--        <span class="slider"></span>-->
+<!--        <span class="card-side"></span>-->
+<!--      </label>-->
+<!--      Valami:<label class="switch">-->
+<!--        <input class="toggle" type="checkbox">-->
+<!--        <span class="slider"></span>-->
+<!--        <span class="card-side"></span>-->
+<!--      </label>-->
+<!--      Valami:<label class="switch">-->
+<!--        <input class="toggle" type="checkbox">-->
+<!--        <span class="slider"></span>-->
+<!--        <span class="card-side"></span>-->
+<!--      </label>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="container div-margin">
+<div class="card" *ngFor="let temp of temps">
+<!--  <div class="card-photo"></div>-->
+  <div class="text-container card-title card-socials item">{{temp.szoba}}
+    <label>Hőmérséklet:{{temp.temperature}}</label><br>
+          <label>Páratartalom:{{temp.humy}}<br></label>
+    <div class="text-item">
+          Valami:<label class="switch">
+            <input class="toggle" type="checkbox">
+            <span class="slider"></span>
+            <span class="card-side"></span>
+          </label>
+    </div>
+    <div class="text-item">
+          Valami:<label class="switch">
+            <input class="toggle" type="checkbox">
+            <span class="slider"></span>
+            <span class="card-side"></span>
+          </label>
+    </div>
+      <div class="text-item">
+          Valami:<label class="switch">
+            <input class="toggle" type="checkbox">
+            <span class="slider"></span>
+            <span class="card-side"></span>
+          </label>
+      </div>
+  </div>
+</div>
+</div>
