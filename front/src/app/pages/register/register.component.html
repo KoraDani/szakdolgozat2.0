@@ -3,9 +3,13 @@
     <div class="flip-card__front">
       <form [formGroup]="registerGroup" class="flip-card__form"  (ngSubmit)="saveUser()">
         <input class="flip-card__input" placeholder="Name" type="text" formControlName="username" >
+        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>
         <input class="flip-card__input" name="email" placeholder="Email" type="email" formControlName="email" >
+        <div *ngIf="this.emailInputError">Email címet kötelező megadni</div>
         <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="pwd1" >
+        <div *ngIf="this.pwd1Error">Jelszót kötelező megadni</div>
         <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2" >
+        <div *ngIf="this.pwd2Error">Jelszó megerősítést kötelező megadni</div>
         <button class="flip-card__btn">Confirm!</button>
       </form>
     </div>

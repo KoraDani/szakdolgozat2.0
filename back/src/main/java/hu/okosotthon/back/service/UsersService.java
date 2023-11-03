@@ -40,4 +40,12 @@ public class UsersService {
     public Users save(Users users) {
         return this.usersRepo.save(users);
     }
+
+    public Users getUserByUsername(String username) {
+        return this.usersRepo.findUsersByUsername(username);
+    }
+
+    public Users getUserByEmail(String email) {
+        return this.usersRepo.findUsersByEmail(email);
+    }
 }

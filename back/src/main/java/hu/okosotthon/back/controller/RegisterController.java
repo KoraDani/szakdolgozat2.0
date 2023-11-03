@@ -21,14 +21,14 @@ public class RegisterController {
     }
 
 
-    //TODO: itt nem tudom miért de néha máködöik a @RequestBody néha nem
     @PostMapping("saveUser")
-    public ResponseEntity<Users> saveUser(Users user){
+    public ResponseEntity<Users> saveUser(@RequestBody Users user){
         System.out.println(user.toString());
-//        if(user.getUsername() == null || user.getEmail() == null || user.getPassword() == null){
-//            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
-//        }
-        Users newUser = this.registerService.saveUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+        if(user.getUsername() != "" && user.getEmail() != "" && user.getPassword() != ""){
+            Users newUser = this.registerService.saveUser(user);
+
+            return new ResponseEntity<>(newUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
     }
 }

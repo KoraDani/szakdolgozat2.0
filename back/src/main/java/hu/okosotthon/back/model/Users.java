@@ -83,4 +83,8 @@ public class Users implements Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
+
+    public boolean userEqual(UserDTO userDTO) {
+        return this.email.equals(userDTO.getEmail()) /*&& this.username.equals(userDTO.getUsername())*/ && this.password.equals(userDTO.getPassword());
+    }
 }
