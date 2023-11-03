@@ -1,4 +1,4 @@
-package hu.okosotthon.back.model;
+package hu.okosotthon.back.dto;
 
 public class UserDTO {
     //private String username;

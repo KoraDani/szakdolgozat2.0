@@ -1,6 +1,6 @@
 package hu.okosotthon.back.controller;
 
-import hu.okosotthon.back.model.UserDTO;
+import hu.okosotthon.back.dto.UserDTO;
 import hu.okosotthon.back.model.Users;
 import hu.okosotthon.back.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {LoginService} from "../../shared/service/login.service";
 import {Users} from "../../shared/model/Users";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserDTO} from "../../shared/model/UserDTO";
+import {UserDTO} from "../../shared/model/dto/UserDTO";
 import {Router} from "@angular/router";
 
 @Component({

@@ -1,5 +1,6 @@
 package hu.okosotthon.back.model;
 
+import hu.okosotthon.back.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

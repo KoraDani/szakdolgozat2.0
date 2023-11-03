@@ -1,0 +1,22 @@
+<div class="wrapper">
+  <div class="card-switch">
+    <div class="flip-card__front">
+      <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">
+        <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text" formControlName="deviceName">
+        <!--        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>-->
+        <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text" formControlName="deviceType">
+          <option value="temp">Hőmérséklet mérés</option>
+          <option value="degree">Hőfokszabályzás</option>
+          <option value="lamp">Lámpa kapcsolás</option>
+<!--          <option></option>-->
+        </select>
+          <!--        <div *ngIf="this.emailInputError">Email címet kötelező megadni</div>-->
+        <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+        <!--        <div *ngIf="this.pwd1Error">Jelszót kötelező megadni</div>-->
+<!--        <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2">-->
+        <!--        <div *ngIf="this.pwd2Error">Jelszó megerősítést kötelező megadni</div>-->
+        <button class="flip-card__btn">Confirm!</button>
+      </form>
+    </div>
+  </div>
+</div>
