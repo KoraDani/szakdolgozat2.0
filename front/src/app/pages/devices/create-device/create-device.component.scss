@@ -1,3 +1,16 @@
+div-margin{
+  margin: 30px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: start
+}
+
 .wrapper {
   --input-focus: #2d8cf0;
   --font-color: #323232;
@@ -67,7 +80,7 @@
 .flip-card__inner {
   width: 300px;
   height: 350px;
-  position: relative;
+  position: absolute;
   background-color: transparent;
   perspective: 1000px;
   /* width: 100%;
@@ -87,7 +100,7 @@
 
 .flip-card__front, .flip-card__back {
   padding: 20px;
-  position: absolute;
+  //position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;

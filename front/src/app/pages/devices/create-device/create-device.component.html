@@ -1,3 +1,5 @@
+<div class="container div-margin">
+
 <div class="wrapper">
   <div class="card-switch">
     <div class="flip-card__front">
@@ -19,4 +21,13 @@
       </form>
     </div>
   </div>
+</div>
+
+<div>
+  <button (click)="addInputField()">Add Input Field</button>
+</div>
+
+<div *ngFor="let input of inputFields; let i = index">
+  <input [(ngModel)]="inputFields[i]" type="text" placeholder="Input {{ i + 1 }}" />
+</div>
 </div>

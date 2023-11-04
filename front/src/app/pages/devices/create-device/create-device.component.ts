@@ -43,12 +43,24 @@ export class CreateDeviceComponent {
     }
   }
 
+  inputFields: string[] = []; // Store input values
+
+  addInputField() {
+    this.inputFields.push(''); // Add an empty input value
+  }
+
   /**
-   * Egyik lehetőség: drag&droppal úgy hogy a felhasználónak meg van addva milyen inputokat tud
+   * Első lehetőség: drag&droppal úgy hogy a felhasználónak meg van addva milyen inputokat tud
    *                  használni és az alapján rakja össze
    *
-   * Másik lehetőség: mint ahogy MySQL-ben beírja az input nevét, megadja típusát, stb. és így össze állítja
+   * Második lehetőség: mint ahogy MySQL-ben beírja az input nevét, megadja típusát, stb. és így össze állítja
    *                  és így le lesz generálva naki hogy miket szeretne fogadni a saját eszközétől
    *
+   * Harmadik lehetőség: JSON-ként eltárolom azt hogy a felhasználó miket akar megjeleníteni és az alapján fogom
+   *                  legenerálni a monitorozást.
+   *
+   *
+   *    Mind a háromban ez az egy funkció közös: Miután ez megtörént és a monitor oldalon van akkor a felhasználó funkciókat adhat hozzá hogy ha
+   *                  felkapcsolja a lámpát történjen, ez meg az, vagy a szoba hőmérséklete elér egy pontott akkor történyen más dolog
    * */
 }
