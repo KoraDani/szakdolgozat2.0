@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/register")
 public class RegisterController {
@@ -22,13 +24,9 @@ public class RegisterController {
 
 
     @PostMapping("saveUser")
-    public ResponseEntity<Users> saveUser(@RequestBody Users user){
+    public ResponseEntity<Users> saveUser(@Valid @RequestBody Users user) {
         System.out.println(user.toString());
-        if(user.getUsername() != "" && user.getEmail() != "" && user.getPassword() != ""){
-            Users newUser = this.registerService.saveUser(user);
-
-            return new ResponseEntity<>(newUser, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+        Users newUser = this.registerService.saveUser(user);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 }

@@ -2,15 +2,29 @@ package hu.okosotthon.back.model;
 
 import hu.okosotthon.back.dto.UserDTO;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Users implements Serializable {
+    /*{
+        "id":0,
+            "username":"",
+            "email":"asd@asd.hu",
+            "password":"asd",
+            "imageUrl":"asd"
+    }*/
+
+
     /**
      * Serializable segít transzformálni a külömböző osztályokat külömbőző streamre konvertálni
      * */
@@ -18,9 +32,13 @@ public class Users implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private int id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
+//    @NotBlank
     private String imageUrl;
 
 //    public Users() {
@@ -34,45 +52,25 @@ public class Users implements Serializable {
 //        this.imageUrl = imageUrl;
 //    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String name) {
-        this.username = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public void setUsername(String name) {
+//        this.username = name;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public void setImageUrl(String imageUrl) {
+//        this.imageUrl = imageUrl;
+//    }
 
     @Override
     public String toString() {

@@ -64,21 +64,21 @@ export class RegisterComponent {
           password: this.registerGroup.get("pwd1")?.value,
           imageUrl: "basic"
         }
-    if(this.registerGroup?.valid){
-      if(this.registerGroup.get("pwd1")?.value == this.registerGroup.get("pwd2")?.value){
+    // if(this.registerGroup?.valid){
+      if(this.registerGroup.get("pwd1")?.value == this.registerGroup.get("pwd2")?.value) {
         this.regServ.saveUser(user).subscribe(() => {
-              console.log("asd");
-            }, error => {
-              if(error.status === 400){
-                console.log("Valamelyik mező üres b+");
-              }
-            });
-      }
-    }else{
-      this.userInputError = !this.registerGroup.get("username")?.valid;
-      this.emailInputError = !this.registerGroup.get("email")?.valid;
-      this.pwd1Error = !this.registerGroup.get("pwd1")?.valid;
-      this.pwd2Error = !this.registerGroup.get("pwd2")?.valid;
-    }
-  }
+          console.log("asd");
+        }, error => {
+          if (error.status === 400) {
+            console.log("Valamelyik mező üres b+");
+          }
+        });
+        /*  }
+        }else{
+          this.userInputError = !this.registerGroup.get("username")?.valid;
+          this.emailInputError = !this.registerGroup.get("email")?.valid;
+          this.pwd1Error = !this.registerGroup.get("pwd1")?.valid;
+          this.pwd2Error = !this.registerGroup.get("pwd2")?.valid;
+        }*/
+      }}
 }

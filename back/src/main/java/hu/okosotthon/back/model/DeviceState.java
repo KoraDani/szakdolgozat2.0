@@ -1,7 +1,9 @@
 package hu.okosotthon.back.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
@@ -10,6 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeviceState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +29,17 @@ public class DeviceState {
     @Nullable
     private int temperature;
 
-    public DeviceState() {
-    }
-
-    public DeviceState(int stateId, int deviceId, String timeStamp, int powerState, int brigthness, int temperature) {
-        this.stateId = stateId;
-        this.deviceId = deviceId;
-        this.timeStamp = timeStamp;
-        this.powerState = powerState;
-        this.brigthness = brigthness;
-        this.temperature = temperature;
-    }
+//    public DeviceState() {
+//    }
+//
+//    public DeviceState(int stateId, int deviceId, String timeStamp, int powerState, int brigthness, int temperature) {
+//        this.stateId = stateId;
+//        this.deviceId = deviceId;
+//        this.timeStamp = timeStamp;
+//        this.powerState = powerState;
+//        this.brigthness = brigthness;
+//        this.temperature = temperature;
+//    }
 
     public int getStateId() {
         return stateId;

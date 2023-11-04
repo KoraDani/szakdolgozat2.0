@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DeviceService} from "../../../shared/service/device.service";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
+import {Devices} from "../../../shared/model/Devices";
 
 @Component({
   selector: 'app-create-device',
@@ -25,15 +26,19 @@ export class CreateDeviceComponent {
 
   saveDevice() {
     if(this.deviceForm.valid){
-      let deviceDTO: DeviceDTO = {
+      let device: Devices = {
+        devicesId: 0,
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
-        location: this.deviceForm.get("location")?.value
+        location: this.deviceForm.get("location")?.value,
+        userId:1
       }
-      this.devServ.saveDevice(deviceDTO).subscribe(()=>{
+      this.devServ.saveDevice(device).subscribe(()=>{
         console.log("Device saved");
       },error => {
-        console.error(error);
+        if(error.status === 400){
+          console.log("Valamit nem töltöttél ki");
+        }
       });
     }
   }
