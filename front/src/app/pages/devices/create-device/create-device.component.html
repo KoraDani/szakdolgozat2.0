@@ -1,33 +1,38 @@
 <div class="container div-margin">
 
-<div class="wrapper">
-  <div class="card-switch">
-    <div class="flip-card__front">
-      <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">
-        <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text" formControlName="deviceName">
-        <!--        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>-->
-        <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text" formControlName="deviceType">
-          <option value="temp">Hőmérséklet mérés</option>
-          <option value="degree">Hőfokszabályzás</option>
-          <option value="lamp">Lámpa kapcsolás</option>
-<!--          <option></option>-->
-        </select>
-          <!--        <div *ngIf="this.emailInputError">Email címet kötelező megadni</div>-->
-        <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
-        <!--        <div *ngIf="this.pwd1Error">Jelszót kötelező megadni</div>-->
-<!--        <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2">-->
-        <!--        <div *ngIf="this.pwd2Error">Jelszó megerősítést kötelező megadni</div>-->
-        <button class="flip-card__btn">Confirm!</button>
-      </form>
+  <div class="wrapper">
+    <div class="card-switch">
+      <div class="flip-card__front">
+
+
+        <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">
+          <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text"
+                 formControlName="deviceName">
+          <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text"
+                  formControlName="deviceType">
+            <option value="temp">Hőmérséklet mérés</option>
+            <option value="degree">Hőfokszabályzás</option>
+            <option value="lamp">Lámpa kapcsolás</option>
+          </select>
+          <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+        </form>
+
+
+        <form [formGroup]="dynamicForm" class="flip-card__form">
+          <div formArrayName="fields">
+            <div *ngFor="let field of fields.controls; let i = index">
+              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>
+            </div>
+          </div>
+          <button class="button" (click)="addInputField()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </form>
+        <button (click)="saveDevice()" (click)="saveInputData()" class="flip-card__btn">Confirm!</button>
+
+      </div>
     </div>
   </div>
 </div>
 
-<div>
-  <button (click)="addInputField()">Add Input Field</button>
-</div>
 
-<div *ngFor="let input of inputFields; let i = index">
-  <input [(ngModel)]="inputFields[i]" type="text" placeholder="Input {{ i + 1 }}" />
-</div>
-</div>
