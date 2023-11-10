@@ -31,7 +31,7 @@ export class CreateDeviceComponent {
   saveDevice() {
     // if(this.deviceForm.valid){
       let devices: Devices = {
-        devicesId: 0,
+        devicesId: null,
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,10 +27,20 @@ public class DeviceController {
     }
 
     @PostMapping("/saveDevice")
-    public ResponseEntity<Devices> saveDevices( @RequestBody Devices devices, String[] array){
+    public ResponseEntity<Devices> saveDevices( @RequestBody Devices devices/*, String[] array*/){
         Devices newDevice = this.deviceService.saveDevice(devices);
         System.out.println(devices.getDeviceName());
-        System.out.println(array[0]);
+//        System.out.println(array[0]);
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllUserDevices")
+    public ResponseEntity<List<Devices>> getAllUserDevices(@RequestBody String userId){
+        System.out.println(userId);
+        List<Devices> devicesList = this.deviceService.getAllUserDevices(userId);
+        for (Devices dev :devicesList) {
+            System.out.println(dev);
+        }
+        return new ResponseEntity<>(devicesList, HttpStatus.OK);
     }
 }

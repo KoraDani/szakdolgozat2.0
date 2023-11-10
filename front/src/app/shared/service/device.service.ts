@@ -21,4 +21,8 @@ export class DeviceService {
     }
       return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", sentData);
   }
+
+  getDevices(userId: any) {
+    return this.http.get<Devices[]>(this.apiUrl+"/device/getAllUserDevices", userId);
+  }
 }

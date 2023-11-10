@@ -1,5 +1,5 @@
 export interface Devices{
-  devicesId: number;
+  devicesId: any | undefined;
   deviceName: string;
   deviceType: string;
   location: string;

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Users} from "../../shared/model/Users";
 import {RegisterService} from "../../shared/service/register.service";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-register',
@@ -58,7 +59,8 @@ export class RegisterComponent {
 
   saveUser() {
     let user: Users = {
-          id: 0,
+          // id: uuid,
+          id: null,
           username: this.registerGroup.get("username")?.value,
           email: this.registerGroup.get("email")?.value,
           password: this.registerGroup.get("pwd1")?.value,
@@ -66,8 +68,9 @@ export class RegisterComponent {
         }
     // if(this.registerGroup?.valid){
       if(this.registerGroup.get("pwd1")?.value == this.registerGroup.get("pwd2")?.value) {
-        this.regServ.saveUser(user).subscribe(() => {
-          console.log("asd");
+        this.regServ.saveUser(user).subscribe((u: Users) => {
+          // console.log("asd");
+          console.log(u);
         }, error => {
           if (error.status === 400) {
             console.log("Valamelyik mező üres b+");

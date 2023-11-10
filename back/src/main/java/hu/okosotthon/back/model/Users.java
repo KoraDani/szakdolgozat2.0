@@ -5,14 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
+@Document("users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Users implements Serializable {
@@ -29,9 +32,8 @@ public class Users implements Serializable {
      * Serializable segít transzformálni a külömböző osztályokat külömbőző streamre konvertálni
      * */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
-    private int id;
+    @Nullable
+    private String id;
     @NotBlank
     private String username;
     @NotBlank
