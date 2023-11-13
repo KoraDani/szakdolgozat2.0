@@ -16,6 +16,7 @@ export class DevicesComponent implements OnInit{
   ngOnInit(): void {
     // @ts-ignore
     this.devServ.getDevices("1").subscribe((dev: Devices[])=> {
+      console.log(dev);
       this.devicesList = dev;
       console.log("Devices is loading");
     }, (error: any) => {

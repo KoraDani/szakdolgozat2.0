@@ -19,10 +19,10 @@ export class DeviceService {
       devices: devices,
       array: array,
     }
-      return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", sentData);
+      return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", devices);
   }
 
-  getDevices(userId: any) {
-    return this.http.get<Devices[]>(this.apiUrl+"/device/getAllUserDevices", userId);
+  getDevices(userId: string) {
+    return this.http.post<Devices[]>(this.apiUrl+"/device/getAllUserDevices", userId);
   }
 }

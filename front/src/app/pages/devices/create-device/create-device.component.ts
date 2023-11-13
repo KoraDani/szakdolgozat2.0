@@ -3,6 +3,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
 import {DeviceService} from "../../../shared/service/device.service";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {Devices} from "../../../shared/model/Devices";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-device',
@@ -17,19 +18,19 @@ export class CreateDeviceComponent {
   });
   dynamicForm: FormGroup;
 
-  constructor(private devServ: DeviceService,private fb: FormBuilder) {
-    // this.deviceForm = this.fb.group({
-    //   deviceName: ['', [Validators.required]],
-    //   deviceType: ['', [Validators.required]],
-    //   location: ['', [Validators.required]]
-    // })
+  constructor(private devServ: DeviceService,private fb: FormBuilder, private router: Router) {
+    this.deviceForm = this.fb.group({
+      deviceName: ['', [Validators.required]],
+      deviceType: ['', [Validators.required]],
+      location: ['', [Validators.required]]
+    })
     this.dynamicForm = this.fb.group({
       fields: this.fb.array([this.createInputControl()]),
     });
   }
 
   saveDevice() {
-    // if(this.deviceForm.valid){
+    if(this.deviceForm.valid){
       let devices: Devices = {
         devicesId: null,
         deviceName: this.deviceForm.get("deviceName")?.value,
@@ -40,13 +41,14 @@ export class CreateDeviceComponent {
       console.log(devices);
       this.devServ.saveDevice(devices, this.fields.value as string[]).subscribe(()=>{
         console.log("Device saved");
+        this.router.navigateByUrl("/devices");
       },error => {
         if(error.status === 400){
           console.log("Valamit nem töltöttél ki");
           console.log(this.fields.value)
         }
       });
-    // }
+    }
   }
 
   createInputControl() {

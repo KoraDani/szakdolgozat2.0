@@ -2,6 +2,7 @@ package hu.okosotthon.back.controller;
 
 import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.service.DeviceService;
+import org.bson.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class DeviceController {
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllUserDevices")
+    @PostMapping("/getAllUserDevices")
     public ResponseEntity<List<Devices>> getAllUserDevices(@RequestBody String userId){
         System.out.println(userId);
         List<Devices> devicesList = this.deviceService.getAllUserDevices(userId);
