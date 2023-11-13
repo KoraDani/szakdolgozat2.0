@@ -23,7 +23,7 @@ public class RegisterController {
     }
 
 
-    @PostMapping("saveUser")
+    @PostMapping("/saveUser")
     public ResponseEntity<Users> saveUser(@Valid @RequestBody Users user) {
         System.out.println(user.toString());
         Users newUser = this.registerService.saveUser(user);

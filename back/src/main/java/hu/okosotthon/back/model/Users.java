@@ -8,9 +8,14 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -18,7 +23,7 @@ import java.util.UUID;
 @Document("users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Users implements Serializable {
+public class Users implements UserDetails {
     /*{
         "id":0,
             "username":"",
@@ -27,10 +32,6 @@ public class Users implements Serializable {
             "imageUrl":"asd"
     }*/
 
-
-    /**
-     * Serializable segít transzformálni a külömböző osztályokat külömbőző streamre konvertálni
-     * */
     @Id
     @Nullable
     private String id;
@@ -87,5 +88,30 @@ public class Users implements Serializable {
 
     public boolean userEqual(UserDTO userDTO) {
         return this.email.equals(userDTO.getEmail()) /*&& this.username.equals(userDTO.getUsername())*/ && this.password.equals(userDTO.getPassword());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

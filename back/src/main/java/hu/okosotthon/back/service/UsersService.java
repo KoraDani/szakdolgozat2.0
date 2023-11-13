@@ -4,12 +4,15 @@ import hu.okosotthon.back.exception.UserNotFoundException;
 import hu.okosotthon.back.model.Users;
 import hu.okosotthon.back.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class UsersService {
+public class UsersService implements UserDetailsService {
     private final UsersRepo usersRepo;
     @Autowired
     public UsersService(UsersRepo usersRepo) {
@@ -47,5 +50,15 @@ public class UsersService {
 
     public Users getUserByEmail(String email) {
         return this.usersRepo.findUsersByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users currentUser = this.usersRepo.findUsersByUsername(username);
+        if(currentUser == null){
+            throw new UsernameNotFoundException("Faild to find user with username: " + username);
+        }
+
+        return currentUser;
     }
 }
