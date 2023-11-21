@@ -28,7 +28,7 @@ public class AppConfig  extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+    //TODO 5. videótól kell nézzem tovább
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(usersService).passwordEncoder(passwordEncoder);
@@ -43,9 +43,9 @@ public class AppConfig  extends WebSecurityConfigurerAdapter {
         }).and();
 
         http.authorizeRequests()
-                .antMatchers("/register/saveUser").permitAll()
+                .antMatchers("/auth/saveUser").permitAll()
                 .antMatchers("/auth/login").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         http.addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class);
     }

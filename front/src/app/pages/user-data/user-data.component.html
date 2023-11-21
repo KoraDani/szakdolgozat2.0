@@ -1,19 +1,24 @@
 <div class="container">
-<div class="card">
-    <div><mat-icon>person</mat-icon></div>
-  <div class="card-title card-socials">Felhasználónév<br>
-    <label>Email</label><br>
-    <label>Valami3<br></label>
-  </div>
-</div>
-<div class="card">
+  <div class="card">
     <div>
-      <label>Jelszó módosítás:</label><br>
-      <label>Régi jelszó:</label><input type="password" placeholder="Password" name="text" class="input">
-      <label>Új jelszó:</label><input type="password" placeholder="Password" name="text" class="input">
-      <label>Jelszó megerősítése:</label><input type="password" placeholder="Password" name="text" class="input">
+      <mat-icon>person</mat-icon>
     </div>
-</div>
+    <div class="card-title card-socials">Felhasználónév<br>
+      <label>Username: {{this.user?.username}}<br></label>
+      <label>Email: {{this.user?.email}}</label><br>
+    </div>
+  </div>
+  <div class="card">
+    <div>
+      <form [formGroup]="newPwdForm" (ngSubmit)="changePassword()">
+        <label>Jelszó módosítás:</label><br>
+        <label>Régi jelszó:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="oldpwd">
+        <label>Új jelszó:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="newpwd1">
+        <label>Jelszó megerősítése:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="newpwd2">
+        <button type="submit" class="flip-card__btn">Jelszó mentése</button>
+      </form>
+    </div>
+  </div>
   <div class="card">
     <div>
       <label>Kép feltöltés</label><br>

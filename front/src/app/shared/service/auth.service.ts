@@ -1,16 +1,29 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Users} from "../model/Users";
+import {RegisterDTO} from "../model/dto/RegisterDTO";
+import {UserDTO} from "../model/dto/UserDTO";
+import {ResponseDTO} from "../model/dto/ResponseDTO";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiServerUrl = '';
+  private apiUrl = 'http://localhost:8080';
   constructor(private http: HttpClient) {
   }
-  public login(users: Users){
-    return this.http.post<any>(this.apiServerUrl+"/auth/login", users);
+  loginUser(userDTO: UserDTO) {
+    return this.http.post<ResponseDTO>(this.apiUrl+"/auth/login", userDTO);
+  }
+  getUserById(username: string){
+    return this.http.post<Users>(this.apiUrl+"/auth/getUserByUsername", username);
   }
 
+  saveUser(user: RegisterDTO) {
+    return this.http.post<Users>(this.apiUrl + "/auth/saveUser", user);
+  }
+
+  changePassword(username:string,oldpwd:string, newpwd1:string, newpwd2:string) {
+    return this.http.post<Users>(this.apiUrl+"/auth/changePassword", null,{params:{username, oldpwd, newpwd1,newpwd2}})
+  }
 }

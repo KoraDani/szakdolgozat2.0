@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {Users} from "../../shared/model/Users";
-import {RegisterService} from "../../shared/service/register.service";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import { v4 as uuid } from 'uuid';
+import {RegisterDTO} from "../../shared/model/dto/RegisterDTO";
+import {AuthService} from "../../shared/service/auth.service";
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,7 @@ export class RegisterComponent {
   pwd1Error: boolean | undefined= false;
   pwd2Error: boolean | undefined= false;
 
-  constructor(private regServ: RegisterService, private fb: FormBuilder) {
+  constructor(private regServ: AuthService, private fb: FormBuilder) {
     this.registerGroup = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -58,15 +59,15 @@ export class RegisterComponent {
   // }
 
   saveUser() {
-    let user: Users = {
-          // id: uuid,
-          id: null,
+    let user: RegisterDTO = {
           username: this.registerGroup.get("username")?.value,
           email: this.registerGroup.get("email")?.value,
-          password: this.registerGroup.get("pwd1")?.value,
+          password1: this.registerGroup.get("pwd1")?.value,
+          password2: this.registerGroup.get("pwd2")?.value,
           imageUrl: "basic"
         }
     // if(this.registerGroup?.valid){
+    console.log(user);
       if(this.registerGroup.get("pwd1")?.value == this.registerGroup.get("pwd2")?.value) {
         this.regServ.saveUser(user).subscribe((u: Users) => {
           // console.log("asd");

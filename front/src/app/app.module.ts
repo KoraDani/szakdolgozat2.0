@@ -15,7 +15,8 @@ import {MatCardModule} from "@angular/material/card";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {UserDataComponent} from './pages/user-data/user-data.component';
 import {ReactiveFormsModule, FormsModule } from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {RequestInterceptor} from "./request.interceptor";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import {HttpClientModule} from "@angular/common/http";
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

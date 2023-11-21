@@ -3,7 +3,7 @@
     <div class="flip-card__front">
       <div class="title">Log in</div>
       <form [formGroup]="loginForm" class="flip-card__form" (ngSubmit)="login()">
-        <input class="flip-card__input" name="email" placeholder="Email" type="login" formControlName="email">
+        <input class="flip-card__input" name="text" placeholder="Email" type="login" formControlName="email">
         <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>
         <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="password">
         <div *ngIf="this.pwdInputError">Jelszót kötelező megadni</div>

@@ -1,5 +1,6 @@
 package hu.okosotthon.back.service;
 
+import hu.okosotthon.back.dto.RegisterDTO;
 import hu.okosotthon.back.exception.UserNotFoundException;
 import hu.okosotthon.back.model.Users;
 import hu.okosotthon.back.repository.UsersRepo;
@@ -9,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -47,6 +50,9 @@ public class UsersService implements UserDetailsService {
     public Users getUserByUsername(String username) {
         return this.usersRepo.findUsersByUsername(username);
     }
+    public Users findUserByUsername(String username) {
+        return this.usersRepo.getUsersByUsername(username);
+    }
 
     public Users getUserByEmail(String email) {
         return this.usersRepo.findUsersByEmail(email);
@@ -61,4 +67,22 @@ public class UsersService implements UserDetailsService {
 
         return currentUser;
     }
+
+    public Users getUserById(String userId) {
+        return this.usersRepo.findUsersById(userId);
+    }
+
+    public List<Users> findAllUsers() {
+        return this.usersRepo.findAll();
+    }
+
+    public Users saveUser(@Valid RegisterDTO registerDTO){
+        return this.usersRepo.save(registerDTO.returnUser());
+    }
+
+    public Users changePassword(Users users) {
+        return this.usersRepo.save(users);
+    }
+
+
 }
