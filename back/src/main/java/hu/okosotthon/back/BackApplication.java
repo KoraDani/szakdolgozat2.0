@@ -1,8 +1,12 @@
 package hu.okosotthon.back;
 
+import hu.okosotthon.back.service.MqttService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -11,7 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-public class BackApplication {
+@EnableAsync
+public class BackApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackApplication.class, args);
@@ -33,4 +38,11 @@ public class BackApplication {
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
 
+	@Autowired
+	private MqttService mqttService;
+
+	@Override
+	public void run(String... args) throws Exception {
+		mqttService.subscribeToTopics();
+	}
 }

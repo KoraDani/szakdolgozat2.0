@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +53,8 @@ public class AuthController {
         final String sessionId = this.sessionRegistery.registerSession(userDTO.getUsername());
 
         ResponseDTO responseDTO = new ResponseDTO(sessionId,this.usersService.getUserByUsername(userDTO.getUsername()).getId(), userDTO.getUsername());
+
+//        System.out.println("Current user: " + this.usersService.getCurrentUser().toString());
 
         return ResponseEntity.ok(responseDTO);
     }

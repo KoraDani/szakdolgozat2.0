@@ -4,4 +4,5 @@ export interface Devices{
   deviceType: string;
   location: string;
   userId: number;
+  topic: string;
 }

@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/CMakeFiles/bootloader
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/CMakeFiles/bootloader.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/CMakeFiles/bootloader-complete.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/cygwin64/home/Dani/szakdolgozat2.0/esp/blink/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

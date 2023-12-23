@@ -14,19 +14,21 @@ export class CreateDeviceComponent {
   deviceForm: FormGroup = new FormGroup({
     deviceName: new FormControl,
     deviceType: new FormControl,
-    location: new FormControl
+    location: new FormControl,
+    topic: new FormControl
   });
-  dynamicForm: FormGroup;
+  // dynamicForm: FormGroup;
 
   constructor(private devServ: DeviceService,private fb: FormBuilder, private router: Router) {
     this.deviceForm = this.fb.group({
       deviceName: ['', [Validators.required]],
       deviceType: ['', [Validators.required]],
-      location: ['', [Validators.required]]
+      location: ['', [Validators.required]],
+      topic: ['', [Validators.required]]
     })
-    this.dynamicForm = this.fb.group({
-      fields: this.fb.array([this.createInputControl()]),
-    });
+    // this.dynamicForm = this.fb.group({
+    //   fields: this.fb.array([this.createInputControl()]),
+    // });
   }
 
   saveDevice() {
@@ -36,16 +38,17 @@ export class CreateDeviceComponent {
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
-        userId:1
+        userId:1,
+        topic: "username/"+this.deviceForm.get("topic")?.value+"/" + this.deviceForm.get("deviceName")?.value
       }
       console.log(devices);
-      this.devServ.saveDevice(devices, this.fields.value as string[]).subscribe(()=>{
+      this.devServ.saveDevice(devices).subscribe(()=>{
         console.log("Device saved");
         this.router.navigateByUrl("/devices");
       },error => {
         if(error.status === 400){
           console.log("Valamit nem töltöttél ki");
-          console.log(this.fields.value)
+          // console.log(this.fields.value)
         }
       });
     }
@@ -55,13 +58,13 @@ export class CreateDeviceComponent {
     return new FormControl('', Validators.required);
   }
 
-  addInputField() {
-    this.fields.push(this.createInputControl());
-  }
-
-  get fields() {
-    return this.dynamicForm.get('fields') as FormArray;
-  }
+  // addInputField() {
+  //   this.fields.push(this.createInputControl());
+  // }
+  //
+  // get fields() {
+  //   return this.dynamicForm.get('fields') as FormArray;
+  // }
 
   /**
    * Első lehetőség: drag&droppal úgy hogy a felhasználónak meg van addva milyen inputokat tud
@@ -77,7 +80,7 @@ export class CreateDeviceComponent {
    *    Mind a háromban ez az egy funkció közös: Miután ez megtörént és a monitor oldalon van akkor a felhasználó funkciókat adhat hozzá hogy ha
    *                  felkapcsolja a lámpát történjen, ez meg az, vagy a szoba hőmérséklete elér egy pontott akkor történyen más dolog
    * */
-  saveInputData() {
-    console.log(this.fields.value);
-  }
+  // saveInputData() {
+  //   console.log(this.fields.value);
+  // }
 }

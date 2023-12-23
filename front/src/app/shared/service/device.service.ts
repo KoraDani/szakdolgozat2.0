@@ -14,11 +14,7 @@ export class DeviceService {
 
   constructor(private http: HttpClient) { }
 
-  saveDevice(devices: Devices, array: string[]) {
-    const sentData = {
-      devices: devices,
-      array: array,
-    }
+  saveDevice(devices: Devices) {
       return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", devices);
   }
 

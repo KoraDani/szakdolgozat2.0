@@ -15,20 +15,21 @@
             <option value="lamp">Lámpa kapcsolás</option>
           </select>
           <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+          <input class="flip-card__input" name="topic" placeholder="Topic" type="text" formControlName="topic">
         </form>
 
 
-        <form [formGroup]="dynamicForm" class="flip-card__form">
-          <div formArrayName="fields">
-            <div *ngFor="let field of fields.controls; let i = index">
-              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>
-            </div>
-          </div>
-          <button class="button" (click)="addInputField()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </form>
-        <button (click)="saveDevice()" (click)="saveInputData()" class="flip-card__btn">Confirm!</button>
+<!--        <form [formGroup]="dynamicForm" class="flip-card__form">-->
+<!--          <div formArrayName="fields">-->
+<!--            <div *ngFor="let field of fields.controls; let i = index">-->
+<!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button class="button" (click)="addInputField()">-->
+<!--            <mat-icon>add</mat-icon>-->
+<!--          </button>-->
+<!--        </form>-->
+        <button (click)="saveDevice()" class="flip-card__btn">Confirm!</button>
 
       </div>
     </div>

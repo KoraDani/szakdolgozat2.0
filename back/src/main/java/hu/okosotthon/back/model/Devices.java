@@ -38,5 +38,6 @@ public class Devices {
     //TODO: valszeg nem lesz jó MySQL  ehhez a projekthez mert nem tudok itt atomi filedet csinálni
     private List<String> params = new ArrayList<>();
     private String userId;
+    private String topic;
 
 }
