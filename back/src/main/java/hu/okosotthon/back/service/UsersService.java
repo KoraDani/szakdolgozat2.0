@@ -1,5 +1,6 @@
 package hu.okosotthon.back.service;
 
+import hu.okosotthon.back.controller.AuthController;
 import hu.okosotthon.back.dto.RegisterDTO;
 import hu.okosotthon.back.exception.UserNotFoundException;
 import hu.okosotthon.back.model.Users;
@@ -52,7 +53,6 @@ public class UsersService implements UserDetailsService {
         if(currentUser == null){
             throw new UsernameNotFoundException("Faild to find user with username: " + username);
         }
-
         return currentUser;
     }
 
@@ -60,14 +60,13 @@ public class UsersService implements UserDetailsService {
         return this.usersRepo.save(registerDTO.returnUser());
     }
 
-//    public Authentication getCurrentUser(){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if(authentication == null || !authentication.isAuthenticated()){
-//            return null;
-//        }
-//
-//        return authentication;
-//    }
+    public List<String> getSubscribedTopicsFromUser(){
+        return AuthController.currentUser.getSubscribedTopic();
+    }
 
+
+    public void updateUsersById(Users currentUser, String topic) {
+        currentUser.setSubscribedTopic(topic);
+        this.usersRepo.save(currentUser);
+    }
 }

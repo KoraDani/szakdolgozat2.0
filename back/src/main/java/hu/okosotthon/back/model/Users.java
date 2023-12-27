@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,12 @@ public class Users implements UserDetails {
             "imageUrl":"asd"
     }*/
 
+    /**
+     * Szóval itt egy olyan változtatás kell hogy a usernél lesz eltárolni a topicok amikre feliratkozik
+     * minden bejelentkezésnél feliratkozik a topicocra és így meg van oldva hogy ha a user új
+     * eszközt add hozzá akkor automatikus feliratkozonn egy topicra
+     *
+     * */
     @Id
     @Nullable
     private String id;
@@ -43,8 +50,21 @@ public class Users implements UserDetails {
     private String password;
 //    @NotBlank
     private String imageUrl;
+    private ArrayList<String> subscribedTopic = new ArrayList<>();
 
-//    public Users() {
+    public Users(@Nullable String id, String username, String email, String password, String imageUrl) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.imageUrl = imageUrl;
+    }
+
+    public void setSubscribedTopic(String topic){
+        this.subscribedTopic.add(topic);
+    }
+
+    //    public Users() {
 //    }
 
 //    public Users(int id, String username, String email, String password, String imageUrl) {

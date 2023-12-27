@@ -22,6 +22,7 @@ public class AuthController {
     private final UsersService usersService;
     private final AuthenticationManager manager;
     private final SessionRegistery sessionRegistery;
+    public static Users currentUser;
 
     @Autowired
     public AuthController(UsersService usersService, AuthenticationManager authenticationManager, SessionRegistery sessionRegistery) {
@@ -52,12 +53,12 @@ public class AuthController {
 
         final String sessionId = this.sessionRegistery.registerSession(userDTO.getUsername());
 
-        ResponseDTO responseDTO = new ResponseDTO(sessionId,this.usersService.getUserByUsername(userDTO.getUsername()).getId(), userDTO.getUsername());
-
-//        System.out.println("Current user: " + this.usersService.getCurrentUser().toString());
-
+        //Bejelentkezett user elmentése a bakcendben
+        currentUser = this.usersService.getUserByUsername(userDTO.getUsername());
+        ResponseDTO responseDTO = new ResponseDTO(sessionId,currentUser.getId(), currentUser.getUsername());
         return ResponseEntity.ok(responseDTO);
     }
+    //TODO itt a response más lett mint volt.
 
     @PostMapping("/getUserByUsername")
     public ResponseEntity<Users> getUserById(@RequestBody String username){

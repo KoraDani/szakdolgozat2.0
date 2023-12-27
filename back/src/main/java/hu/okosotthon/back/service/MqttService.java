@@ -1,5 +1,6 @@
 package hu.okosotthon.back.service;
 
+import hu.okosotthon.back.controller.AuthController;
 import hu.okosotthon.back.model.Topics;
 import org.bson.json.JsonObject;
 import org.eclipse.paho.client.mqttv3.*;
@@ -16,13 +17,13 @@ import java.util.List;
 public class MqttService {
 
     private TopicService topicService;
+    private UsersService usersService;
 
     @Autowired
-    public MqttService(TopicService topicService) {
+    public MqttService(TopicService topicService, UsersService usersService) {
         this.topicService = topicService;
+        this.usersService = usersService;
     }
-
-
 
     public void subscribeToTopics() {
         String broker = "tcp://192.168.0.171:1883";
@@ -34,7 +35,6 @@ public class MqttService {
         String humidityTopic = "esp32/dht11/humidity";
         String tasmotaTopic = "tele/home/dolgozo/temp/SENSOR";
 
-//        List<Topics> userTopicsList = this.topicService.getAllUserTopics();
         try {
             MqttClient mqttClient = new MqttClient(broker, clientId, new MemoryPersistence());
             MqttConnectOptions connOpts = new MqttConnectOptions();
@@ -44,11 +44,15 @@ public class MqttService {
             mqttClient.connect(connOpts);
             System.out.println("Connected");
 
-            // Subscribe to temperature topic
-//            for (Topics t : userTopicsList) {
-//                mqttClient.subscribe(t.getTopic());
-//            }
-            mqttClient.subscribe(tasmotaTopic);
+//            mqttClient.subscribe(tasmotaTopic);
+
+
+            if(AuthController.currentUser != null){
+                List<String> userTopicList = this.usersService.getSubscribedTopicsFromUser();
+                for (String topic: userTopicList) {
+                    mqttClient.subscribe(topic);
+                }
+            }
 
             mqttClient.setCallback(new MqttCallback() {
 
@@ -58,7 +62,7 @@ public class MqttService {
                     System.out.println("Received message on topic: " + topic);
                     System.out.println("Message: " + new String(message.getPayload()));
                     JSONObject obj = new JSONObject(new String(message.getPayload()));
-                    System.out.println("JSON obj: "+ obj.getJSONObject("DHT11"));
+                    System.out.println("JSON obj: " + obj.getJSONObject("DHT11"));
                     topicService.save(tasmotaTopic, obj.getJSONObject("DHT11"));
                     // Delegate message handling to the service
                     handleAsyncMessage(topic, new String(message.getPayload()));
@@ -87,6 +91,7 @@ public class MqttService {
             me.printStackTrace();
         }
     }
+
     @Async
     public void handleAsyncMessage(String topic, String payload) {
         // This method is called asynchronously to handle the received message

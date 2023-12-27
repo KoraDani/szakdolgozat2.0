@@ -4,7 +4,9 @@ import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.model.Topics;
 import hu.okosotthon.back.service.DeviceService;
 import hu.okosotthon.back.service.TopicService;
+import hu.okosotthon.back.service.UsersService;
 import org.bson.json.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +26,14 @@ public class DeviceController {
 
     private DeviceService deviceService;
     private TopicService topicService;
+    private UsersService usersService;
 
     @Autowired
-    public DeviceController(DeviceService deviceService, TopicService topicService) {
+    public DeviceController(DeviceService deviceService, TopicService topicService, UsersService usersService) {
         this.deviceService = deviceService;
         this.topicService = topicService;
+        this.usersService = usersService;
     }
-
-
 
 
     @PostMapping("/saveDevice")
@@ -39,6 +41,7 @@ public class DeviceController {
         Devices newDevice = this.deviceService.saveDevice(devices);
         System.out.println(devices.getDeviceName());
         this.topicService.saveTopic(devices.getTopic());
+        this.usersService.updateUsersById(AuthController.currentUser, devices.getTopic());
 //        System.out.println(array[0]);
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
@@ -51,5 +54,10 @@ public class DeviceController {
             System.out.println(dev);
         }
         return new ResponseEntity<>(devicesList, HttpStatus.OK);
+    }
+
+    @PostMapping("/sendDataToFront")
+    public ResponseEntity<JSONObject> sendDataToFront(JSONObject json){
+        return new ResponseEntity<>(json, HttpStatus.OK);
     }
 }
