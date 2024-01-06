@@ -24,33 +24,35 @@
 <!--</div>-->
 
 <div class="container div-margin">
-<div class="card" *ngFor="let dev of devicesList">
-<!--  <div class="card-photo"></div>-->
-  <div class="text-container card-title card-socials item">{{dev.location}}
-    <label>Hőmérséklet:{{dev.deviceName}}</label><br>
-          <label>Páratartalom:{{dev.deviceType}}<br></label>
-    <div class="text-item">
-          Valami:<label class="switch">
-            <input class="toggle" type="checkbox">
-            <span class="slider"></span>
-            <span class="card-side"></span>
-          </label>
-    </div>
-    <div class="text-item">
-          Valami:<label class="switch">
-            <input class="toggle" type="checkbox">
-            <span class="slider"></span>
-            <span class="card-side"></span>
-          </label>
-    </div>
+  <div class="card" *ngFor="let dev of devicesList">
+    <!--  <div class="card-photo"></div>-->
+    <div class="text-container card-title card-socials item">{{dev.location}}
+      <label>Hőmérséklet:{{measurment.get("temperature")?.valueOf()}}</label><br>
+      <label>Páratartalom:{{measurment.get("humidity")?.valueOf()}}</label><br>
       <div class="text-item">
-          Valami:<label class="switch">
-            <input class="toggle" type="checkbox">
-            <span class="slider"></span>
-            <span class="card-side"></span>
-          </label>
+        Valami:<label class="switch">
+        <input class="toggle" type="checkbox">
+        <span class="slider"></span>
+        <span class="card-side"></span>
+      </label>
       </div>
+      <div class="text-item">
+        Valami:<label class="switch">
+        <input class="toggle" type="checkbox">
+        <span class="slider"></span>
+        <span class="card-side"></span>
+      </label>
+      </div>
+      <div class="text-item">
+        Valami:<label class="switch">
+        <input class="toggle" type="checkbox">
+        <span class="slider"></span>
+        <span class="card-side"></span>
+      </label>
+      </div>
+    </div>
   </div>
 </div>
+<div>
+  <button><a href="/create-device">Eszköz hozzáadása</a></button>
 </div>
-<div><button><a href="/create-device">Eszköz hozzáadása</a></button></div>

@@ -43,6 +43,6 @@ public class BackApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		mqttService.subscribeToTopics();
+		mqttService.connectToBroker();
 	}
 }

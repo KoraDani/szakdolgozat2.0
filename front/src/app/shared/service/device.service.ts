@@ -4,6 +4,7 @@ import {DeviceDTO} from "../model/dto/DeviceDTO";
 import {Devices} from "../model/Devices";
 import {FormArray} from "@angular/forms";
 import {argsArgArrayOrObject} from "rxjs/internal/util/argsArgArrayOrObject";
+import {Measurement} from "../model/Measurement";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class DeviceService {
       return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", devices);
   }
 
-  getDevices(userId: string) {
-    return this.http.post<Devices[]>(this.apiUrl+"/device/getAllUserDevices", userId);
+  getDevices() {
+    return this.http.get<Devices[]>(this.apiUrl+"/device/getAllUserDevices");
   }
+
 }

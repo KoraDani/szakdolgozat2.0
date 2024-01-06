@@ -3,6 +3,6 @@ export interface Devices{
   deviceName: string;
   deviceType: string;
   location: string;
-  userId: number;
+  username: string | undefined;
   topic: string;
 }

@@ -4,22 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.json.JsonObject;
-import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
-@Document("topics")
+
 @Getter
 @Setter
+@Document("topics")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Topics {
+public class Measurement {
     @Id
     @Nullable
-    private String topicId;
+    private String measurementId;
+    private String username;
     private String topic;
     @Nullable
-    private JSONObject payload;
+    private String payload;
+//    @Nullable
+//    private String dateTime;
 }
+
+

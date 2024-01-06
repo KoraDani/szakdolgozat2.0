@@ -38,8 +38,8 @@ export class CreateDeviceComponent {
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
-        userId:1,
-        topic: "username/"+this.deviceForm.get("topic")?.value+"/" + this.deviceForm.get("deviceName")?.value
+        username: "",
+        topic: this.deviceForm.get("topic")?.value
       }
       console.log(devices);
       this.devServ.saveDevice(devices).subscribe(()=>{

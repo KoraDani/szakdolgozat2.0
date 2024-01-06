@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface DeviceRepo extends MongoRepository<Devices, String> {
 
-    @Query(value = "{'userId':'?0'}")
-    List<Devices> getAllUserDevices(String userId);
+//    @Query(value = "{'userId':'?0'}")
+    List<Devices> getDevicesByUsername(String userId);
 //    List<Devices> findAllByUserId(String userId);
 }
