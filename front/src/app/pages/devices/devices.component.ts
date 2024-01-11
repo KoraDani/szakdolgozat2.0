@@ -17,6 +17,8 @@ export class DevicesComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    //TODO most hogy már megvan minden ami kell hogy teljesen moduláris legyen most már csak a fronton kell megvalósítani
+
     // @ts-ignore
     this.devServ.getDevices().subscribe((dev: Devices[])=> {
       console.log(dev);
