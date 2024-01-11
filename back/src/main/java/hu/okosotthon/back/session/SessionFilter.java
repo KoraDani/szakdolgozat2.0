@@ -1,6 +1,5 @@
 package hu.okosotthon.back.session;
 
-import hu.okosotthon.back.model.Users;
 import hu.okosotthon.back.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,19 +18,21 @@ import java.io.IOException;
 
 @Component
 public class SessionFilter extends OncePerRequestFilter {
-    private final SessionRegistery sessionRegistery;
-    private final UsersService usersService;
-
     @Autowired
-    public SessionFilter(final SessionRegistery sessionRegistery, final UsersService usersService) {
-        this.sessionRegistery = sessionRegistery;
-        this.usersService = usersService;
-    }
+    private SessionRegistery sessionRegistery;
+    @Autowired
+    private UsersService usersService;
+
+//    @Autowired
+//    public SessionFilter(final SessionRegistery sessionRegistery, final UsersService usersService) {
+//        this.sessionRegistery = sessionRegistery;
+//        this.usersService = usersService;
+//    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String sessionId = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(sessionId == null || sessionId.length() == 0){
+        if(sessionId == null || sessionId.isEmpty()){
             filterChain.doFilter(request,response);
             return;
         }

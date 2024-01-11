@@ -9,13 +9,15 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 
 
-//{
-//        "username":"valami",
-//        "email":"valami@valamia.hu",
-//        "password1":"asdasd",
-//        "password2":"asdasd",
-//        "imageUrl":"valami"
+//        {
+//        "username":"proba",
+//        "email":"asd@äsd.hu",
+//        "password1":"qweqwe",
+//        "password2":"qweqwe",
+//        "imageUrl":"asd"
 //        }
+
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +29,6 @@ public class RegisterDTO {
     private String password2;
     private String imageUrl;
     public Users returnUser(){
-        return new Users(null,this.username,this.email,this.password1,this.imageUrl);
+        return new Users(0,this.username,this.email,this.password1,this.imageUrl);
     }
 }

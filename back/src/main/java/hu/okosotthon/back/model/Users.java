@@ -5,23 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
-@Document("users")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Users implements UserDetails {
@@ -40,8 +35,9 @@ public class Users implements UserDetails {
      *
      * */
     @Id
-    @Nullable
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int userId;
+
     @NotBlank
     private String username;
     @NotBlank
@@ -50,55 +46,12 @@ public class Users implements UserDetails {
     private String password;
 //    @NotBlank
     private String imageUrl;
-    private ArrayList<String> subscribedTopic = new ArrayList<>();
 
-    public Users(@Nullable String id, String username, String email, String password, String imageUrl) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.imageUrl = imageUrl;
-    }
-
-    public void setSubscribedTopic(String topic){
-        this.subscribedTopic.add(topic);
-    }
-
-    //    public Users() {
-//    }
-
-//    public Users(int id, String username, String email, String password, String imageUrl) {
-//        this.id = id;
-//        this.username = username;
-//        this.email = email;
-//        this.password = password;
-//        this.imageUrl = imageUrl;
-//    }
-
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public void setUsername(String name) {
-//        this.username = name;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public void setImageUrl(String imageUrl) {
-//        this.imageUrl = imageUrl;
-//    }
 
     @Override
     public String toString() {
         return "Users{" +
-                "id=" + id +
+                "id=" + userId +
                 ", name='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
@@ -134,4 +87,6 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

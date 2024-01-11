@@ -19,46 +19,37 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthController {
-    private final UsersService usersService;
-    private final AuthenticationManager manager;
-    private final SessionRegistery sessionRegistery;
+    @Autowired
+    private UsersService usersService;
+    @Autowired
+    private AuthenticationManager manager;
+    @Autowired
+    private SessionRegistery sessionRegistery;
     public static Users currentUser;
 
-    @Autowired
-    public AuthController(UsersService usersService, AuthenticationManager authenticationManager, SessionRegistery sessionRegistery) {
-        this.usersService = usersService;
-        this.manager = authenticationManager;
-        this.sessionRegistery = sessionRegistery;
-    }
-
-//    @PostMapping("/login")
-//        public ResponseEntity<Users> loginUsers(@RequestBody UserDTO userDTO) {
-//        //TODO befejezni a logint
-////        System.out.println(userDTO.toString());
-//        Users users = usersService.getUserByEmail(userDTO.getEmail());
-//        if (users.userEqual(userDTO)) {
-//            return new ResponseEntity<>(users, HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(users, HttpStatus.BAD_REQUEST);
+//    @Autowired
+//    public AuthController(UsersService usersService/*, AuthenticationManager authenticationManager*/, SessionRegistery sessionRegistery) {
+//        this.usersService = usersService;
+////        this.manager = authenticationManager;
+//        this.sessionRegistery = sessionRegistery;
 //    }
 
-//    {
-//        "username":"valami",
-//            "email":"valami@valamia.hu",
-//            "password":"qweqwe"
-//    }
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> loginUsers(@RequestBody UserDTO userDTO) {
+        System.out.println("Felhasználó beléptetése "+ userDTO.getUsername()+ " " + userDTO.getPassword());
+
         this.manager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(),userDTO.getPassword()));
+//        this.manager.authenticate(new UsernamePasswordAuthenticationToken("proba","asdasd"));
 
         final String sessionId = this.sessionRegistery.registerSession(userDTO.getUsername());
+        System.out.println("sessionId: " + sessionId);
 
         //Bejelentkezett user elmentése a bakcendben
-        currentUser = this.usersService.getUserByUsername(userDTO.getUsername());
-        ResponseDTO responseDTO = new ResponseDTO(sessionId,currentUser.getId(), currentUser.getUsername());
+        currentUser = this.usersService.findUsersByUsername(userDTO.getUsername());
+        ResponseDTO responseDTO = new ResponseDTO(sessionId,currentUser.getUserId(), currentUser.getUsername());
         return ResponseEntity.ok(responseDTO);
     }
-    //TODO itt a response más lett mint volt.
+    //TODO itt a response más lett mint volt. Kérdés hogy használom e fronton
 
     @PostMapping("/getUserByUsername")
     public ResponseEntity<Users> getUserById(@RequestBody String username){
@@ -83,7 +74,7 @@ public class AuthController {
     @PostMapping("/changePassword")
     public ResponseEntity<Users> changePassword(@RequestParam String username,@RequestParam String oldpwd,@RequestParam String newpwd1,@RequestParam String newpwd2){
 //        System.out.println("Jleszó változtatás"+ oldpwd);
-        Users users = this.usersService.findUserByUsername(username);
+        Users users = this.usersService.findUsersByUsername(username);
         System.out.println(users.toString());
         System.out.println(hasPassword(newpwd1));
         if(samePassowrd(oldpwd,users.getPassword())){

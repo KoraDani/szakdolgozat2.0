@@ -1,16 +1,19 @@
 package hu.okosotthon.back.repository;
 
 import hu.okosotthon.back.model.Devices;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface DeviceRepo extends MongoRepository<Devices, String> {
+public interface DeviceRepo extends JpaRepository<Devices, String> {
 
-//    @Query(value = "{'userId':'?0'}")
-    List<Devices> getDevicesByUsername(String userId);
-//    List<Devices> findAllByUserId(String userId);
+    @Query("SELECT d FROM Devices d WHERE d.userId = ?1")
+    List<Devices> getDevicesByUserId(int userId);
+
+    @Query("SELECT d.devicesId FROM Devices d WHERE d.topic = ?1")
+    int getDevicesByTopic(String topic);
+
 }

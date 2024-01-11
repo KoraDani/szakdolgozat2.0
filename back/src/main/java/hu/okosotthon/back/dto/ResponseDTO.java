@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ResponseDTO {
     private String sessionId;
-    private String userId;
+    private int userId;
     private String username;
 }

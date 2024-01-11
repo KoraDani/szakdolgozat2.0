@@ -1,10 +1,10 @@
 package hu.okosotthon.back.controller;
 
+import hu.okosotthon.back.dto.DeviceDTO;
 import hu.okosotthon.back.model.Devices;
-import hu.okosotthon.back.service.DeviceService;
-import hu.okosotthon.back.service.MqttService;
-import hu.okosotthon.back.service.MeasurementService;
-import hu.okosotthon.back.service.UsersService;
+import hu.okosotthon.back.model.Fields;
+import hu.okosotthon.back.model.Topic;
+import hu.okosotthon.back.service.*;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,35 +20,33 @@ import java.util.List;
 public class DeviceController {
 
     private DeviceService deviceService;
-    private MeasurementService measurementService;
-    private UsersService usersService;
     private MqttService mqttService;
+    private FieldsService fieldsService;
 
     @Autowired
-    public DeviceController(DeviceService deviceService, MeasurementService measurementService, UsersService usersService, MqttService mqttService) {
+    public DeviceController(DeviceService deviceService, MqttService mqttService, FieldsService fieldsService) {
         this.deviceService = deviceService;
-        this.measurementService = measurementService;
-        this.usersService = usersService;
         this.mqttService = mqttService;
+        this.fieldsService = fieldsService;
     }
 
-
     @PostMapping("/saveDevice")
-    public ResponseEntity<Devices> saveDevices( @RequestBody Devices devices/*, String[] array*/) throws MqttException {
-        devices.setUsername(AuthController.currentUser.getUsername());
-        Devices newDevice = this.deviceService.saveDevice(devices);
-//        System.out.println(AuthController.currentUser.getId());
-//        System.out.println(devices.getDeviceName());
-        this.measurementService.saveTopic(devices.getTopic());
-        this.usersService.updateUsersById(AuthController.currentUser, devices.getTopic());
-        this.mqttService.subscribeToTopic(devices.getTopic());
-//        System.out.println(array[0]);
+    public ResponseEntity<Devices> saveDevices(@RequestBody DeviceDTO devices) throws MqttException {
+        Devices newDevice;
+            newDevice = this.deviceService.saveDevice(new Devices(devices.getDeviceName(), devices.getDeviceType(), devices.getLocation(), AuthController.currentUser.getUserId(),devices.getTopic()));
+            this.mqttService.subscribeToTopic(newDevice.getTopic());
+            List<Fields> fieldsList = new ArrayList<>();
+            for (int i = 0; i < devices.getFieldKey().length; i++){
+                fieldsList.add(new Fields(newDevice.getDevicesId(), devices.getFieldKey()[i],devices.getFieldType()[i]));
+            }
+            this.fieldsService.saveAll(fieldsList);
+//        }
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
 
     @GetMapping("/getAllUserDevices")
     public ResponseEntity<List<Devices>> getAllUserDevices(){
-        List<Devices> devicesList = this.deviceService.getAllUserDevices(AuthController.currentUser.getUsername());
+        List<Devices> devicesList = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());
 //        for (Devices dev :devicesList) {
 //            System.out.println(dev);
 //        }

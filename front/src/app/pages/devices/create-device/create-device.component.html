@@ -6,31 +6,70 @@
 
 
         <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">
-          <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text"
-                 formControlName="deviceName">
-          <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text"
-                  formControlName="deviceType">
-            <option value="temp">Hőmérséklet mérés</option>
-            <option value="degree">Hőfokszabályzás</option>
-            <option value="lamp">Lámpa kapcsolás</option>
-          </select>
+          <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text" formControlName="deviceName">
+          <!--          <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text"-->
+          <!--                  formControlName="deviceType">-->
+          <!--            <option value="temp">Hőmérséklet mérés</option>-->
+          <!--            <option value="degree">Hőfokszabályzás</option>-->
+          <!--            <option value="lamp">Lámpa kapcsolás</option>-->
+          <!--          </select>-->
+          <input class="flip-card__input" name="deviceType" placeholder="Eszköz típus" type="text" formControlName="deviceType">
           <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
           <input class="flip-card__input" name="topic" placeholder="Topic" type="text" formControlName="topic">
         </form>
 
 
-<!--        <form [formGroup]="dynamicForm" class="flip-card__form">-->
-<!--          <div formArrayName="fields">-->
-<!--            <div *ngFor="let field of fields.controls; let i = index">-->
-<!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <button class="button" (click)="addInputField()">-->
-<!--            <mat-icon>add</mat-icon>-->
-<!--          </button>-->
-<!--        </form>-->
+        <!--        <form [formGroup]="dynamicForm" class="flip-card__form">-->
+        <!--          <div formArrayName="fields">-->
+        <!--            <div *ngFor="let field of fields.controls; let i = index">-->
+        <!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--          <button class="button" (click)="addInputField()">-->
+        <!--            <mat-icon>add</mat-icon>-->
+        <!--          </button>-->
+        <!--        </form>-->
         <button (click)="saveDevice()" class="flip-card__btn">Confirm!</button>
 
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="card-switch">
+      <div class="flip-card__front">
+        <label>JSON key</label>
+        <form [formGroup]="dynamicInputForm" class="flip-card__form">
+          <div formArrayName="inputFields">
+            <div *ngFor="let inputFields of inputFields.controls; let i = index">
+              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="InputField {{ i +1}}"/>
+              <button class="button" (click)="removeInputField(i)" ><mat-icon>remove</mat-icon></button>
+            </div>
+          </div>
+          <button class="button" (click)="addInputField()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="card-switch">
+      <div class="flip-card__front">
+        <label>Be és kikapcsolás</label>
+        <form [formGroup]="dynamicCheckBoxForm" class="flip-card__form">
+          <div formArrayName="checkBoxFields">
+            <div *ngFor="let checkBoxFields of checkBoxFields.controls; let i = index">
+              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="CheckBox {{ i +1}}"/>
+<!--              <input [formControlName]="i*2" type="checkbox" placeholder="CheckBox {{ i +1}}"/>-->
+              <button class="button" (click)="removeCheckBoxField(i)" ><mat-icon>remove</mat-icon></button>
+            </div>
+          </div>
+          <button class="button" (click)="addCheckBoxField()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </form>
       </div>
     </div>
   </div>

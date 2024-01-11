@@ -19,9 +19,13 @@ public class DeviceService {
         return this.deviceRepo.save(devices);
     }
 
-    public List<Devices> getAllUserDevices(String username) {
-        return this.deviceRepo.getDevicesByUsername(username);
+    public List<Devices> getAllUserDevices(int userId) {
+        return this.deviceRepo.getDevicesByUserId(userId);
 //        return this.deviceRepo.findAll();
 //        return this.deviceRepo.findAllByUserId(userId);
+    }
+
+    public int getDeviceIdByTopic(String topic) {
+        return this.deviceRepo.getDevicesByTopic(topic);
     }
 }

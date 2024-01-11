@@ -1,8 +1,8 @@
 export interface Devices{
-  devicesId: any | undefined;
+  devicesId: number | undefined;
   deviceName: string;
   deviceType: string;
   location: string;
-  username: string | undefined;
+  userId: number | undefined;
   topic: string;
 }

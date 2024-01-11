@@ -9,11 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.Nullable;
 
 
-@Document("deviceState")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class DeviceState {
     @Id
     @Nullable

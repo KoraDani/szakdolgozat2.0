@@ -25,7 +25,7 @@ export class DevicesComponent implements OnInit{
     }, (error: any) => {
       console.error(error);
     });
-    //TODO itt most már csak azt kell megcsinálni hogy az utolsó mérést adja vissza
+    //TODO utolsó mérés plusz hogy megjelenjen az adat
     this.topServ.getMeasurment().subscribe((topic : Measurement[]) =>{
       // @ts-ignore
       this.measurment = new Map(Object.entries(JSON.parse(topic[0].payload)));

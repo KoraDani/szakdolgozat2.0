@@ -5,6 +5,7 @@ import {Devices} from "../model/Devices";
 import {FormArray} from "@angular/forms";
 import {argsArgArrayOrObject} from "rxjs/internal/util/argsArgArrayOrObject";
 import {Measurement} from "../model/Measurement";
+import {Topic} from "../model/Topic";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class DeviceService {
 
   constructor(private http: HttpClient) { }
 
-  saveDevice(devices: Devices) {
+  saveDevice(devices: DeviceDTO) {
       return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", devices);
   }
 

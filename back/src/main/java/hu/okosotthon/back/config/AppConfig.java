@@ -43,6 +43,7 @@ public class AppConfig  extends WebSecurityConfigurerAdapter {
         }).and();
 
         http.authorizeRequests()
+                .antMatchers("/error").permitAll()
                 .antMatchers("/auth/saveUser").permitAll()
                 .antMatchers("/auth/login").permitAll()
                 .anyRequest().permitAll();

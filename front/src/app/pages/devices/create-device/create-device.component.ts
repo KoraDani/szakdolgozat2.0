@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DeviceService} from "../../../shared/service/device.service";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
-import {Devices} from "../../../shared/model/Devices";
 import {Router} from "@angular/router";
 
 @Component({
@@ -17,31 +16,43 @@ export class CreateDeviceComponent {
     location: new FormControl,
     topic: new FormControl
   });
-  // dynamicForm: FormGroup;
+  dynamicInputForm: FormGroup;
+  dynamicCheckBoxForm: FormGroup;
 
-  constructor(private devServ: DeviceService,private fb: FormBuilder, private router: Router) {
+  constructor(private devServ: DeviceService,private fb: FormBuilder,private router: Router) {
     this.deviceForm = this.fb.group({
       deviceName: ['', [Validators.required]],
       deviceType: ['', [Validators.required]],
       location: ['', [Validators.required]],
       topic: ['', [Validators.required]]
     })
-    // this.dynamicForm = this.fb.group({
-    //   fields: this.fb.array([this.createInputControl()]),
-    // });
+    this.dynamicInputForm = this.fb.group({
+      inputFields: this.fb.array([this.createInputControl()]),
+    });
+    this.dynamicCheckBoxForm = this.fb.group({
+      checkBoxFields: this.fb.array([this.createCheckBoxControl()]),
+    });
   }
 
   saveDevice() {
     if(this.deviceForm.valid){
-      let devices: Devices = {
-        devicesId: null,
+      let dynamicCheckBoxArr : string[] = this.dynamicCheckBoxForm.get("checkBoxFields")?.value;
+      let dynamicInputArr : string[] = this.dynamicInputForm.get("inputFields")?.value;
+      let map = new Map<string, number>;
+
+      dynamicCheckBoxArr.forEach((arr) =>{map.set(arr, 1);});
+      dynamicInputArr.forEach((arr) =>{map.set(arr, 2);});
+
+      let devices: DeviceDTO = {
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
-        username: "",
-        topic: this.deviceForm.get("topic")?.value
+        topic: this.deviceForm.get("topic")?.value,
+        fieldKey: Array.from(map.keys()),
+        fieldType: Array.from(map.values())
+        //TODO localstoraget meg kell nézni hogy ide elmentem ez az userId-t
       }
-      console.log(devices);
+
       this.devServ.saveDevice(devices).subscribe(()=>{
         console.log("Device saved");
         this.router.navigateByUrl("/devices");
@@ -58,13 +69,31 @@ export class CreateDeviceComponent {
     return new FormControl('', Validators.required);
   }
 
-  // addInputField() {
-  //   this.fields.push(this.createInputControl());
-  // }
-  //
-  // get fields() {
-  //   return this.dynamicForm.get('fields') as FormArray;
-  // }
+  addInputField() {
+    this.inputFields.push(this.createInputControl());
+  }
+
+  removeInputField(index: number){
+    this.inputFields.removeAt(index);
+  }
+  createCheckBoxControl() {
+    return new FormControl('', Validators.required);
+  }
+
+  addCheckBoxField() {
+    this.checkBoxFields.push(this.createInputControl());
+  }
+
+  removeCheckBoxField(index: number){
+    this.checkBoxFields.removeAt(index);
+  }
+
+  get inputFields() {
+    return this.dynamicInputForm.get('inputFields') as FormArray;
+  }
+  get checkBoxFields() {
+    return this.dynamicCheckBoxForm.get('checkBoxFields') as FormArray;
+  }
 
   /**
    * Első lehetőség: drag&droppal úgy hogy a felhasználónak meg van addva milyen inputokat tud

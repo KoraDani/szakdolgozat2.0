@@ -13,4 +13,7 @@ public class DeviceDTO {
     private String deviceName;
     private String deviceType;
     private String location;
+    private String topic;
+    private String[] fieldKey;
+    private String[] fieldType;
 }

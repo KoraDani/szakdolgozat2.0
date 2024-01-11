@@ -1,20 +1,24 @@
 package hu.okosotthon.back.service;
 
+import hu.okosotthon.back.model.Measurement;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 
 @Service
 public class MqttService {
 
     private MeasurementService measurementService;
+    private DeviceService deviceService;
     private UsersService usersService;
 
     @Autowired
-    public MqttService(MeasurementService measurementService, UsersService usersService) throws MqttException {
+    public MqttService(MeasurementService measurementService, DeviceService deviceService, UsersService usersService) {
         this.measurementService = measurementService;
+        this.deviceService = deviceService;
         this.usersService = usersService;
     }
 
@@ -47,13 +51,6 @@ public class MqttService {
 
 
     public void subscribeToTopic(String topic) throws MqttException {
-        String temperatureTopic = "esp32/dht11/temperature";
-        String humidityTopic = "esp32/dht11/humidity";
-        String tasmotaTopic = "tele/home/dolgozo/temp/SENSOR";
-
-        //Topicnál pedig amikor egy felhasználó hozzáad egy eszközt akkor meg kell adnia topicot és azt
-        //a topicot eltároljuk egy listában és mindig azon a listán végig iterálva fogunk feliratkozni a topicocra
-
         mqttClient.subscribe(topic);
 //        if(AuthController.currentUser != null){
 //            List<String> userTopicList = this.usersService.getSubscribedTopicsFromUser();
@@ -67,20 +64,23 @@ public class MqttService {
         mqttClient.setCallback(new MqttCallback() {
 
             @Override
-            @Async // Make the method asynchronous
+            @Async
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 System.out.println("Received message on topic: " + topic);
                 System.out.println("Message: " + new String(message.getPayload()));
-//                JSONObject obj = new JSONObject(new String(message.getPayload()));
-//                System.out.println("JSON obj: " + obj.get("DHT11"));
-                measurementService.save(topic, new String(message.getPayload()));
-                // Delegate message handling to the service
+                int deviceId = deviceService.getDeviceIdByTopic(topic);
+                System.out.println("deviceId: " + deviceId);
+                if(message.getPayload() != null){
+                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    measurementService.save(new Measurement(deviceId, new String(message.getPayload()), currentDateTime.toString()));
+                }
 //                handleAsyncMessage(topic, new String(message.getPayload()));
             }
 
             @Override
             public void connectionLost(Throwable cause) {
                 System.out.println("Connection lost"+ cause);
+                connectToBroker();
             }
 
             @Override
