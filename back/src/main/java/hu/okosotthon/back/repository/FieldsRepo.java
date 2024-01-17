@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface FieldsRepo extends JpaRepository<Fields, Integer> {
 
-    @Query("SELECT f FROM Fields f INNER JOIN Devices d ON f.deviceId=d.devicesId WHERE d.userId = ?1")
+    @Query("SELECT f FROM Fields f INNER JOIN Devices d ON f.devices.devicesId=d.devicesId WHERE d.users.userId = ?1")
     List<Fields> getAllByUserId(int userId);
 }

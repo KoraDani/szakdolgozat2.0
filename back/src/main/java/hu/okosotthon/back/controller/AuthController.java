@@ -1,7 +1,7 @@
 package hu.okosotthon.back.controller;
 
 import hu.okosotthon.back.dto.RegisterDTO;
-import hu.okosotthon.back.dto.ResponseDTO;
+import hu.okosotthon.back.dto.UserResponseDTO;
 import hu.okosotthon.back.dto.UserDTO;
 import hu.okosotthon.back.model.Users;
 import hu.okosotthon.back.service.UsersService;
@@ -25,39 +25,31 @@ public class AuthController {
     private AuthenticationManager manager;
     @Autowired
     private SessionRegistery sessionRegistery;
+
+    public static UserResponseDTO currentUserRes;
     public static Users currentUser;
 
-//    @Autowired
-//    public AuthController(UsersService usersService/*, AuthenticationManager authenticationManager*/, SessionRegistery sessionRegistery) {
-//        this.usersService = usersService;
-////        this.manager = authenticationManager;
-//        this.sessionRegistery = sessionRegistery;
-//    }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> loginUsers(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> loginUsers(@RequestBody UserDTO userDTO) {
         System.out.println("Felhasználó beléptetése "+ userDTO.getUsername()+ " " + userDTO.getPassword());
 
         this.manager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(),userDTO.getPassword()));
-//        this.manager.authenticate(new UsernamePasswordAuthenticationToken("proba","asdasd"));
 
         final String sessionId = this.sessionRegistery.registerSession(userDTO.getUsername());
         System.out.println("sessionId: " + sessionId);
 
         //Bejelentkezett user elmentése a bakcendben
         currentUser = this.usersService.findUsersByUsername(userDTO.getUsername());
-        ResponseDTO responseDTO = new ResponseDTO(sessionId,currentUser.getUserId(), currentUser.getUsername());
-        return ResponseEntity.ok(responseDTO);
+        currentUserRes = convertUser(currentUser);
+        currentUserRes.setSessionId(sessionId);
+        return ResponseEntity.ok(currentUserRes);
     }
-    //TODO itt a response más lett mint volt. Kérdés hogy használom e fronton
 
+    //TODO megkérdezni hogy jó ötlet e eltárolni a usert backendnél
     @PostMapping("/getUserByUsername")
-    public ResponseEntity<Users> getUserById(@RequestBody String username){
-        System.out.println(username);
-//        Users user = this.usersService.getUserById(userId);
-        Users user = this.usersService.findUsersByUsername(username);
-//        System.out.println(user.getUsername());
-        return new ResponseEntity<>(user,HttpStatus.OK);
+    public ResponseEntity<UserResponseDTO> getUserById(){
+        return new ResponseEntity<>(currentUserRes,HttpStatus.OK);
     }
 
     @PostMapping("/saveUser")
@@ -91,5 +83,8 @@ public class AuthController {
     }
     public boolean samePassowrd(String oldpwd, String hashPwd){
         return new BCryptPasswordEncoder().matches(oldpwd, hashPwd);
+    }
+    public UserResponseDTO convertUser(Users users){
+        return new UserResponseDTO(users.getUserId(), users.getUsername(), users.getEmail(), users.getImageUrl());
     }
 }

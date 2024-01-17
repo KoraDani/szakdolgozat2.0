@@ -12,10 +12,16 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceDTO {
+    @Nullable
+    private int devicesId;
     private String deviceName;
     private String deviceType;
     private String location;
     private String topic;
     private String[] fieldKey;
     private String[] fieldType;
+    @Nullable
+    private String[] payloadValue;
+//    private Measurement measurement;
+    //TODO measurementtel baja van
 }

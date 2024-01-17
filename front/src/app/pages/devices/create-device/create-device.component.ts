@@ -44,12 +44,15 @@ export class CreateDeviceComponent {
       dynamicInputArr.forEach((arr) =>{map.set(arr, 2);});
 
       let devices: DeviceDTO = {
+        devicesId: undefined,
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
         topic: this.deviceForm.get("topic")?.value,
         fieldKey: Array.from(map.keys()),
-        fieldType: Array.from(map.values())
+        fieldType: Array.from(map.values()),
+        payloadValue: []
+        // measurement: undefined
         //TODO localstoraget meg kell nézni hogy ide elmentem ez az userId-t
       }
 

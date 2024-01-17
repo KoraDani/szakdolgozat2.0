@@ -11,6 +11,6 @@ import java.util.List;
 public interface MeasurementRepo extends JpaRepository<Measurement, String> {
 //    void updateTopicsByTopic(Topics topics);
 //    Map<String, String> findAll();
-    @Query("SELECT m FROM Measurement m INNER JOIN Devices d ON d.devicesId=m.deviceId WHERE d.userId = ?1")
+    @Query("SELECT m FROM Measurement m INNER JOIN Devices d ON d.devicesId=m.devices.devicesId WHERE d.users.userId = ?1")
     List<Measurement> findMeasurementByUserId(int userId);
 }

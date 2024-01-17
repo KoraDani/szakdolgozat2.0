@@ -1,5 +1,6 @@
 package hu.okosotthon.back.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import hu.okosotthon.back.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,12 +29,6 @@ public class Users implements UserDetails {
             "imageUrl":"asd"
     }*/
 
-    /**
-     * Szóval itt egy olyan változtatás kell hogy a usernél lesz eltárolni a topicok amikre feliratkozik
-     * minden bejelentkezésnél feliratkozik a topicocra és így meg van oldva hogy ha a user új
-     * eszközt add hozzá akkor automatikus feliratkozonn egy topicra
-     *
-     * */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -46,7 +41,17 @@ public class Users implements UserDetails {
     private String password;
 //    @NotBlank
     private String imageUrl;
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Devices> devicesList;
 
+    public Users(int userId, String username, String email, String password, String imageUrl) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.imageUrl = imageUrl;
+    }
 
     @Override
     public String toString() {
@@ -59,9 +64,6 @@ public class Users implements UserDetails {
                 '}';
     }
 
-    public boolean userEqual(UserDTO userDTO) {
-        return this.email.equals(userDTO.getEmail()) /*&& this.username.equals(userDTO.getUsername())*/ && this.password.equals(userDTO.getPassword());
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -25,6 +25,6 @@ public class MeasurementController {
     public ResponseEntity<List<Measurement>> getAllUserMeasurment(){
         System.out.println("GetAllMeasurment");
         List<Measurement> measurementList = this.measurementService.findMeasurementByUserId();
-        return new ResponseEntity<>(measurementList, HttpStatus.OK);
+        return new ResponseEntity<>(measurementList.isEmpty() ? null : measurementList, HttpStatus.OK);
     }
 }

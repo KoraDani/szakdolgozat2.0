@@ -23,36 +23,23 @@
 <!--  </div>-->
 <!--</div>-->
 
-<div class="container div-margin">
-  <div class="card" *ngFor="let dev of devicesList">
+
+<!--<div class="container div-margin">-->
+<div class="container">
+<!--  <div class="card" *ngFor="let dev of devicesList">-->
+  <div *ngFor="let dev of devicesList">
     <!--  <div class="card-photo"></div>-->
-    <div class="text-container card-title card-socials item">{{dev.location}}
-      <label>Hőmérséklet:{{measurment.get("temperature")?.valueOf()}}</label><br>
-      <label>Páratartalom:{{measurment.get("humidity")?.valueOf()}}</label><br>
-      <div class="text-item">
-        Valami:<label class="switch">
-        <input class="toggle" type="checkbox">
-        <span class="slider"></span>
-        <span class="card-side"></span>
-      </label>
-      </div>
-      <div class="text-item">
-        Valami:<label class="switch">
-        <input class="toggle" type="checkbox">
-        <span class="slider"></span>
-        <span class="card-side"></span>
-      </label>
-      </div>
-      <div class="text-item">
-        Valami:<label class="switch">
-        <input class="toggle" type="checkbox">
-        <span class="slider"></span>
-        <span class="card-side"></span>
-      </label>
+<!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
+      <label>Hőmérséklet:{{measurmentMap.get("temperature")?.valueOf()}}</label><br>
+      <label>Páratartalom:{{measurmentMap.get("humidity")?.valueOf()}}</label><br>
+      <div *ngFor="let field of dev.fieldKey; index as i">
+        <label>{{field}}</label>&nbsp;
+        <label *ngIf="dev.fieldType[i] == 2">{{dev.payloadValue[i]}}</label>
+<!--        //TODO Most már csak a többit kell ide megcsinálni-->
       </div>
     </div>
   </div>
-</div>
+<!--</div>-->
 <div>
   <button><a href="/create-device">Eszköz hozzáadása</a></button>
 </div>

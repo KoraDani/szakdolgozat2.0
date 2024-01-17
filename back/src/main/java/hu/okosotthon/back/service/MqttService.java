@@ -1,12 +1,20 @@
 package hu.okosotthon.back.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.model.Measurement;
+import netscape.javascript.JSObject;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MqttService {
@@ -68,11 +76,16 @@ public class MqttService {
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 System.out.println("Received message on topic: " + topic);
                 System.out.println("Message: " + new String(message.getPayload()));
-                int deviceId = deviceService.getDeviceIdByTopic(topic);
-                System.out.println("deviceId: " + deviceId);
-                if(message.getPayload() != null){
-                    LocalDateTime currentDateTime = LocalDateTime.now();
-                    measurementService.save(new Measurement(deviceId, new String(message.getPayload()), currentDateTime.toString()));
+//                int deviceId = deviceService.getDeviceIdByTopic(topic);
+//                System.out.println("deviceId: " + deviceId);
+                LocalDateTime currentDateTime = LocalDateTime.now();
+                Devices devices = deviceService.getDeviceByTopic(topic);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                Map<String, String> jsonMap = objectMapper.readValue(new String(message.getPayload()), Map.class);
+                System.out.println(jsonMap.get("temp"));
+                for (Map.Entry<String,String> entry : jsonMap.entrySet()){
+                    System.out.println("Measurement save: " + devices.getDevicesId());
+                    measurementService.save(new Measurement(String.valueOf(entry.getKey()),String.valueOf(entry.getValue()), currentDateTime.toString(), devices));
                 }
 //                handleAsyncMessage(topic, new String(message.getPayload()));
             }
@@ -80,7 +93,7 @@ public class MqttService {
             @Override
             public void connectionLost(Throwable cause) {
                 System.out.println("Connection lost"+ cause);
-                connectToBroker();
+//                connectToBroker();
             }
 
             @Override

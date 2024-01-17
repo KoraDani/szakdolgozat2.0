@@ -14,6 +14,7 @@ import javax.validation.Valid;
 @Service
 public class UsersService implements UserDetailsService {
     private final UsersRepo usersRepo;
+
     @Autowired
     public UsersService(UsersRepo usersRepo) {
         this.usersRepo = usersRepo;

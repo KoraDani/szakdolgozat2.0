@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,25 +33,43 @@ public class DeviceController {
 
     @PostMapping("/saveDevice")
     public ResponseEntity<Devices> saveDevices(@RequestBody DeviceDTO devices) throws MqttException {
-        Devices newDevice;
-            newDevice = this.deviceService.saveDevice(new Devices(devices.getDeviceName(), devices.getDeviceType(), devices.getLocation(), AuthController.currentUser.getUserId(),devices.getTopic()));
-            this.mqttService.subscribeToTopic(newDevice.getTopic());
-            List<Fields> fieldsList = new ArrayList<>();
-            for (int i = 0; i < devices.getFieldKey().length; i++){
-                fieldsList.add(new Fields(newDevice.getDevicesId(), devices.getFieldKey()[i],devices.getFieldType()[i]));
-            }
-            this.fieldsService.saveAll(fieldsList);
-//        }
+        List<Fields> fieldsList = new ArrayList<>();
+
+        System.out.println(devices.getDeviceName());
+
+
+        Devices newDevice = this.deviceService.saveDevice(new Devices(devices.getDeviceName(), devices.getDeviceType(), devices.getLocation(), AuthController.currentUser,devices.getTopic()));
+        for (int i = 0; i < devices.getFieldKey().length; i++){
+//            fieldsList.add(new Fields(devices.getFieldKey()[i],devices.getFieldType()[i],newDevice));
+            this.fieldsService.save(new Fields(devices.getFieldKey()[i],devices.getFieldType()[i],newDevice));
+        }
+//        this.fieldsService.saveAll(fieldsList);
+
+        this.mqttService.subscribeToTopic(newDevice.getTopic());
+
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
 
     @GetMapping("/getAllUserDevices")
-    public ResponseEntity<List<Devices>> getAllUserDevices(){
-        List<Devices> devicesList = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());
-//        for (Devices dev :devicesList) {
-//            System.out.println(dev);
-//        }
-        return new ResponseEntity<>(devicesList, HttpStatus.OK);
+    public ResponseEntity<List<DeviceDTO>> getAllUserDevices(){
+        List<Devices> dev = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());
+        List<DeviceDTO> deviceDTOS = new ArrayList<>();
+        System.out.println("devices szie: " + dev.size());
+        int i = 0;
+        for (Devices devices : dev) {
+            if(devices.getFieldsList() != null){
+                for (int j = 0; j < devices.getFieldsList().size(); j++) {
+                    if(devices.getMeasurementList() != null && devices.getMeasurementList().size()-1 > i){
+                        if(devices.getFieldsList().get(j).getFieldKey().equals(devices.getMeasurementList().get(i).getPayloadKey())){
+                            deviceDTOS.add(devices.convertDivece());
+                            i++;
+                            System.out.println("hozzadadva");
+                        }
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(deviceDTOS, HttpStatus.OK);
     }
 
     @PostMapping("/sendDataToFront")

@@ -2,6 +2,7 @@ export interface Measurement {
   measurementId: string;
   username: string;
   topic: string;
-  payload: string;
+  payloadKey: string;
+  payloadValue: string;
   time: string;
 }

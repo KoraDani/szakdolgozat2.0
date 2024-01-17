@@ -26,6 +26,9 @@ public class DeviceService {
     }
 
     public int getDeviceIdByTopic(String topic) {
-        return this.deviceRepo.getDevicesByTopic(topic);
+        return this.deviceRepo.getDevicesIdByTopic(topic);
+    }
+    public Devices getDeviceByTopic(String topic){
+        return this.deviceRepo.getDeviceByTopic(topic);
     }
 }

@@ -44,5 +44,6 @@ public class BackApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		mqttService.connectToBroker();
+		mqttService.subscribeToTopic("home/szoba/temp");
 	}
 }

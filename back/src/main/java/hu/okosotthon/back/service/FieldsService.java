@@ -25,4 +25,8 @@ public class FieldsService {
     public List<Fields> getAllFieldsByUserId() {
         return this.fieldsRepo.getAllByUserId(AuthController.currentUser.getUserId());
     }
+
+    public Fields save(Fields fields) {
+        return this.fieldsRepo.save(fields);
+    }
 }
