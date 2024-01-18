@@ -26,19 +26,35 @@
 
 <!--<div class="container div-margin">-->
 <div class="container">
-<!--  <div class="card" *ngFor="let dev of devicesList">-->
-  <div *ngFor="let dev of devicesList">
-    <!--  <div class="card-photo"></div>-->
-<!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
-      <label>Hőmérséklet:{{measurmentMap.get("temperature")?.valueOf()}}</label><br>
-      <label>Páratartalom:{{measurmentMap.get("humidity")?.valueOf()}}</label><br>
-      <div *ngFor="let field of dev.fieldKey; index as i">
-        <label>{{field}}</label>&nbsp;
-        <label *ngIf="dev.fieldType[i] == 2">{{dev.payloadValue[i]}}</label>
-<!--        //TODO Most már csak a többit kell ide megcsinálni-->
-      </div>
+  <!--  <div class="card" *ngFor="let dev of devicesList">-->
+  <div class="card" *ngFor="let dev of devicesList">
+    <!--      <div class="card-photo">-->
+    <!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
+    <p>{{dev.deviceName}}</p>
+    <div *ngFor="let field of dev.fieldKey; index as i">
+      <label>{{field}}</label>&nbsp;
+      <label *ngIf="dev.fieldType[i] == 2">{{dev.payloadValue[i]}}</label>
+      <!--        //TODO Most már csak a többit kell ide megcsinálni-->
     </div>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Módosítás</span>
+      </button>
+      <!--      <button mat-menu-item disabled>-->
+      <!--        <mat-icon>voicemail</mat-icon>-->
+      <!--        <span>Check voice mail</span>-->
+      <!--      </button>-->
+      <button mat-menu-item (click)="deleteDevice(dev.devicesId)">
+        <mat-icon>delete</mat-icon>
+        <span>Törlés</span>
+      </button>
+    </mat-menu>
   </div>
+</div>
 <!--</div>-->
 <div>
   <button><a href="/create-device">Eszköz hozzáadása</a></button>

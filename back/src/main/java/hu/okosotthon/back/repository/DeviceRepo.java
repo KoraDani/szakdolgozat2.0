@@ -2,6 +2,7 @@ package hu.okosotthon.back.repository;
 
 import hu.okosotthon.back.model.Devices;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -19,4 +20,9 @@ public interface DeviceRepo extends JpaRepository<Devices, String> {
     @Query("SELECT d FROM Devices d WHERE d.topic = ?1")
     Devices getDeviceByTopic(String topic);
 
+    @Modifying
+    @Query("DELETE FROM Devices d WHERE d.devicesId = ?1")
+    int deleteDevicesByDevicesId(int devicesId);
+
+    void deleteByDevicesId(int devicesId);
 }

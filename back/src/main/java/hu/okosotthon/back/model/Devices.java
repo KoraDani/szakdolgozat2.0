@@ -32,11 +32,11 @@ public class Devices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int devicesId;
-//    @NotBlank(message = "Minden mezőt ki kell tölteni")
+    //    @NotBlank(message = "Minden mezőt ki kell tölteni")
     private String deviceName;
-//    @NotBlank(message = "Minden mezőt ki kell tölteni")
+    //    @NotBlank(message = "Minden mezőt ki kell tölteni")
     private String deviceType;
-//    @NotBlank(message = "Minden mezőt ki kell tölteni")
+    //    @NotBlank(message = "Minden mezőt ki kell tölteni")
     private String location;
 
     @ManyToOne
@@ -51,7 +51,7 @@ public class Devices {
     @OneToMany(mappedBy = "devices", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Measurement> measurementList;
-//    private int userId;
+    //    private int userId;
     private String topic;
 
     public Devices(String deviceName, String deviceType, String location, Users users, String topic) {
@@ -78,17 +78,17 @@ public class Devices {
 //        this.topic = topic;
 //    }
 
-    public DeviceDTO convertDivece(){
+    public DeviceDTO convertDivece() {
         String[] fieldKey = new String[fieldsList.size()];
         String[] fieldType = new String[fieldsList.size()];
-        //TODO itt már csak azt kell megcsinálni hogy ne legyen üres index a tömben
-        //Utolsót adja vissza alapértelmezetten
-        String[] payloadValue = new String[measurementList.size()];
+        String[] payloadValue = new String[fieldsList.size()];
 
-        for(int i = 0; i < fieldsList.size(); i++){
-            fieldKey[i] = fieldsList.get(i).getFieldKey();
-            fieldType[i] = fieldsList.get(i).getFieldType();
-            payloadValue[i] = measurementList.get(i).getPayloadValue();
+        for (int i = 0; i < fieldsList.size(); i++) {
+            if (fieldsList.get(i).getFieldKey().equals(measurementList.get((measurementList.size()-2)-i).getPayloadKey())) {
+                fieldKey[i] = fieldsList.get(i).getFieldKey();
+                fieldType[i] = fieldsList.get(i).getFieldType();
+                payloadValue[i] = measurementList.get((measurementList.size()-1)-i).getPayloadValue();
+            }
         }
 
         return new DeviceDTO(

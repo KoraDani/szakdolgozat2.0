@@ -22,6 +22,4 @@ public class DeviceDTO {
     private String[] fieldType;
     @Nullable
     private String[] payloadValue;
-//    private Measurement measurement;
-    //TODO measurementtel baja van
 }

@@ -11,10 +11,18 @@ import {ShowDeviceAndField} from "../../shared/model/dto/ShowDeviceAndField";
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss']
 })
-export class DevicesComponent implements OnInit{
-  devicesList: DeviceDTO[] = [];
-  measurmentMap: Map<string, string> = new Map<string, string>()
-  showDevAndField: ShowDeviceAndField[] = [];
+export class DevicesComponent implements OnInit {
+  // devicesList: DeviceDTO[] = [];
+  devicesList: DeviceDTO[] = [{
+    devicesId: 1,
+    deviceName: "Proba",
+    deviceType: "1",
+    location: "Konyha",
+    topic: "home/szoba/temp",
+    fieldKey: ["temp", "humi"],
+    fieldType: [2, 2],
+    payloadValue: ["10", "15"]
+  }];
 
   constructor(private devServ: DeviceService, private topServ: TopicService) {
   }
@@ -23,7 +31,7 @@ export class DevicesComponent implements OnInit{
     //TODO most hogy már megvan minden ami kell hogy teljesen moduláris legyen most már csak a fronton kell megvalósítani
 
     // @ts-ignore
-    this.devServ.getDevices().subscribe((dev: DeviceDTO[])=> {
+    this.devServ.getDevices().subscribe((dev: DeviceDTO[]) => {
       console.log(dev);
       this.devicesList = dev;
       // this.convertFieldsAndMeasurment(dev);
@@ -33,34 +41,15 @@ export class DevicesComponent implements OnInit{
     });
   }
 
-  //TODO további CRUD műveleteket megvalósítani, Olvasni tud, most már csak törölni, szerkeszteni kell
+  deleteDevice(deviceId: number) {
+    console.log("Eszköz törlés: " + deviceId);
+    this.devServ.deleteDevice(deviceId).subscribe(() => {
+      console.log("Eszköz sikeresen törölve");
+    }, error => {
+      console.error(error);
+    });
+  }
 
-  // convertFieldsAndMeasurment(dev: DeviceDTO[]){
-  //   let fieldKeyArr : string[];
-  //   for (let i = 0; i < dev.length; i++){//DeviceDTO listán végig iterálás
-  //     let mas = dev[i].measurement?.payload;//Measrument JSON elmentése mindegyik iterációban a rövidebb kód miatt
-  //     // @ts-ignore
-  //     for (var val in mas){ //Payload JSON-önt való végig iterálás
-  //       for(let j = 0; j < dev[i].fieldKey.length; j++){//A devicenak a fieldjein végig iterálás hogy leellenőrizni hogy ugyan az a fieldKey és a JSON key
-  //         if(dev[i].fieldKey[j] == val){//Ellenőrzés hogy egyenlő-e
-  //           this.showDevAndField[i] = {
-  //             // @ts-ignore
-  //             devicesId: dev[i].devicesId,
-  //             deviceName: dev[i].deviceName,
-  //             deviceType: dev[i].deviceType,
-  //             location: dev[i].location
-  //           }
-  //         }
-  //       }
-  //       // @ts-ignore
-  //       this.measurmentMap.set(val, mas[val]);
-  //     }
-  //   }
-  //
-  //   for (let i = 0; i < dev.length; i++){
-  //
-  //   }
-
-  // }
+  //TODO szerkesztést meg kell valósítani
 
 }

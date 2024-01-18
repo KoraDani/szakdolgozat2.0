@@ -1,7 +1,7 @@
 import {Measurement} from "../Measurement";
 
 export interface DeviceDTO{
-  devicesId: number | undefined;
+  devicesId: number | 0;
   deviceName: string;
   deviceType: string;
   location: string;

@@ -17,6 +17,8 @@ import {UserDataComponent} from './pages/user-data/user-data.component';
 import {ReactiveFormsModule, FormsModule } from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RequestInterceptor} from "./request.interceptor";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import {RequestInterceptor} from "./request.interceptor";
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatMenuModule,
+    MatButtonModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
   bootstrap: [AppComponent]

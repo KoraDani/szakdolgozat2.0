@@ -31,4 +31,10 @@ public class DeviceService {
     public Devices getDeviceByTopic(String topic){
         return this.deviceRepo.getDeviceByTopic(topic);
     }
+
+    public void deleteDeviceById(int deviceId) {
+//        return this.deviceRepo.deleteDevicesByDevicesId(deviceId);
+        //TODO a törlés valószínűleg nem így kell megoldani majd holnap meg kell kérdezni
+         this.deviceRepo.deleteByDevicesId(deviceId);
+    }
 }

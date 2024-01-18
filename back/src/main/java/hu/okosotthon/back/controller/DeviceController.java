@@ -3,16 +3,14 @@ package hu.okosotthon.back.controller;
 import hu.okosotthon.back.dto.DeviceDTO;
 import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.model.Fields;
-import hu.okosotthon.back.model.Topic;
 import hu.okosotthon.back.service.*;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +67,17 @@ public class DeviceController {
                 }
             }
         }
+        for (DeviceDTO deviceDTO: deviceDTOS) {
+            System.out.println("deviceName: " + deviceDTO.getDeviceName());
+        }
         return new ResponseEntity<>(deviceDTOS, HttpStatus.OK);
     }
 
-    @PostMapping("/sendDataToFront")
-    public ResponseEntity<JSONObject> sendDataToFront(JSONObject json){
-        return new ResponseEntity<>(json, HttpStatus.OK);
+    @PostMapping("/deleteDevice")
+    public ResponseEntity<Integer> deleteDevice(@RequestBody int deviceId){
+        System.out.println("deleted devicesid: " +deviceId);
+        this.deviceService.deleteDeviceById(deviceId);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
-
 
 }

@@ -24,4 +24,8 @@ export class DeviceService {
     return this.http.get<Devices[]>(this.apiUrl+"/device/getAllUserDevices");
   }
 
+  deleteDevice(deviceId: number) {
+    //TODO rest apit megadni
+    return this.http.post(this.apiUrl+"/device/deleteDevice", deviceId);
+  }
 }

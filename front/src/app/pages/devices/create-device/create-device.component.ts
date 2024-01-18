@@ -44,7 +44,7 @@ export class CreateDeviceComponent {
       dynamicInputArr.forEach((arr) =>{map.set(arr, 2);});
 
       let devices: DeviceDTO = {
-        devicesId: undefined,
+        devicesId: 0,
         deviceName: this.deviceForm.get("deviceName")?.value,
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
