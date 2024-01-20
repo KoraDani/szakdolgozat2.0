@@ -19,17 +19,17 @@ export class DevicesComponent implements OnInit {
     deviceType: "1",
     location: "Konyha",
     topic: "home/szoba/temp",
+    active: 1,
     fieldKey: ["temp", "humi"],
-    fieldType: [2, 2],
+    fieldType: [2, 1],
     payloadValue: ["10", "15"]
   }];
+  number: number[] | undefined;
 
   constructor(private devServ: DeviceService, private topServ: TopicService) {
   }
 
   ngOnInit(): void {
-    //TODO most hogy már megvan minden ami kell hogy teljesen moduláris legyen most már csak a fronton kell megvalósítani
-
     // @ts-ignore
     this.devServ.getDevices().subscribe((dev: DeviceDTO[]) => {
       console.log(dev);
@@ -45,6 +45,14 @@ export class DevicesComponent implements OnInit {
     console.log("Eszköz törlés: " + deviceId);
     this.devServ.deleteDevice(deviceId).subscribe(() => {
       console.log("Eszköz sikeresen törölve");
+    }, error => {
+      console.error(error);
+    });
+  }
+
+  sendPayloadToDevice(payloadKey: string,topic: string, payload: any){
+    this.devServ.sendPayloadToDevice(payloadKey,topic,payload.toString()).subscribe(()=>{
+      console.log("sikeresen elkuldve");
     }, error => {
       console.error(error);
     });

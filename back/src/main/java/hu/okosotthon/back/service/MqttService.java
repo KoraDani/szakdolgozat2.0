@@ -68,6 +68,14 @@ public class MqttService {
 //        }
     }
 
+    public void publishDataToDevice(String topic, String payload) {
+        try {
+            mqttClient.publish(topic, new MqttMessage(payload.getBytes()));
+        } catch (MqttException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void messageArrived(){
         mqttClient.setCallback(new MqttCallback() {
 

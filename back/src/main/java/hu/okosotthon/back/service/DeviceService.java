@@ -32,9 +32,8 @@ public class DeviceService {
         return this.deviceRepo.getDeviceByTopic(topic);
     }
 
-    public void deleteDeviceById(int deviceId) {
+    public void setDeviceDeletedByDeviceId(int deviceId) {
 //        return this.deviceRepo.deleteDevicesByDevicesId(deviceId);
-        //TODO a törlés valószínűleg nem így kell megoldani majd holnap meg kell kérdezni
-         this.deviceRepo.deleteByDevicesId(deviceId);
+         this.deviceRepo.setDeviceDeletedByDeviceId(deviceId);
     }
 }

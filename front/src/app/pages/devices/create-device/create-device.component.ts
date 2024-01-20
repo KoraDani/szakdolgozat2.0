@@ -49,6 +49,7 @@ export class CreateDeviceComponent {
         deviceType: this.deviceForm.get("deviceType")?.value,
         location: this.deviceForm.get("location")?.value,
         topic: this.deviceForm.get("topic")?.value,
+        active: 1,
         fieldKey: Array.from(map.keys()),
         fieldType: Array.from(map.values()),
         payloadValue: []

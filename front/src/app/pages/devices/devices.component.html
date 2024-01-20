@@ -32,15 +32,22 @@
     <!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
     <p>{{dev.deviceName}}</p>
     <div *ngFor="let field of dev.fieldKey; index as i">
-      <label>{{field}}</label>&nbsp;
-      <label *ngIf="dev.fieldType[i] == 2">{{dev.payloadValue[i]}}</label>
+      <div *ngIf="dev.fieldType[i] == 2">
+        <label>{{field}}</label>&nbsp;
+        <label >{{dev.payloadValue[i]}}</label>
+      </div>
+      <div *ngIf="dev.fieldType[i] == 1">
+        <label>{{field}}</label>
+        <input type="number" name="{{field}}" value="{{dev.payloadValue[i]}}" size="4" [(ngModel)]="number">
+        <button (click)="sendPayloadToDevice(field, dev.topic,number)">Küldés</button>
+      </div>
       <!--        //TODO Most már csak a többit kell ide megcsinálni-->
     </div>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item >
         <mat-icon>edit</mat-icon>
         <span>Módosítás</span>
       </button>

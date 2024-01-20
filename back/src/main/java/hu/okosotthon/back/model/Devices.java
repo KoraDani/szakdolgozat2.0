@@ -53,6 +53,7 @@ public class Devices {
     private List<Measurement> measurementList;
     //    private int userId;
     private String topic;
+    private int active;
 
     public Devices(String deviceName, String deviceType, String location, Users users, String topic) {
         this.deviceName = deviceName;
@@ -97,6 +98,7 @@ public class Devices {
                 deviceType,
                 location,
                 topic,
+                active,
                 fieldKey,
                 fieldType,
                 payloadValue);

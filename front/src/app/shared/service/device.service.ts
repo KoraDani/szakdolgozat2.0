@@ -25,7 +25,11 @@ export class DeviceService {
   }
 
   deleteDevice(deviceId: number) {
-    //TODO rest apit megadni
     return this.http.post(this.apiUrl+"/device/deleteDevice", deviceId);
+  }
+
+  sendPayloadToDevice(payloadKey: string,topic: string, payload: string) {
+    console.log({topic, payload})
+    return this.http.post(this.apiUrl+"/device/sendPayloadToDevice",null,{params:{payloadKey, topic, payload}});
   }
 }

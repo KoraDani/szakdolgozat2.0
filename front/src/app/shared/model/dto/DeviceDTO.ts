@@ -6,6 +6,7 @@ export interface DeviceDTO{
   deviceType: string;
   location: string;
   topic: string;
+  active: number;
   fieldKey: string[];
   fieldType: number[];
   payloadValue: string[];

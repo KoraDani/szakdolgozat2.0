@@ -48,13 +48,11 @@ public class UsersService implements UserDetailsService {
     }
 
 
-    //TODO user topicocat vissza adni
 //    public List<String> getSubscribedTopicsFromUser(){
 //        return AuthController.currentUser;
 //    }
 
 
-    //TODO itt is topicot beállítani
     public void updateUsersById(Users currentUser, String topic) {
 //        currentUser.setSubscribedTopic(topic);
         this.usersRepo.save(currentUser);

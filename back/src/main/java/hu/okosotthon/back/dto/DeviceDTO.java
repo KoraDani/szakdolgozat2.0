@@ -18,6 +18,8 @@ public class DeviceDTO {
     private String deviceType;
     private String location;
     private String topic;
+    @Nullable
+    private int active;
     private String[] fieldKey;
     private String[] fieldType;
     @Nullable
