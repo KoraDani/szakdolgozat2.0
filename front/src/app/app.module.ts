@@ -19,6 +19,10 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RequestInterceptor} from "./request.interceptor";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {DevicesModule} from "./pages/devices/devices.module";
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import {MatButtonModule} from "@angular/material/button";
     HttpClientModule,
     ReactiveFormsModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatExpansionModule,
+    DevicesModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
   bootstrap: [AppComponent]

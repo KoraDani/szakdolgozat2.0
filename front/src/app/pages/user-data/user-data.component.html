@@ -1,28 +1,46 @@
-<div class="container">
-  <div class="card">
-    <div>
-      <mat-icon>person</mat-icon>
-    </div>
-    <div class="card-title card-socials">Felhasználónév<br>
+<div fxLayout="column" fxLayoutAlign="start center" class="max-widht">
+
+
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Felhasználói adatok
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <label>Username: {{this.user?.username}}<br></label>
       <label>Email: {{this.user?.email}}</label><br>
-    </div>
-  </div>
-  <div class="card">
-    <div>
-      <form [formGroup]="newPwdForm" (ngSubmit)="changePassword()">
-        <label>Jelszó módosítás:</label><br>
-        <label>Régi jelszó:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="oldpwd">
-        <label>Új jelszó:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="newpwd1">
-        <label>Jelszó megerősítése:</label><input type="password" placeholder="Password" name="text" class="input" formControlName="newpwd2">
-        <button type="submit" class="flip-card__btn">Jelszó mentése</button>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Jelszó módosítás
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form [formGroup]="newPwdForm" (ngSubmit)="changePassword()" fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Régi jelszó:</mat-label>
+          <input matInput type="password" placeholder="Password" name="text" class="input" formControlName="oldpwd">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Régi jelszó megerősítése:</mat-label>
+          <input matInput type="password" placeholder="Password" name="text" class="input" formControlName="newpwd1">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Új jelszó:</mat-label>
+          <input matInput type="password" placeholder="Password" name="text" class="input" formControlName="newpwd2">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Jelszó mentése</button>
       </form>
-    </div>
-  </div>
-  <div class="card">
-    <div>
-      <label>Kép feltöltés</label><br>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Kép feltöltése
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <input type="file" placeholder="Kép feltöltés" name="text" class="input">
-    </div>
-  </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>

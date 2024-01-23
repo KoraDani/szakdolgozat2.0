@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {Users} from "../../shared/model/Users";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import { v4 as uuid } from 'uuid';
+import {FormBuilder, FormControl, FormGroup,  Validators} from "@angular/forms";
 import {RegisterDTO} from "../../shared/model/dto/RegisterDTO";
 import {AuthService} from "../../shared/service/auth.service";
 

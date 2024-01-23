@@ -1,0 +1,52 @@
+<div fxLayout="column" fxLayoutAlign="start center">
+  <!--  <div class="card" *ngFor="let dev of devicesList">-->
+  <!--  <div class="card" *ngFor="let dev of devicesList">-->
+  <!--      <div class="card-photo">-->
+  <!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
+  <p>{{deviceInput.deviceName}}</p>
+  <div *ngFor="let field of deviceInput.fieldKey; index as i">
+    <div *ngIf="deviceInput.fieldType[i] == 2">
+      <label>{{field}}</label>&nbsp;
+      <label>{{deviceInput.payloadValue[i]}}</label>
+    </div>
+    <div *ngIf="deviceInput.fieldType[i] == 1">
+      <!--      <label>{{field}}</label>-->
+      <mat-form-field appearance="outline">
+        <mat-label>{{field}}</mat-label>
+        <input matInput type="number" name="{{field}}" value="{{deviceInput.payloadValue[i]}}" size="4"
+               [(ngModel)]="number">
+      </mat-form-field>
+        <button mat-raised-button color="primary" (click)="sendPayloadToDevice(field, deviceInput.topic,number)"
+                style="margin-left: 10px">
+          <mat-icon>send</mat-icon>
+        </button>
+    </div>
+    <!--        //TODO Most már csak a többit kell ide megcsinálni-->
+  </div>
+  <!--  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">-->
+  <!--    <mat-icon>more_vert</mat-icon>-->
+  <!--  </button>-->
+  <!--  <mat-menu #menu="matMenu">-->
+  <!--    <button mat-menu-item>-->
+  <!--      <mat-icon>edit</mat-icon>-->
+  <!--      <span>Módosítás</span>-->
+  <!--    </button>-->
+  <!--    &lt;!&ndash;      <button mat-menu-item disabled>&ndash;&gt;-->
+  <!--    &lt;!&ndash;        <mat-icon>voicemail</mat-icon>&ndash;&gt;-->
+  <!--    &lt;!&ndash;        <span>Check voice mail</span>&ndash;&gt;-->
+  <!--    &lt;!&ndash;      </button>&ndash;&gt;-->
+  <!--    <button mat-menu-item (click)="deleteDevice(deviceInput.devicesId)">-->
+  <!--      <mat-icon>delete</mat-icon>-->
+  <!--      <span>Törlés</span>-->
+  <!--    </button>-->
+  <!--  </mat-menu>-->
+</div>
+
+<!--</div>-->
+
+<!--<mat-grid-list cols="2" rowHeight="2:1" >-->
+<!--  <mat-grid-tile class="blue"></mat-grid-tile>-->
+<!--  <mat-grid-tile class="red"></mat-grid-tile>-->
+<!--  <mat-grid-tile class="green"></mat-grid-tile>-->
+<!--  <mat-grid-tile class="yellow"></mat-grid-tile>-->
+<!--</mat-grid-list>-->

@@ -1,78 +1,147 @@
-<div class="container div-margin">
+<!--<div class="container div-margin">-->
 
-  <div class="wrapper">
-    <div class="card-switch">
-      <div class="flip-card__front">
-
-
-        <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">
-          <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text" formControlName="deviceName">
-          <!--          <select class="flip-card__input" name="deviceType" placeholder="Típus" type="text"-->
-          <!--                  formControlName="deviceType">-->
-          <!--            <option value="temp">Hőmérséklet mérés</option>-->
-          <!--            <option value="degree">Hőfokszabályzás</option>-->
-          <!--            <option value="lamp">Lámpa kapcsolás</option>-->
-          <!--          </select>-->
-          <input class="flip-card__input" name="deviceType" placeholder="Eszköz típus" type="text" formControlName="deviceType">
-          <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
-          <input class="flip-card__input" name="topic" placeholder="Topic" type="text" formControlName="topic">
-        </form>
+<!--  <div class="wrapper">-->
+<!--    <div class="card-switch">-->
+<!--      <div class="flip-card__front">-->
 
 
-        <!--        <form [formGroup]="dynamicForm" class="flip-card__form">-->
-        <!--          <div formArrayName="fields">-->
-        <!--            <div *ngFor="let field of fields.controls; let i = index">-->
-        <!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="Field {{ i +1}}"/>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--          <button class="button" (click)="addInputField()">-->
-        <!--            <mat-icon>add</mat-icon>-->
-        <!--          </button>-->
-        <!--        </form>-->
-        <button (click)="saveDevice()" class="flip-card__btn">Confirm!</button>
+<!--        <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()">-->
+<!--          <input class="flip-card__input" name="deviceName" placeholder="Eszköz Név" type="text"-->
+<!--                 formControlName="deviceName">-->
+<!--          <input class="flip-card__input" name="deviceType" placeholder="Eszköz típus" type="text"-->
+<!--                 formControlName="deviceType">-->
+<!--          <input class="flip-card__input" name="location" placeholder="Elhelyezkedése" type="text"-->
+<!--                 formControlName="location">-->
+<!--          <input class="flip-card__input" name="topic" placeholder="Topic" type="text" formControlName="topic">-->
+<!--        </form>-->
+<!--        <button (click)="saveDevice()" class="flip-card__btn">Confirm!</button>-->
 
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="wrapper">-->
+<!--    <div class="card-switch">-->
+<!--      <div class="flip-card__front">-->
+<!--        <label>JSON key</label>-->
+<!--        <form [formGroup]="dynamicInputForm" class="flip-card__form">-->
+<!--          <div formArrayName="inputFields">-->
+<!--            <div *ngFor="let inputFields of inputFields.controls; let i = index">-->
+<!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="InputField {{ i +1}}"/>-->
+<!--              <button class="button" (click)="removeInputField(i)">-->
+<!--                <mat-icon>remove</mat-icon>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button class="button" (click)="addInputField()">-->
+<!--            <mat-icon>add</mat-icon>-->
+<!--          </button>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="wrapper">-->
+<!--    <div class="card-switch">-->
+<!--      <div class="flip-card__front">-->
+<!--        <label>Be és kikapcsolás</label>-->
+<!--        <form [formGroup]="dynamicCheckBoxForm" class="flip-card__form">-->
+<!--          <div formArrayName="checkBoxFields">-->
+<!--            <div *ngFor="let checkBoxFields of checkBoxFields.controls; let i = index">-->
+<!--              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="CheckBox {{ i +1}}"/>-->
+<!--              &lt;!&ndash;              <input [formControlName]="i*2" type="checkbox" placeholder="CheckBox {{ i +1}}"/>&ndash;&gt;-->
+<!--              <button class="button" (click)="removeCheckBoxField(i)">-->
+<!--                <mat-icon>remove</mat-icon>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <button class="button" (click)="addCheckBoxField()">-->
+<!--            <mat-icon>add</mat-icon>-->
+<!--          </button>-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<mat-vertical-stepper #stepper class="halfwidht">
+  <mat-step [stepControl]="deviceForm">
+    <form [formGroup]="deviceForm" class="flip-card__form" (ngSubmit)="saveDevice()" fxLayout="column" fxLayoutAlign="space-evenly center">
+      <ng-template matStepLabel>Eszköz általános adatai</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Eszköz neve</mat-label>
+        <input matInput name="deviceName" placeholder="Eszköz Neve" type="text" formControlName="deviceName">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Eszköz típus</mat-label>
+        <input matInput name="deviceType" placeholder="Eszköz típus" type="text" formControlName="deviceType">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Elhelyezkedése</mat-label>
+        <input matInput name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Topic</mat-label>
+        <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
+      </mat-form-field>
+      <div>
+        <button mat-raised-button matStepperNext>Következő</button>
       </div>
-    </div>
-  </div>
-
-  <div class="wrapper">
-    <div class="card-switch">
-      <div class="flip-card__front">
-        <label>JSON key</label>
-        <form [formGroup]="dynamicInputForm" class="flip-card__form">
-          <div formArrayName="inputFields">
-            <div *ngFor="let inputFields of inputFields.controls; let i = index">
-              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="InputField {{ i +1}}"/>
-              <button class="button" (click)="removeInputField(i)" ><mat-icon>remove</mat-icon></button>
-            </div>
-          </div>
-          <button class="button" (click)="addInputField()">
-            <mat-icon>add</mat-icon>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="dynamicInputForm">
+    <form [formGroup]="dynamicInputForm" fxLayout="column" fxLayoutAlign="space-evenly center">
+      <ng-template matStepLabel>Bementei inputok megadása</ng-template>
+      <div formArrayName="inputFields">
+        <div *ngFor="let inputFields of inputFields.controls; let i = index">
+          <mat-form-field appearance="outline">
+            <mat-label>InputField</mat-label>
+            <input matInput [formControlName]="i" type="text" placeholder="InputField {{ i +1}}"/>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="removeInputField(i)">
+            <mat-icon>remove</mat-icon>
           </button>
-        </form>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="wrapper">
-    <div class="card-switch">
-      <div class="flip-card__front">
-        <label>Be és kikapcsolás</label>
-        <form [formGroup]="dynamicCheckBoxForm" class="flip-card__form">
-          <div formArrayName="checkBoxFields">
-            <div *ngFor="let checkBoxFields of checkBoxFields.controls; let i = index">
-              <input class="flip-card__input" [formControlName]="i" type="text" placeholder="CheckBox {{ i +1}}"/>
-<!--              <input [formControlName]="i*2" type="checkbox" placeholder="CheckBox {{ i +1}}"/>-->
-              <button class="button" (click)="removeCheckBoxField(i)" ><mat-icon>remove</mat-icon></button>
-            </div>
-          </div>
-          <button class="button" (click)="addCheckBoxField()">
-            <mat-icon>add</mat-icon>
+      <button mat-raised-button color="primary" (click)="addInputField()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <div>
+        <button mat-raised-button matStepperPrevious>Vissza</button>
+        <button mat-raised-button matStepperNext>Következő</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="dynamicCheckBoxForm">
+    <form [formGroup]="dynamicCheckBoxForm" fxLayout="column" fxLayoutAlign="space-evenly center">
+      <ng-template matStepLabel>Kimenetei inputok megadása</ng-template>
+      <div formArrayName="checkBoxFields">
+        <div *ngFor="let checkBoxFields of checkBoxFields.controls; let i = index">
+          <mat-form-field appearance="outline">
+            <mat-label>CheckBox</mat-label>
+            <input matInput [formControlName]="i" type="text" placeholder="CheckBox {{ i +1}}"/>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="removeCheckBoxField(i)">
+            <mat-icon>remove</mat-icon>
           </button>
-        </form>
+        </div>
       </div>
+      <button mat-raised-button color="primary" class="button" (click)="addCheckBoxField()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <div>
+        <button mat-raised-button matStepperPrevious>Vissza</button>
+        <button mat-raised-button matStepperNext>Következő</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Eszköz megerősítése</ng-template>
+    <p>Biztos elmenti az eszközt?</p>
+    <button (click)="saveDevice()" mat-raised-button color="primary">Eszköz mentése</button>
+    <div>
+      <button mat-raised-button matStepperPrevious>Vissza</button>
     </div>
-  </div>
-</div>
-
+  </mat-step>
+</mat-vertical-stepper>
 

@@ -1,17 +1,47 @@
-<div class="wrapper">
-  <div class="card-switch">
-    <div class="flip-card__front">
-      <form [formGroup]="registerGroup" class="flip-card__form"  (ngSubmit)="saveUser()">
-        <input class="flip-card__input" placeholder="Name" type="text" formControlName="username" >
-        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>
-        <input class="flip-card__input" name="email" placeholder="Email" type="email" formControlName="email" >
-        <div *ngIf="this.emailInputError">Email címet kötelező megadni</div>
-        <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="pwd1" >
-        <div *ngIf="this.pwd1Error">Jelszót kötelező megadni</div>
-        <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2" >
-        <div *ngIf="this.pwd2Error">Jelszó megerősítést kötelező megadni</div>
-        <button class="flip-card__btn">Confirm!</button>
+<!--<div class="wrapper">-->
+<!--  <div class="card-switch">-->
+<!--    <div class="flip-card__front">-->
+<!--      <form  class="flip-card__form"  (ngSubmit)="saveUser()">-->
+<!--        <input class="flip-card__input" placeholder="Name" type="text" formControlName="username" >-->
+<!--        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>-->
+<!--        <input class="flip-card__input" name="email" placeholder="Email" type="email" formControlName="email" >-->
+<!--        <div *ngIf="this.emailInputError">Email címet kötelező megadni</div>-->
+<!--        <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="pwd1" >-->
+<!--        <div *ngIf="this.pwd1Error">Jelszót kötelező megadni</div>-->
+<!--        <input class="flip-card__input" name="password" placeholder="Confirm password" type="password" formControlName="pwd2" >-->
+<!--        <div *ngIf="this.pwd2Error">Jelszó megerősítést kötelező megadni</div>-->
+<!--        <button class="flip-card__btn">Confirm!</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div fxLayout="column" fxLayoutAlign="start center" class="max-widht">
+
+  <mat-card class="example-card">
+    <mat-card-header fxLayoutAlign="center center">
+      <mat-card-title>Regisztráció</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="registerGroup" (ngSubmit)="saveUser()" fxLayout="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Felhasználónév</mat-label>
+          <input matInput placeholder="Felhasználónév" type="text" formControlName="username">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email cím</mat-label>
+          <input matInput name="email" placeholder="Email cím" type="email" formControlName="email">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Jelszó</mat-label>
+          <input matInput name="password" placeholder="Jelszó" type="password" formControlName="pwd1">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Jelszó megerősítése</mat-label>
+          <input matInput name="password" placeholder="Jelszó megerősítése" type="password" formControlName="pwd2">
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Regisztráció</button>
       </form>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>

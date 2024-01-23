@@ -56,6 +56,7 @@ public class DeviceController {
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
 
+    //TODO valamiért két szer küldi vissza a activ devicot
     @GetMapping("/getAllUserDevices")
     public ResponseEntity<List<DeviceDTO>> getAllUserDevices() {
         List<Devices> dev = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());

@@ -35,103 +35,135 @@ $front-theme: mat.define-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 
-
-
-app-root {
-  height: 100%;
-  display: block;
-}
-
-html, body{
-  height: 100%;
-  background-color: #2185D5;
+body {
   margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  //height: 100vh;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-
-.flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  align-content: space-around;
-  margin:30px;
+.max-widht{
+  margin-top: 20px;
+  height: 90vh;
+  width: 100%;
 }
-.flex-items:nth-child {
-  display: block;
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto;
-  align-self: auto;
-  order: 0;
+
+.max-height{
+  height: 90vh;
+  width: auto;
+}
+
+.halfwidht{
+  width: 50%;
 }
 
 
 
-//Checkbox
 
-$input-focus: #2d8cf0;
-$font-color: #323232;
-$font-color-sub: #666;
-$bg-color: #fff;
-$bg-color-alt: #666;
-$main-color: #323232;
-.switch {
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  width: 50px;
-  height: 20px;
-}
 
-.toggle {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
 
-.slider {
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 2px solid $main-color;
-  box-shadow: 4px 4px $main-color;
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: $bg-color;
-  transition: 0.3s;
-}
 
-.slider:before {
-  box-sizing: border-box;
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  border: 2px solid $main-color;
-  border-radius: 5px;
-  left: -2px;
-  bottom: 2px;
-  background-color: $bg-color;
-  box-shadow: 0 3px 0 $main-color;
-  transition: 0.3s;
-}
 
-.toggle:checked + .slider {
-  background-color: $input-focus;
-}
 
-.toggle:checked + .slider:before {
-  transform: translateX(30px);
-}
+
+
+
+
+//app-root {
+//  height: 100%;
+//  display: block;
+//}
+//
+//html, body{
+//  height: 100%;
+//  background-color: #2185D5;
+//  margin: 0;
+//}
+//
+//html, body { height: 100%; }
+//body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+//
+//
+//.flex-container {
+//  display: flex;
+//  flex-direction: row;
+//  flex-wrap: wrap;
+//  justify-content: space-around;
+//  align-items: center;
+//  align-content: space-around;
+//  margin:30px;
+//}
+//.flex-items:nth-child {
+//  display: block;
+//  flex-grow: 0;
+//  flex-shrink: 1;
+//  flex-basis: auto;
+//  align-self: auto;
+//  order: 0;
+//}
+//
+//
+//
+////Checkbox
+//
+//$input-focus: #2d8cf0;
+//$font-color: #323232;
+//$font-color-sub: #666;
+//$bg-color: #fff;
+//$bg-color-alt: #666;
+//$main-color: #323232;
+//.switch {
+//
+//  position: relative;
+//  display: flex;
+//  flex-direction: column;
+//  justify-content: center;
+//  align-items: center;
+//  gap: 30px;
+//  width: 50px;
+//  height: 20px;
+//}
+//
+//.toggle {
+//  opacity: 0;
+//  width: 0;
+//  height: 0;
+//}
+//
+//.slider {
+//  box-sizing: border-box;
+//  border-radius: 5px;
+//  border: 2px solid $main-color;
+//  box-shadow: 4px 4px $main-color;
+//  position: absolute;
+//  cursor: pointer;
+//  top: 0;
+//  left: 0;
+//  right: 0;
+//  bottom: 0;
+//  background-color: $bg-color;
+//  transition: 0.3s;
+//}
+//
+//.slider:before {
+//  box-sizing: border-box;
+//  position: absolute;
+//  content: "";
+//  height: 20px;
+//  width: 20px;
+//  border: 2px solid $main-color;
+//  border-radius: 5px;
+//  left: -2px;
+//  bottom: 2px;
+//  background-color: $bg-color;
+//  box-shadow: 0 3px 0 $main-color;
+//  transition: 0.3s;
+//}
+//
+//.toggle:checked + .slider {
+//  background-color: $input-focus;
+//}
+//
+//.toggle:checked + .slider:before {
+//  transform: translateX(30px);
+//}

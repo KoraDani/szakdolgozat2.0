@@ -1,79 +1,49 @@
-<!--<div class="wrapper">-->
-<!--  <div class="option">-->
-<!--    <input class="input" type="radio" name="btn" value="option1" checked="">-->
-<!--    <div class="btn">-->
-<!--      <span class="span">Option</span>-->
-<!--    </div>-->
+<!--  //TODO menüt megcsinálni hogy amikor bejelentkezik a felhasználó akkor a megfelelő menüpontok maradjanak meg-->
+<!--<div class="container">-->
+<!--  <div class="div-nav">-->
+<!--    <ul class="option">-->
+<!--      <li class="item"><a routerLink="/main">Fő oldal</a></li>-->
+<!--      <li class="item"><a routerLink="/devices">Eszközök</a></li>-->
+<!--      <li class="item"><a routerLink="/user-data">Felhasználói adatok</a></li>-->
+<!--      <li class="item"><a routerLink="/login">Bejelentkezés</a></li>-->
+<!--      <li class="item"><a routerLink="/register">Regisztráció</a></li>-->
+<!--    </ul>-->
 <!--  </div>-->
-<!--  <div class="option">-->
-<!--    <input class="input" type="radio" name="btn" value="option2">-->
-<!--    <div class="btn">-->
-<!--      <span class="span">Option</span>-->
-<!--    </div>  </div>-->
-<!--  <div class="option">-->
-<!--    <input class="input" type="radio" name="btn" value="option3">-->
-<!--    <div class="btn">-->
-<!--      <span class="span">Option</span>-->
-<!--    </div>-->
-<!--  </div>-->
+<!--  <router-outlet></router-outlet>-->
 <!--</div>-->
 
 
-<div class="container">
-  <!--  <mat-sidenav #sidenav>-->
-  <!--&lt;!&ndash;    <app-menu&ndash;&gt;-->
-  <!--&lt;!&ndash;      (selectedPage)="changePage($event)"&ndash;&gt;-->
-  <!--&lt;!&ndash;      [currentPage]="page"&ndash;&gt;-->
-  <!--&lt;!&ndash;      *ngIf="page"&ndash;&gt;-->
-  <!--&lt;!&ndash;      (onCloseSidenav)="onClose($event, sidenav)"&ndash;&gt;-->
-  <!--&lt;!&ndash;      [loggedInUser]="loggedInUser"&ndash;&gt;-->
-  <!--&lt;!&ndash;      (onLogout)="logout($event)"&ndash;&gt;-->
-  <!--&lt;!&ndash;    ></app-menu>&ndash;&gt;-->
-  <!--  </mat-sidenav>-->
-  <!--  <mat-sidenav-content>-->
-  <!--    <mat-toolbar color="primary">-->
-  <!--      <div fxHide.gt-xs>-->
-  <!--        <button mat-icon-button (click)="onToggleSidenav(sidenav)">-->
-  <!--          <mat-icon>menu</mat-icon>-->
-  <!--        </button>-->
-  <!--      </div>-->
-  <!--      <div></div>-->
-<!--  //TODO menüt megcsinálni hogy amikor bejelentkezik a felhasználó akkor a megfelelő menüpontok maradjanak meg-->
 
-  <div class="div-nav">
-    <ul class="option">
-      <li class="item"><a routerLink="/main">Fő oldal</a></li>
-      <li class="item"><a routerLink="/devices">Eszközök</a></li>
-      <li class="item"><a routerLink="/user-data">Felhasználói adatok</a></li>
-      <li class="item"><a routerLink="/login">Bejelentkezés</a></li>
-      <li class="item"><a routerLink="/register">Regisztráció</a></li>
-    </ul>
-  </div>
-  <!--    </mat-toolbar>-->
-  <router-outlet></router-outlet>
-  <!--  </mat-sidenav-content>-->
-</div>
-<!--<mat-sidenav-container>-->
-<!--  <mat-sidenav-content>-->
-<!--    <mat-toolbar color="primary">-->
-<!--      <div fxHide.gt-xs>-->
-<!--        <button mat-icon-button >-->
-<!--          <mat-icon>menu</mat-icon>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div></div>-->
-<!--      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>-->
-<!--        <ul fxLayout fxLayoutGap="10px" class="navigation-items">-->
-<!--          <li><a routerLink="/main">Fő oldal</a></li>-->
-<!--          <li><a routerLink="/list">Kátyúk listázása</a></li>-->
-<!--          <li> &lt;!&ndash;*ngIf=""&ndash;&gt;<a routerLink="/pothole">Kátyú felvétele</a></li>-->
-<!--          <li >&lt;!&ndash;*ngIf=""&ndash;&gt;<a routerLink="/userdata">Felhasználói adatok</a></li>-->
-<!--          <li >&lt;!&ndash;*ngIf="!"&ndash;&gt;<a routerLink="/login">Bejelentkezés</a></li>-->
-<!--          <li &lt;!&ndash;*ngIf=""&ndash;&gt;<a routerLink="/login"> &lt;!&ndash;(click)="logout()"&ndash;&gt;Kijelentkezés</a></li>-->
-<!--          <li &lt;!&ndash;*ngIf="!"&ndash;&gt;<a routerLink="/register">Regisztráció</a></li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--    </mat-toolbar>-->
-<!--    <router-outlet></router-outlet>-->
-<!--  </mat-sidenav-content>-->
-<!--</mat-sidenav-container>-->
+
+<mat-sidenav-container>
+<!--  <mat-sidenav #sidenav>-->
+<!--    <app-menu-->
+<!--      (selectedPage)="changePage($event)"-->
+<!--      [currentPage]="page"-->
+<!--      *ngIf="page"-->
+<!--      (onCloseSidenav)="onClose($event, sidenav)"-->
+<!--      [loggedInUser]="loggedInUser"-->
+<!--      (onLogout)="logout($event)"-->
+<!--    ></app-menu>-->
+<!--  </mat-sidenav>-->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <div fxHide.gt-xs>
+        <button mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div></div>
+      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+        <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+          <li><a routerLink="/main">Fő oldal</a></li>
+          <li><a routerLink="/devices">Eszközök</a></li>
+          <li ><a routerLink="/user-data">Felhasználói adatok</a></li>
+          <li ><a routerLink="/login">Bejelentkezés</a></li>
+          <li ><a routerLink="/register">Regisztráció</a></li>
+        </ul>
+      </div>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

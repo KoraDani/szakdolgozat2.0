@@ -56,6 +56,7 @@ export class CreateDeviceComponent {
         // measurement: undefined
         //TODO localstoraget meg kell nézni hogy ide elmentem ez az userId-t
       }
+      console.log(devices);
 
       this.devServ.saveDevice(devices).subscribe(()=>{
         console.log("Device saved");
