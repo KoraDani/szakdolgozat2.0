@@ -23,6 +23,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {DevicesModule} from "./pages/devices/devices.module";
+import { MenuComponent } from './shared/menu/menu.component';
+import {MatListModule} from "@angular/material/list";
 
 @NgModule({
   declarations: [
@@ -31,27 +33,29 @@ import {DevicesModule} from "./pages/devices/devices.module";
     LoginComponent,
     RegisterComponent,
     MainComponent,
-    UserDataComponent
+    UserDataComponent,
+    MenuComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatCardModule,
-    FlexLayoutModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatExpansionModule,
-    DevicesModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatCardModule,
+        FlexLayoutModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatExpansionModule,
+        DevicesModule,
+        MatListModule
+    ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
   bootstrap: [AppComponent]
 })

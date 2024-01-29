@@ -42,7 +42,7 @@ export class LoginComponent {
         sessionStorage.setItem('token',this.sessionId);
         sessionStorage.setItem('userId',res.userId);
         sessionStorage.setItem('username',res.username);
-        this.router.navigateByUrl("/devices")
+        this.router.navigateByUrl("/devices");
       },error => {
         console.error(error);
         this.userExistError = true;

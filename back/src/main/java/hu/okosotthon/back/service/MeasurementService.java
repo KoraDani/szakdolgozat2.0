@@ -27,4 +27,8 @@ public class MeasurementService {
     public List<Measurement> findMeasurementByUserId() {
         return this.measurementRepo.findMeasurementByUserId(AuthController.currentUser.getUserId());
     }
+
+    public List<Measurement> getAllMeasurementByDeviceId(int deviceId) {
+        return this.measurementRepo.getAllMeasurementByDeviceId(deviceId);
+    }
 }

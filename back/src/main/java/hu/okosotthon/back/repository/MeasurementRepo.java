@@ -13,4 +13,7 @@ public interface MeasurementRepo extends JpaRepository<Measurement, String> {
 //    Map<String, String> findAll();
     @Query("SELECT m FROM Measurement m INNER JOIN Devices d ON d.devicesId=m.devices.devicesId WHERE d.users.userId = ?1")
     List<Measurement> findMeasurementByUserId(int userId);
+
+    @Query("SELECT m FROM Measurement m WHERE m.devices.devicesId = ?1")
+    List<Measurement> getAllMeasurementByDeviceId(int deviceId);
 }

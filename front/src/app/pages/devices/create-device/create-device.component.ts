@@ -52,6 +52,7 @@ export class CreateDeviceComponent {
         active: 1,
         fieldKey: Array.from(map.keys()),
         fieldType: Array.from(map.values()),
+        payloadKey: [],
         payloadValue: []
         // measurement: undefined
         //TODO localstoraget meg kell nézni hogy ide elmentem ez az userId-t

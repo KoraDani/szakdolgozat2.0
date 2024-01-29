@@ -26,4 +26,7 @@ public interface DeviceRepo extends JpaRepository<Devices, String> {
     @Transactional
     @Query("UPDATE Devices d SET d.active = 0 WHERE d.devicesId = ?1")
     void setDeviceDeletedByDeviceId(int deviceId);
+
+    @Query("SELECT d FROM Devices d WHERE d.devicesId = ?1")
+    Devices getDevicesById(int deviceId);
 }

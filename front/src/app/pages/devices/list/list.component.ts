@@ -1,15 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {DeviceService} from "../../../shared/service/device.service";
 import {Router} from "@angular/router";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit{
+export class ListComponent implements OnInit, OnDestroy{
 
   @Input() devicesObjectInput: Array<DeviceDTO> = [];
   @Output() deviceObjectEmmiter: EventEmitter<any> = new EventEmitter();
@@ -17,7 +16,12 @@ export class ListComponent implements OnInit{
 
   constructor(private devServ: DeviceService, private router: Router) {
   }
+
+  //TODO itt lehetne olyat hogy amikor kilistázzuk akkor csak pár dolog jelenyen meg de ha a nevére rákattint akkor tovább megy a view
+  //és onnan meg lehet nézni a többi beállítást is.
   ngOnInit(): void {
+    // @ts-ignore
+    console.log(this.devicesObjectInput);
 
   }
 
@@ -26,8 +30,11 @@ export class ListComponent implements OnInit{
   }
 
   selectDevice(device: DeviceDTO) {
+    // console.log(device);
+    this.devServ.setSelectedDevice(device);
     this.chosenDevice = device;
     this.reload();
+    this.router.navigateByUrl("/view");
   }
   deleteDevice(deviceId: number) {
     console.log("Eszköz törlés: " + deviceId);
@@ -41,4 +48,9 @@ export class ListComponent implements OnInit{
   createNewDevice() {
     this.router.navigateByUrl("/create-device");
   }
+
+  ngOnDestroy(): void {
+
+  }
+
 }

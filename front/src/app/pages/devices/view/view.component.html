@@ -1,8 +1,4 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <!--  <div class="card" *ngFor="let dev of devicesList">-->
-  <!--  <div class="card" *ngFor="let dev of devicesList">-->
-  <!--      <div class="card-photo">-->
-  <!--    <div class="text-container card-title card-socials item">{{dev.location}}-->
   <p>{{deviceInput.deviceName}}</p>
   <div *ngFor="let field of deviceInput.fieldKey; index as i">
     <div *ngIf="deviceInput.fieldType[i] == 2">
@@ -21,25 +17,23 @@
           <mat-icon>send</mat-icon>
         </button>
     </div>
+    <div *ngIf="deviceInput.fieldType[i] == 3">
+<!--            <label>{{field}}</label>-->
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>{{field}}</mat-label>-->
+<!--      </mat-form-field>-->
+<!--      //TODO ki be kapcsoláshoz egy functiont írni-->
+      <section class="example-section">
+        <mat-slide-toggle color="primary" class="example-margin">On/Off</mat-slide-toggle>
+      </section>
+    </div>
     <!--        //TODO Most már csak a többit kell ide megcsinálni-->
   </div>
-  <!--  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">-->
-  <!--    <mat-icon>more_vert</mat-icon>-->
-  <!--  </button>-->
-  <!--  <mat-menu #menu="matMenu">-->
-  <!--    <button mat-menu-item>-->
-  <!--      <mat-icon>edit</mat-icon>-->
-  <!--      <span>Módosítás</span>-->
-  <!--    </button>-->
-  <!--    &lt;!&ndash;      <button mat-menu-item disabled>&ndash;&gt;-->
-  <!--    &lt;!&ndash;        <mat-icon>voicemail</mat-icon>&ndash;&gt;-->
-  <!--    &lt;!&ndash;        <span>Check voice mail</span>&ndash;&gt;-->
-  <!--    &lt;!&ndash;      </button>&ndash;&gt;-->
-  <!--    <button mat-menu-item (click)="deleteDevice(deviceInput.devicesId)">-->
-  <!--      <mat-icon>delete</mat-icon>-->
-  <!--      <span>Törlés</span>-->
-  <!--    </button>-->
-  <!--  </mat-menu>-->
+</div>
+
+
+<div *ngIf="deviceInput.payloadValue[0] != '0'">
+  <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'400px'}"></canvasjs-chart>
 </div>
 
 <!--</div>-->
@@ -50,3 +44,8 @@
 <!--  <mat-grid-tile class="green"></mat-grid-tile>-->
 <!--  <mat-grid-tile class="yellow"></mat-grid-tile>-->
 <!--</mat-grid-list>-->
+
+
+<!--//TODO EZEKET MÉG MA MEG KELL CSINÁLNI-->
+<!--//TODO angular vissza is küldjön adatott az MQTT felé-->
+<!--//TODO ha mentés történik az adatbázisba akkor frissítse az adatokat angulárban-->

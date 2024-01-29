@@ -18,6 +18,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {MatInputModule} from "@angular/material/input";
 import {MatStepperModule} from "@angular/material/stepper";
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatCardModule} from "@angular/material/card";
 
 
 @NgModule({
@@ -46,7 +49,10 @@ import {MatStepperModule} from "@angular/material/stepper";
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    MatStepperModule
+    MatStepperModule,
+    CanvasJSAngularChartsModule,
+    MatSlideToggleModule,
+    MatCardModule
   ]
 })
 export class DevicesModule { }

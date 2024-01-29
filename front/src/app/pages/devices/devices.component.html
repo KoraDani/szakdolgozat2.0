@@ -1,39 +1,12 @@
-<!--<div class="flex-container div-margin">-->
-<!--  <div class="flip-card__front" *ngFor="let temp of temps">-->
-<!--       <label>{{temp.szoba}}</label>-->
-<!--    <div class="">-->
-<!--      <label>Hőmérséklet:{{temp.temperature}}</label><br>-->
-<!--      <label>Páratartalom:{{temp.humy}}<br></label>-->
-<!--      Valami:<label class="switch">-->
-<!--        <input class="toggle" type="checkbox">-->
-<!--        <span class="slider"></span>-->
-<!--        <span class="card-side"></span>-->
-<!--      </label>-->
-<!--      Valami:<label class="switch">-->
-<!--        <input class="toggle" type="checkbox">-->
-<!--        <span class="slider"></span>-->
-<!--        <span class="card-side"></span>-->
-<!--      </label>-->
-<!--      Valami:<label class="switch">-->
-<!--        <input class="toggle" type="checkbox">-->
-<!--        <span class="slider"></span>-->
-<!--        <span class="card-side"></span>-->
-<!--      </label>-->
-<!--    </div>-->
-<!--  </div>-->
+<!--<div fxLayout="colomn" fxLayoutAlign="start none">-->
+<app-list [devicesObjectInput]="devicesList" (deviceObjectEmmiter)="loadDevice($event)"></app-list>
+<!--  <app-view [deviceInput]="chosenDevice" style="margin-left: 20px"></app-view>-->
 <!--</div>-->
-
-
-<!--<div class="container div-margin">-->
-
-<!--</div>-->
-<div fxLayout="row" fxLayoutAlign="start none">
-  <app-list [devicesObjectInput]="devicesList" (deviceObjectEmmiter)="loadDevice($event)" style="background-color: #CFD4EC" class="max-height"></app-list>
-  <app-view [deviceInput]="chosenDevice" style="margin-left: 20px"></app-view>
+<div class="createDeviceButton">
+  <button mat-fab color="primary" (click)="goToCreateDevice()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
-<!--<div>-->
-<!--  <button><a href="/create-device">Eszköz hozzáadása</a></button>-->
-<!--</div>-->
 
-
+<!--style="background-color: #CFD4EC" class="max-height"-->
 

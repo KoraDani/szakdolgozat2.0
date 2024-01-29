@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@canvasjs/angular-charts": "^1.0.3",
     "@canvasjs/charts": "^3.7.35",
     "@types/uuid": "^9.0.7",
     "axios": "^1.5.1",

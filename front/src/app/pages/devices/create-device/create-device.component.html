@@ -84,9 +84,9 @@
         <mat-label>Topic</mat-label>
         <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
       </mat-form-field>
-      <div>
-        <button mat-raised-button matStepperNext>Következő</button>
-      </div>
+<!--      <div>-->
+<!--        <button mat-raised-button matStepperNext>Következő</button>-->
+<!--      </div>-->
     </form>
   </mat-step>
   <mat-step [stepControl]="dynamicInputForm">
@@ -106,10 +106,10 @@
       <button mat-raised-button color="primary" (click)="addInputField()">
         <mat-icon>add</mat-icon>
       </button>
-      <div>
-        <button mat-raised-button matStepperPrevious>Vissza</button>
-        <button mat-raised-button matStepperNext>Következő</button>
-      </div>
+<!--      <div>-->
+<!--        <button mat-raised-button matStepperPrevious>Vissza</button>-->
+<!--        <button mat-raised-button matStepperNext>Következő</button>-->
+<!--      </div>-->
     </form>
   </mat-step>
   <mat-step [stepControl]="dynamicCheckBoxForm">
@@ -129,19 +129,23 @@
       <button mat-raised-button color="primary" class="button" (click)="addCheckBoxField()">
         <mat-icon>add</mat-icon>
       </button>
-      <div>
-        <button mat-raised-button matStepperPrevious>Vissza</button>
-        <button mat-raised-button matStepperNext>Következő</button>
-      </div>
+<!--      <div>-->
+<!--        <button mat-raised-button matStepperPrevious>Vissza</button>-->
+<!--        <button mat-raised-button matStepperNext>Következő</button>-->
+<!--      </div>-->
     </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Eszköz megerősítése</ng-template>
     <p>Biztos elmenti az eszközt?</p>
     <button (click)="saveDevice()" mat-raised-button color="primary">Eszköz mentése</button>
-    <div>
-      <button mat-raised-button matStepperPrevious>Vissza</button>
-    </div>
+<!--    <div>-->
+<!--      <button mat-raised-button matStepperPrevious>Vissza</button>-->
+<!--    </div>-->
   </mat-step>
 </mat-vertical-stepper>
 
+
+<!--//TODO itt is lehetne még olyat hogy a típus kiválasztani hogy az alapján a list nél meg lehesen határolni mik azok a fildek amiket-->
+<!--//gyorsan el kellene érni-->
+<!--//TODO itt a fildek mellett lehetne még olyat is megcsinálni hogy ha fokot add vissza akkor egy celsius jel jelenyen meg mellette-->

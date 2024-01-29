@@ -64,16 +64,17 @@ public class DeviceController {
         System.out.println("devices szie: " + dev.size());
         int i = 0;
         for (Devices devices : dev) {
+            System.out.println(devices.getDeviceName());
             if (devices.getFieldsList() != null) {
-                for (int j = 0; j < devices.getFieldsList().size(); j++) {
-                    if (devices.getMeasurementList() != null && devices.getMeasurementList().size() - 1 > i) {
-                        if (devices.getFieldsList().get(j).getFieldKey().equals(devices.getMeasurementList().get(i).getPayloadKey())) {
+//                for (int j = 0; j < devices.getFieldsList().size(); j++) {
+//                    if (devices.getMeasurementList() != null && devices.getMeasurementList().size() - 1 > i) {
+//                        if (devices.getFieldsList().get(j).getFieldKey().equals(devices.getMeasurementList().get(i).getPayloadKey())) {
                             deviceDTOS.add(devices.convertDivece());
                             i++;
                             System.out.println("hozzadadva");
-                        }
-                    }
-                }
+//                        }
+//                    }
+//                }
             }
         }
         for (DeviceDTO deviceDTO : deviceDTOS) {
@@ -95,11 +96,17 @@ public class DeviceController {
             @RequestParam(value = "topic") String topic,
             @RequestParam(value = "payload") String payload) {
 
-        Devices d = this.deviceService.getDeviceByTopic(topic);
+//        Devices d = this.deviceService.getDeviceByTopic(topic);
         LocalDateTime currentDateTime = LocalDateTime.now();
         this.mqttService.publishDataToDevice(topic, "{\""+payloadKey+"\":\""+payload+"\"}");
-        this.measurementService.save(new Measurement(payloadKey, payload.toString(), currentDateTime.toString(), d));
+        this.measurementService.save(new Measurement(payloadKey, payload.toString(), currentDateTime.toString(), null));
         return new ResponseEntity<>(payload, HttpStatus.OK);
+    }
+
+    @PostMapping("/getDeviceById")
+    public ResponseEntity<DeviceDTO> getDeviceById(@RequestParam String devicesId){
+        System.out.println("getDeviceById lefutott");
+        return new ResponseEntity<>(this.deviceService.getDeviceById(Integer.parseInt(devicesId)), HttpStatus.OK);
     }
 
 }

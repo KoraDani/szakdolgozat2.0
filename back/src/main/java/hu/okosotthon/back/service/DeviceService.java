@@ -1,5 +1,6 @@
 package hu.okosotthon.back.service;
 
+import hu.okosotthon.back.dto.DeviceDTO;
 import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.repository.DeviceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,9 @@ public class DeviceService {
     public void setDeviceDeletedByDeviceId(int deviceId) {
 //        return this.deviceRepo.deleteDevicesByDevicesId(deviceId);
          this.deviceRepo.setDeviceDeletedByDeviceId(deviceId);
+    }
+
+    public DeviceDTO getDeviceById(int devicesId) {
+        return this.deviceRepo.getDevicesById(devicesId).convertDivece();
     }
 }

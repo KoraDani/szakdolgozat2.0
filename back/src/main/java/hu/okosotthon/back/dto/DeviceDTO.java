@@ -23,5 +23,7 @@ public class DeviceDTO {
     private String[] fieldKey;
     private String[] fieldType;
     @Nullable
+    private String[] payloadKey;
+    @Nullable
     private String[] payloadValue;
 }

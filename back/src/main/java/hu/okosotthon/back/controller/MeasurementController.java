@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/topic")
+@RequestMapping("/measurement")
 public class MeasurementController {
     private final MeasurementService measurementService;
 
@@ -26,5 +25,11 @@ public class MeasurementController {
         System.out.println("GetAllMeasurment");
         List<Measurement> measurementList = this.measurementService.findMeasurementByUserId();
         return new ResponseEntity<>(measurementList.isEmpty() ? null : measurementList, HttpStatus.OK);
+    }
+
+    @PostMapping("/getAllMeasurementByDeviceId")
+    public ResponseEntity<List<Measurement>> getAllMeasurementByDeviceId(@RequestParam int deviceId){
+        List<Measurement> measurementList = this.measurementService.getAllMeasurementByDeviceId(deviceId);
+        return new ResponseEntity<>( measurementList.subList(measurementList.size()-50, measurementList.size()), HttpStatus.OK);
     }
 }

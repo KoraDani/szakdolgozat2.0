@@ -82,13 +82,27 @@ public class Devices {
     public DeviceDTO convertDivece() {
         String[] fieldKey = new String[fieldsList.size()];
         String[] fieldType = new String[fieldsList.size()];
-        String[] payloadValue = new String[fieldsList.size()];
+        String[] payloadKey = new String[measurementList.size() == 0 ? fieldsList.size() : measurementList.size()];
+        String[] payloadValue = new String[measurementList.size() == 0 ? fieldsList.size() : measurementList.size()];
 
         for (int i = 0; i < fieldsList.size(); i++) {
-            if (fieldsList.get(i).getFieldKey().equals(measurementList.get((measurementList.size()-2)-i).getPayloadKey())) {
+            if(!measurementList.isEmpty()){
+                if (fieldsList.get(i).getFieldKey().equals(measurementList.get((measurementList.size()-2)-i).getPayloadKey())) {
+                    fieldKey[i] = fieldsList.get(i).getFieldKey();
+                    fieldType[i] = fieldsList.get(i).getFieldType();
+                }
+            }else {
+                System.out.println(fieldsList.get(i).getFieldKey());
                 fieldKey[i] = fieldsList.get(i).getFieldKey();
                 fieldType[i] = fieldsList.get(i).getFieldType();
-                payloadValue[i] = measurementList.get((measurementList.size()-1)-i).getPayloadValue();
+                payloadKey[i] = "0";
+                payloadValue[i] ="0";
+            }
+        }
+        if(!measurementList.isEmpty()){
+            for (int i = 0; i < measurementList.size(); i++){
+                payloadKey[i] = measurementList.get(i).getPayloadKey();
+                payloadValue[i] = measurementList.get(i).getPayloadValue();
             }
         }
 
@@ -101,6 +115,7 @@ public class Devices {
                 active,
                 fieldKey,
                 fieldType,
+                payloadKey,
                 payloadValue);
     }
 }

@@ -9,6 +9,7 @@ export interface DeviceDTO{
   active: number;
   fieldKey: string[];
   fieldType: number[];
+  payloadKey: string[];
   payloadValue: string[];
   // measurement: Measurement | undefined;
 }

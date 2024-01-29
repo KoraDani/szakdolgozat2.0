@@ -26,4 +26,8 @@ export class AuthService {
   changePassword(username:string,oldpwd:string, newpwd1:string, newpwd2:string) {
     return this.http.post<Users>(this.apiUrl+"/auth/changePassword", null,{params:{username, oldpwd, newpwd1,newpwd2}})
   }
+
+  logout(){
+    return this.http.get(this.apiUrl+"logout");
+  }
 }
