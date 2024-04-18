@@ -30,7 +30,7 @@ public class MqttService {
         this.usersService = usersService;
     }
 
-    String broker = "tcp://192.168.0.171:1883";
+    String broker = "tcp://192.168.56.1:1883";
     //A ClientId az lehetne aki ben van jelentkezve
     String clientId = "SpringBootSubscriber";
     MqttClient mqttClient;

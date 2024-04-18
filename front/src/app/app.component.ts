@@ -9,7 +9,7 @@ import {AuthService} from "./shared/service/auth.service";
 })
 export class AppComponent implements OnInit{
   title = 'front';
-  //TODO elvileg beállítom de akkor sem stimmel valami vele
+  //TODO bejelentkezéskor nem frissül azonnal a menü és csak ha frissítem az oldalt akkor megjelenik jól
   loggedInUser: any;
 
   constructor(private authServ: AuthService) {

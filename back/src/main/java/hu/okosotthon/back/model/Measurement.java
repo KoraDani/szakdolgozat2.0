@@ -18,9 +18,9 @@ import javax.persistence.*;
 public class Measurement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String measurementId;
-//    private int deviceId;
     @Nullable
+    private int measurementId;
+//    private int deviceId;
     private String payloadKey;
     private String payloadValue;
     private String time;
@@ -37,23 +37,23 @@ public class Measurement {
         this.devices = devices;
     }
 
-    public Measurement(@Nullable String payloadKey, String payloadValue, String time, int devicesId) {
+    public Measurement(int measurementId, String payloadKey, String payloadValue, String time) {
+        this.measurementId = measurementId;
         this.payloadKey = payloadKey;
         this.payloadValue = payloadValue;
         this.time = time;
-        this.devices.setDevicesId(devicesId);
     }
 
-    //    public Measurement(int deviceId, @Nullable String payload) {
-//        this.deviceId = deviceId;
-//        this.payload = payload;
-//    }
-
-//    public Measurement(int deviceId, @Nullable String payload, String time) {
-//        this.deviceId = deviceId;
-//        this.payload = payload;
-//        this.time = time;
-//    }
+    @Override
+    public String toString() {
+        return '{' +
+                "measurementId=" + measurementId +
+                ", payloadKey='" + payloadKey + '\'' +
+                ", payloadValue='" + payloadValue + '\'' +
+                ", time='" + time + '\'' +
+                ", devices=" + devices.getDevicesId() +
+                '}';
+    }
 }
 
 

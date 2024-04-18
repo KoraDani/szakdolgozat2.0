@@ -1,6 +1,8 @@
 package hu.okosotthon.back.service;
 
 import hu.okosotthon.back.controller.AuthController;
+import hu.okosotthon.back.dto.DeviceDTO2;
+import hu.okosotthon.back.dto.FieldDTO;
 import hu.okosotthon.back.model.Fields;
 import hu.okosotthon.back.repository.FieldsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,9 @@ public class FieldsService {
 
     public Fields save(Fields fields) {
         return this.fieldsRepo.save(fields);
+    }
+
+    public List<FieldDTO> getDevicesFieldsByOutput(int userId) {
+        return this.fieldsRepo.getDevicesFieldsByOutput(userId);
     }
 }

@@ -1,51 +1,49 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <p>{{deviceInput.deviceName}}</p>
-  <div *ngFor="let field of deviceInput.fieldKey; index as i">
-    <div *ngIf="deviceInput.fieldType[i] == 2">
-      <label>{{field}}</label>&nbsp;
-      <label>{{deviceInput.payloadValue[i]}}</label>
+  <div *ngFor="let key of this.measirmentList;">
+    <div *ngIf="key[0].fieldType =='1'" fxLayout="row" fxLayoutAlign="center center">
+      <label>{{key[0].payloadKey}}:&nbsp; </label>
+      <!--      <div *ngFor="let val of key">-->
+      <label>{{key[0].payloadValue | number:'1.0-0'}} &nbsp;</label>
+      <!--      </div>-->
     </div>
-    <div *ngIf="deviceInput.fieldType[i] == 1">
-      <!--      <label>{{field}}</label>-->
-      <mat-form-field appearance="outline">
-        <mat-label>{{field}}</mat-label>
-        <input matInput type="number" name="{{field}}" value="{{deviceInput.payloadValue[i]}}" size="4"
-               [(ngModel)]="number">
-      </mat-form-field>
-        <button mat-raised-button color="primary" (click)="sendPayloadToDevice(field, deviceInput.topic,number)"
-                style="margin-left: 10px">
-          <mat-icon>send</mat-icon>
-        </button>
+
+
+    <div *ngIf="key[0].fieldType =='2'" fxLayout="row" fxLayoutAlign="center center">
+      <div *ngFor="let val of key">
+        <mat-label>{{val.payloadKey}}</mat-label>
+        <mat-form-field>
+          <input matInput type="text" placeholder="Output">
+        </mat-form-field>
+      </div>
     </div>
-    <div *ngIf="deviceInput.fieldType[i] == 3">
-<!--            <label>{{field}}</label>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <mat-label>{{field}}</mat-label>-->
-<!--      </mat-form-field>-->
-<!--      //TODO ki be kapcsoláshoz egy functiont írni-->
-      <section class="example-section">
-        <mat-slide-toggle color="primary" class="example-margin">On/Off</mat-slide-toggle>
-      </section>
+
+    <div *ngIf="key[0].fieldType =='3'" fxLayout="row" fxLayoutAlign="center center">
+      <div *ngFor="let val of key">
+        <label>OnOff</label>
+        <!--      //TODO itt majd a be ki kapcsolást úgy is meg lehetne oldani hogy változzon a szöveg-->
+        <mat-slide-toggle>
+          {{val.payloadKey}}
+        </mat-slide-toggle>
+      </div>
     </div>
-    <!--        //TODO Most már csak a többit kell ide megcsinálni-->
+
+    <div *ngIf="key[0].fieldType =='4'" fxLayout="row" fxLayoutAlign="center center">
+      <div *ngFor="let val of key">
+        <label>RGB</label>
+        <input type="color" [(ngModel)]="colorPicker">
+      </div>
+    </div>
+
+    <div *ngIf="key[0].fieldType =='5'" fxLayout="row" fxLayoutAlign="center center">
+      <!--      //TODO most már működik de lehet külön kellene szedni azokat amikor csak kap értéket az oldal-->
+      <label>LineChart</label>
+      <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'400px'}"></canvasjs-chart>
+    </div>
   </div>
+
+  <!--  //TODO if then befejezni-->
+
 </div>
+<app-if-then [mestList]="this.measirmentList" ></app-if-then>
 
-
-<div *ngIf="deviceInput.payloadValue[0] != '0'">
-  <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'400px'}"></canvasjs-chart>
-</div>
-
-<!--</div>-->
-
-<!--<mat-grid-list cols="2" rowHeight="2:1" >-->
-<!--  <mat-grid-tile class="blue"></mat-grid-tile>-->
-<!--  <mat-grid-tile class="red"></mat-grid-tile>-->
-<!--  <mat-grid-tile class="green"></mat-grid-tile>-->
-<!--  <mat-grid-tile class="yellow"></mat-grid-tile>-->
-<!--</mat-grid-list>-->
-
-
-<!--//TODO EZEKET MÉG MA MEG KELL CSINÁLNI-->
-<!--//TODO angular vissza is küldjön adatott az MQTT felé-->
 <!--//TODO ha mentés történik az adatbázisba akkor frissítse az adatokat angulárban-->

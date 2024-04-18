@@ -1,6 +1,10 @@
 package hu.okosotthon.back.repository;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+import hu.okosotthon.back.dto.DeviceDTO;
+import hu.okosotthon.back.dto.DeviceDTO2;
 import hu.okosotthon.back.model.Devices;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +33,6 @@ public interface DeviceRepo extends JpaRepository<Devices, String> {
 
     @Query("SELECT d FROM Devices d WHERE d.devicesId = ?1")
     Devices getDevicesById(int deviceId);
+
 }
+

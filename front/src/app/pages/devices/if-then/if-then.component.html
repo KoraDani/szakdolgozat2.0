@@ -1,0 +1,49 @@
+<div>
+  <div *ngFor="let key of this.mestList">
+    <div *ngIf="key[0].fieldType == '1'">
+      <form [formGroup]="ifThenFormGroup" (ngSubmit)="onClick()">
+        <mat-form-field>
+          <mat-label>{{key[0].payloadKey}}</mat-label>
+          <input matInput type="text" name="{{key[0].payloadKey}}If" formControlName="{{key[0].payloadKey}}If">
+        </mat-form-field>
+        <select *ngFor="let f of this.devicesByOutputField">
+          <option value="{{f.fieldId}}">{{f.fieldKey}}</option>
+        </select>
+        <mat-form-field>
+          <mat-label>Massage to send</mat-label>
+          <input matInput type="text" name="{{key[0].payloadKey}}Then" formControlName="{{key[0].payloadKey}}Then">
+        </mat-form-field>
+        <button mat-raised-button color="primary">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div>
+  <mat-label>If:</mat-label>
+  <select>
+    <option *ngFor="let key of this.selectOutputField(this.mestList)"
+            value="{{key.fieldType}}">{{key.payloadKey}}</option>
+  </select>
+  <mat-radio-group>
+    <mat-radio-button>Nagyon</mat-radio-button>
+    <mat-radio-button>Kisebb</mat-radio-button>
+    <mat-radio-button>Egyenlő</mat-radio-button>
+  </mat-radio-group>
+  <mat-label>Then</mat-label>
+  <select>
+    <option>Device1</option>
+    <option>Device2</option>
+    <option>Device3</option>
+  </select>
+  <select>
+    <option>Output1</option>
+    <option>Output2</option>
+    <option>Output3</option>
+  </select>
+  <mat-form-field>
+    <mat-label>Massage to send</mat-label>
+    <input matInput type="text" >
+  </mat-form-field>
+</div>

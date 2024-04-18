@@ -9,13 +9,15 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceDTO {
+public class DeviceDTO2 {
     @Nullable
     private int devicesId;
     private String deviceName;
@@ -25,18 +27,12 @@ public class DeviceDTO {
     @Nullable
     private int active;
     @Nullable
-    private List<String> fieldKey = new ArrayList<>();
+    private Map<String, String> fields = new HashMap<>();
     @Nullable
-    private List<String> fieldType= new ArrayList<>();
-    @Nullable
-    private List<String> payloadKey= new ArrayList<>();
-    @Nullable
-    private List<String> payloadValue= new ArrayList<>();
-    @Nullable
-    private List<String> time = new ArrayList<>();;
+    private Map<String, String> payload = new HashMap<>();
 
 
-    public DeviceDTO(int devicesId, String deviceName, String location, String topic) {
+    public DeviceDTO2(int devicesId, String deviceName, String location, String topic) {
         this.devicesId = devicesId;
         this.deviceName = deviceName;
         this.location = location;
@@ -44,22 +40,26 @@ public class DeviceDTO {
     }
 
 
-    public DeviceDTO(int devicesId, String deviceName, String location, String topic, List<Fields> fieldsList, List<Measurement> measurementList) {
+    public DeviceDTO2(int devicesId, String deviceName, String location, String topic, List<Fields> fieldsList, List<Measurement> measurementList) {
         this.devicesId = devicesId;
         this.deviceName = deviceName;
         this.location = location;
         this.topic = topic;
         for (Fields f: fieldsList) {
             if(!f.getFieldKey().isEmpty()){
-                this.fieldKey.add(f.getFieldKey());
-                this.fieldType.add(f.getFieldType());
+                this.fields.put(f.getFieldKey(),f.getFieldType());
             }
         }
         for (Measurement m : measurementList) {
             if(!m.getPayloadKey().isEmpty()){
-                this.payloadKey.add(m.getPayloadKey());
-                this.payloadValue.add(m.getPayloadValue());
+                this.payload.put(m.getPayloadKey(),m.getPayloadValue());
             }
         }
+    }
+
+    public DeviceDTO2(int devicesId, String deviceName, @Nullable Map<String, String> fields) {
+        this.devicesId = devicesId;
+        this.deviceName = deviceName;
+        this.fields = fields;
     }
 }

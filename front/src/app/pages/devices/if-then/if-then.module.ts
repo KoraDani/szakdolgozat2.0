@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ListRoutingModule } from './list-routing.module';
+import { IfThenRoutingModule } from './if-then-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    ListRoutingModule
+    IfThenRoutingModule
   ]
 })
-export class ListModule { }
+export class IfThenModule { }

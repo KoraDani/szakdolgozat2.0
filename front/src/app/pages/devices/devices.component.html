@@ -1,5 +1,5 @@
 <!--<div fxLayout="colomn" fxLayoutAlign="start none">-->
-<app-list [devicesObjectInput]="devicesList" (deviceObjectEmmiter)="loadDevice($event)"></app-list>
+<!--<app-list [devicesObjectInput]="devicesList" (deviceObjectEmmiter)="loadDevice($event)"></app-list>-->
 <!--  <app-view [deviceInput]="chosenDevice" style="margin-left: 20px"></app-view>-->
 <!--</div>-->
 <div class="createDeviceButton">
@@ -8,5 +8,28 @@
   </button>
 </div>
 
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div *ngFor="let device of devicesList2" class="max-div fontStlye">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>{{device.deviceName}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+<!--        //TODO mivel más képpen küldöm a mért adatokat itt ezeket teljesen át kell dolgozni-->
+        <div *ngFor="let field of device.fields | keyvalue; index as i">
+          <div *ngFor="let payload of device.payload | keyvalue; index as i">
+              <p *ngIf="payload.key == field.key">{{payload.key}}:{{payload.value}}</p>
+          </div>
+        </div>
+<!--        <div *ngIf="device.f == '3' || device.deviceType == '2'">-->
+<!--          <section class="example-section">-->
+<!--&lt;!&ndash;            <mat-slide-toggle color="primary" class="example-margin" [(ngModel)]="device.status" (click)="changeDeviceStatus(device.devicesId)">On/Off</mat-slide-toggle>&ndash;&gt;-->
+<!--          </section>-->
+<!--        </div>-->
+        <button mat-raised-button color="primary" (click)="selectDevice(device)">View</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 <!--style="background-color: #CFD4EC" class="max-height"-->
 

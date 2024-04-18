@@ -1,19 +1,19 @@
 package hu.okosotthon.back.controller;
 
 import hu.okosotthon.back.dto.DeviceDTO;
+
+import hu.okosotthon.back.dto.DeviceDTO2;
 import hu.okosotthon.back.model.Devices;
 import hu.okosotthon.back.model.Fields;
 import hu.okosotthon.back.model.Measurement;
 import hu.okosotthon.back.service.*;
 
-import netscape.javascript.JSObject;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +45,9 @@ public class DeviceController {
 
 
         Devices newDevice = this.deviceService.saveDevice(new Devices(deviceDTO.getDeviceName(), deviceDTO.getDeviceType(), deviceDTO.getLocation(), AuthController.currentUser, deviceDTO.getTopic()));
-        for (int i = 0; i < deviceDTO.getFieldKey().length; i++) {
+        for (int i = 0; i < deviceDTO.getFieldKey().size(); i++) {
 //            fieldsList.add(new Fields(deviceDTO.getFieldKey()[i],deviceDTO.getFieldType()[i],newDevice));
-            this.fieldsService.save(new Fields(deviceDTO.getFieldKey()[i], deviceDTO.getFieldType()[i], newDevice));
+            this.fieldsService.save(new Fields(deviceDTO.getFieldKey().get(i), deviceDTO.getFieldType().get(i), newDevice));
         }
 //        this.fieldsService.saveAll(fieldsList);
 
@@ -56,30 +56,16 @@ public class DeviceController {
         return new ResponseEntity<>(newDevice, HttpStatus.OK);
     }
 
-    //TODO valamiért két szer küldi vissza a activ devicot
+    //TODO egyenlőre nem működik
     @GetMapping("/getAllUserDevices")
     public ResponseEntity<List<DeviceDTO>> getAllUserDevices() {
-        List<Devices> dev = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());
-        List<DeviceDTO> deviceDTOS = new ArrayList<>();
-        System.out.println("devices szie: " + dev.size());
-        int i = 0;
-        for (Devices devices : dev) {
-            System.out.println(devices.getDeviceName());
-            if (devices.getFieldsList() != null) {
-//                for (int j = 0; j < devices.getFieldsList().size(); j++) {
-//                    if (devices.getMeasurementList() != null && devices.getMeasurementList().size() - 1 > i) {
-//                        if (devices.getFieldsList().get(j).getFieldKey().equals(devices.getMeasurementList().get(i).getPayloadKey())) {
-                            deviceDTOS.add(devices.convertDivece());
-                            i++;
-                            System.out.println("hozzadadva");
-//                        }
-//                    }
-//                }
-            }
-        }
-        for (DeviceDTO deviceDTO : deviceDTOS) {
-            System.out.println("deviceName: " + deviceDTO.getDeviceName());
-        }
+        List<DeviceDTO> deviceDTOS = this.deviceService.getAllUserDevices(AuthController.currentUser.getUserId());
+        return new ResponseEntity<>(deviceDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllUserDevices2")
+    public ResponseEntity<List<DeviceDTO2>> getAllUserDevices2() {
+        List<DeviceDTO2> deviceDTOS = this.deviceService.getAllUserDevices2(AuthController.currentUser.getUserId());
         return new ResponseEntity<>(deviceDTOS, HttpStatus.OK);
     }
 
@@ -92,21 +78,16 @@ public class DeviceController {
 
     @PostMapping("/sendPayloadToDevice")
     public ResponseEntity<String> sendPayloadToDevice(
+            @RequestBody DeviceDTO device,
             @RequestParam(value = "payloadKey") String payloadKey,
-            @RequestParam(value = "topic") String topic,
-            @RequestParam(value = "payload") String payload) {
-
-//        Devices d = this.deviceService.getDeviceByTopic(topic);
+            @RequestParam(value = "payload") String payload
+    ) {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        this.mqttService.publishDataToDevice(topic, "{\""+payloadKey+"\":\""+payload+"\"}");
-        this.measurementService.save(new Measurement(payloadKey, payload.toString(), currentDateTime.toString(), null));
+        this.mqttService.publishDataToDevice(device.getTopic(), "{\""+payloadKey+"\":\""+payload+"\"}");
+        this.measurementService.save(new Measurement(payloadKey, payload.toString(), currentDateTime.toString(), this.deviceService.getDeviceById(device.getDevicesId())));
         return new ResponseEntity<>(payload, HttpStatus.OK);
     }
 
-    @PostMapping("/getDeviceById")
-    public ResponseEntity<DeviceDTO> getDeviceById(@RequestParam String devicesId){
-        System.out.println("getDeviceById lefutott");
-        return new ResponseEntity<>(this.deviceService.getDeviceById(Integer.parseInt(devicesId)), HttpStatus.OK);
-    }
+
 
 }

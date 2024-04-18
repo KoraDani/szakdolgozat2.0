@@ -40,4 +40,19 @@ public class Fields {
 //        this.fieldKey = fieldKey;
 //        this.fieldType = fieldType;
 //    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+                "fieldId=" + fieldId +
+                ", fieldKey='" + fieldKey + '\'' +
+                ", fieldType='" + fieldType + '\'' +
+                ", devices=" + devices.getDevicesId() +
+                '}';
+    }
+
+    public String fieldTypeToString(){
+        return fieldKey+":"+fieldType;
+    }
 }

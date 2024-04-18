@@ -9,7 +9,6 @@ import {MatIconModule} from "@angular/material/icon";
 import { ViewComponent } from './view/view.component';
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
-import { ListComponent } from './list/list.component';
 import {MatListModule} from "@angular/material/list";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatGridListModule} from "@angular/material/grid-list";
@@ -21,17 +20,20 @@ import {MatStepperModule} from "@angular/material/stepper";
 import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatCardModule} from "@angular/material/card";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import { IfThenComponent } from './if-then/if-then.component';
 
 
 @NgModule({
     declarations: [
         CreateDeviceComponent,
         ViewComponent,
-        ListComponent
+        IfThenComponent
+
     ],
   exports: [
-    ViewComponent,
-    ListComponent
+    ViewComponent
   ],
   imports: [
     DevicesRoutingModule,
@@ -52,7 +54,9 @@ import {MatCardModule} from "@angular/material/card";
     MatStepperModule,
     CanvasJSAngularChartsModule,
     MatSlideToggleModule,
-    MatCardModule
+    MatCardModule,
+    MatRadioModule,
+    MatCheckboxModule
   ]
 })
 export class DevicesModule { }

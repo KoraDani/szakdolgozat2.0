@@ -1,16 +1,13 @@
-import {Measurement} from "../Measurement";
 
-export interface DeviceDTO{
+export interface DeviceDTO2{
   devicesId: number | 0;
   deviceName: string | "";
   deviceType: string | "";
   location: string | "";
   topic: string | "";
   active: number | "";
-  fieldKey: string[];
-  fieldType: number[];
-  payloadKey: string[];
-  payloadValue: string[];
-  status: boolean;
+  fields: any;
+  payload: any;
+  // status: boolean;
   // measurement: Measurement | undefined;
 }

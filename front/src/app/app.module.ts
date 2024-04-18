@@ -25,6 +25,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {DevicesModule} from "./pages/devices/devices.module";
 import { MenuComponent } from './shared/menu/menu.component';
 import {MatListModule} from "@angular/material/list";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {MatListModule} from "@angular/material/list";
         MatInputModule,
         MatExpansionModule,
         DevicesModule,
-        MatListModule
+        MatListModule,
+        MatSlideToggleModule
     ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
   bootstrap: [AppComponent]

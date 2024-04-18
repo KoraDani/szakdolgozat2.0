@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, setTestabilityGetter} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DeviceService} from "../../../shared/service/device.service";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {Router} from "@angular/router";
+import {flush} from "@angular/core/testing";
 
 @Component({
   selector: 'app-create-device',
@@ -17,9 +18,17 @@ export class CreateDeviceComponent {
     topic: new FormControl
   });
   dynamicInputForm: FormGroup;
-  dynamicCheckBoxForm: FormGroup;
+  dynamicOutputForm: FormGroup;
+  input = false;
+  output = false;
+  onoff = false;
+  onoffForm: string = "";
+  lineChart = false;
+  rgbColor = false;
+  rgbKeyForm: string = "";
 
-  constructor(private devServ: DeviceService,private fb: FormBuilder,private router: Router) {
+
+  constructor(private devServ: DeviceService, private fb: FormBuilder, private router: Router) {
     this.deviceForm = this.fb.group({
       deviceName: ['', [Validators.required]],
       deviceType: ['', [Validators.required]],
@@ -29,19 +38,40 @@ export class CreateDeviceComponent {
     this.dynamicInputForm = this.fb.group({
       inputFields: this.fb.array([this.createInputControl()]),
     });
-    this.dynamicCheckBoxForm = this.fb.group({
-      checkBoxFields: this.fb.array([this.createCheckBoxControl()]),
+    this.dynamicOutputForm = this.fb.group({
+      outputFields: this.fb.array([this.createCheckBoxControl()]),
     });
   }
 
   saveDevice() {
-    if(this.deviceForm.valid){
-      let dynamicCheckBoxArr : string[] = this.dynamicCheckBoxForm.get("checkBoxFields")?.value;
-      let dynamicInputArr : string[] = this.dynamicInputForm.get("inputFields")?.value;
+    if (this.deviceForm.valid) {
+      let dynamicOutputArr: string[] = this.dynamicOutputForm.get("outputFields")?.value;
+      let dynamicInputArr: string[] = this.dynamicInputForm.get("inputFields")?.value;
       let map = new Map<string, number>;
 
-      dynamicCheckBoxArr.forEach((arr) =>{map.set(arr, 1);});
-      dynamicInputArr.forEach((arr) =>{map.set(arr, 2);});
+      console.log("OnOff form: " + this.onoffForm.valueOf());
+      console.log("RGBCOLOR: " + this.rgbKeyForm);
+
+
+      if(this.input){
+        dynamicInputArr.forEach((arr) => {
+          map.set(arr, 1);
+        });
+      }
+      if(this.output){
+        dynamicOutputArr.forEach((arr) => {
+          map.set(arr, 2);
+        });
+      }
+      if(this.onoff){
+        map.set(this.onoffForm, 3);
+      }
+      if(this.rgbColor){
+        map.set(this.rgbKeyForm, 4);
+      }
+      if (this.lineChart){
+        map.set("linechart", 5)
+      }
 
       let devices: DeviceDTO = {
         devicesId: 0,
@@ -53,23 +83,24 @@ export class CreateDeviceComponent {
         fieldKey: Array.from(map.keys()),
         fieldType: Array.from(map.values()),
         payloadKey: [],
-        payloadValue: []
+        payloadValue: [],
+        status: true
         // measurement: undefined
-        //TODO localstoraget meg kell nézni hogy ide elmentem ez az userId-t
       }
       console.log(devices);
 
-      this.devServ.saveDevice(devices).subscribe(()=>{
+      this.devServ.saveDevice(devices).subscribe(() => {
         console.log("Device saved");
         this.router.navigateByUrl("/devices");
-      },error => {
-        if(error.status === 400){
+      }, error => {
+        if (error.status === 400) {
           console.log("Valamit nem töltöttél ki");
           // console.log(this.fields.value)
         }
       });
     }
   }
+
 
   createInputControl() {
     return new FormControl('', Validators.required);
@@ -79,26 +110,28 @@ export class CreateDeviceComponent {
     this.inputFields.push(this.createInputControl());
   }
 
-  removeInputField(index: number){
+  removeInputField(index: number) {
     this.inputFields.removeAt(index);
   }
+
   createCheckBoxControl() {
     return new FormControl('', Validators.required);
   }
 
   addCheckBoxField() {
-    this.checkBoxFields.push(this.createInputControl());
+    this.outputFields.push(this.createInputControl());
   }
 
-  removeCheckBoxField(index: number){
-    this.checkBoxFields.removeAt(index);
+  removeCheckBoxField(index: number) {
+    this.outputFields.removeAt(index);
   }
 
   get inputFields() {
     return this.dynamicInputForm.get('inputFields') as FormArray;
   }
-  get checkBoxFields() {
-    return this.dynamicCheckBoxForm.get('checkBoxFields') as FormArray;
+
+  get outputFields() {
+    return this.dynamicOutputForm.get('outputFields') as FormArray;
   }
 
   /**
@@ -118,4 +151,5 @@ export class CreateDeviceComponent {
   // saveInputData() {
   //   console.log(this.fields.value);
   // }
+  // protected readonly onfocus = onfocus;
 }

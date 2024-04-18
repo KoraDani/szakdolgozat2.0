@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -71,6 +72,17 @@ public class Devices {
         this.fieldsList = fieldsList;
         this.topic = topic;
     }
+
+    public Devices(String deviceName, String deviceType, String location, String topic, Users users, @Nullable List<Fields> fieldsList, @Nullable List<Measurement> measurementList) {
+        this.deviceName = deviceName;
+        this.deviceType = deviceType;
+        this.location = location;
+        this.users = users;
+        this.fieldsList = fieldsList;
+        this.measurementList = measurementList;
+        this.topic = topic;
+    }
+
     //    public Devices(String deviceName, String deviceType, String location, int userId, String topic) {
 //        this.deviceName = deviceName;
 //        this.deviceType = deviceType;
@@ -78,44 +90,4 @@ public class Devices {
 //        this.userId = userId;
 //        this.topic = topic;
 //    }
-
-    public DeviceDTO convertDivece() {
-        String[] fieldKey = new String[fieldsList.size()];
-        String[] fieldType = new String[fieldsList.size()];
-        String[] payloadKey = new String[measurementList.size() == 0 ? fieldsList.size() : measurementList.size()];
-        String[] payloadValue = new String[measurementList.size() == 0 ? fieldsList.size() : measurementList.size()];
-
-        for (int i = 0; i < fieldsList.size(); i++) {
-            if(!measurementList.isEmpty()){
-                if (fieldsList.get(i).getFieldKey().equals(measurementList.get((measurementList.size()-2)-i).getPayloadKey())) {
-                    fieldKey[i] = fieldsList.get(i).getFieldKey();
-                    fieldType[i] = fieldsList.get(i).getFieldType();
-                }
-            }else {
-                System.out.println(fieldsList.get(i).getFieldKey());
-                fieldKey[i] = fieldsList.get(i).getFieldKey();
-                fieldType[i] = fieldsList.get(i).getFieldType();
-                payloadKey[i] = "0";
-                payloadValue[i] ="0";
-            }
-        }
-        if(!measurementList.isEmpty()){
-            for (int i = 0; i < measurementList.size(); i++){
-                payloadKey[i] = measurementList.get(i).getPayloadKey();
-                payloadValue[i] = measurementList.get(i).getPayloadValue();
-            }
-        }
-
-        return new DeviceDTO(
-                devicesId,
-                deviceName,
-                deviceType,
-                location,
-                topic,
-                active,
-                fieldKey,
-                fieldType,
-                payloadKey,
-                payloadValue);
-    }
 }
