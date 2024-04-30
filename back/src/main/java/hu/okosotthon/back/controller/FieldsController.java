@@ -34,4 +34,9 @@ public class FieldsController {
     public ResponseEntity<List<FieldDTO>> getDevicesFieldsByOutput(){
         return new ResponseEntity<>(this.fieldsService.getDevicesFieldsByOutput(AuthController.currentUser.getUserId()), HttpStatus.OK);
     }
+
+//    @GetMapping("/getAllUserDeviceNamesByOutput")
+//    public ResponseEntity<List<FieldDTO>> getAllUserDeviceNamesByOutput(){
+//        return new ResponseEntity<>(this.fieldsService.getAllUserDeviceNamesByOutput(), HttpStatus.OK);
+//    }
 }

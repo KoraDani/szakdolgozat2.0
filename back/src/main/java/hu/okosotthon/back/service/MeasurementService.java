@@ -110,7 +110,7 @@ public class MeasurementService {
         for (Fields f : fieldsList) {
             List<Measurement> tmp =this.measurementRepo.getMeasurementByField(devicesId,f.getFieldKey(), PageRequest.of(0,20));
             if(!tmp.isEmpty()){
-                listOfList.add(convertMeasToDTO(tmp,f.getFieldType()));
+                listOfList.add(convertMeasToDTO(tmp,f.getFieldId(),f.getFieldType()));
             }else {
                 List<MeasurementDTO> t = new ArrayList<>();
                 t.add(new MeasurementDTO(0,f.getFieldKey(),"0","0", f.getFieldType()));
@@ -120,10 +120,10 @@ public class MeasurementService {
         return listOfList;
     }
 
-    public List<MeasurementDTO> convertMeasToDTO(List<Measurement> measurementList, String fieldType){
+    public List<MeasurementDTO> convertMeasToDTO(List<Measurement> measurementList, int fieldId, String fieldType){
         List<MeasurementDTO> measurementDTOS = new ArrayList<>();
         for (Measurement m : measurementList){
-            measurementDTOS.add(new MeasurementDTO(m.getMeasurementId(),m.getPayloadKey(),m.getPayloadValue(),m.getTime(),fieldType));
+            measurementDTOS.add(new MeasurementDTO(m.getMeasurementId(),m.getPayloadKey(),m.getPayloadValue(),m.getTime(),fieldId,fieldType,m.getDevices().getDevicesId()));
         }
         return measurementDTOS;
     }

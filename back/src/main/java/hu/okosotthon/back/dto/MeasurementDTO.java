@@ -16,5 +16,17 @@ public class MeasurementDTO {
     private String payloadKey;
     private String payloadValue;
     private String time;
+    @Nullable
+    private int fieldId;
     private String fieldType;
+    @Nullable
+    private int devicesId;
+
+    public MeasurementDTO(int measurementId, String payloadKey, String payloadValue, String time, String fieldType) {
+        this.measurementId = measurementId;
+        this.payloadKey = payloadKey;
+        this.payloadValue = payloadValue;
+        this.time = time;
+        this.fieldType = fieldType;
+    }
 }

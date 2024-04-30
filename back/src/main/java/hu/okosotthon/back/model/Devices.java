@@ -56,6 +56,11 @@ public class Devices {
     private String topic;
     private int active;
 
+    public Devices(int devicesId, String deviceName) {
+        this.devicesId = devicesId;
+        this.deviceName = deviceName;
+    }
+
     public Devices(String deviceName, String deviceType, String location, Users users, String topic) {
         this.deviceName = deviceName;
         this.deviceType = deviceType;

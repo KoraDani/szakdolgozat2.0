@@ -34,5 +34,7 @@ public interface DeviceRepo extends JpaRepository<Devices, String> {
     @Query("SELECT d FROM Devices d WHERE d.devicesId = ?1")
     Devices getDevicesById(int deviceId);
 
+    @Query("SELECT new hu.okosotthon.back.model.Devices(d.devicesId, d.deviceName) FROM Devices d WHERE d.devicesId = ?1")
+    Devices getDeviceNameAndIdByDeviceId(int deviceId);
 }
 

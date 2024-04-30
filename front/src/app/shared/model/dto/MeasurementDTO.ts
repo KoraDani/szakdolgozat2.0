@@ -3,5 +3,7 @@ export interface MeasurementDTO{
   payloadKey: string;
   payloadValue: string;
   time: string;
+  fieldId: number;
   fieldType: string;
+  deviceId: number;
 }

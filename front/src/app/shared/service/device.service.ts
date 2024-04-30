@@ -54,4 +54,6 @@ export class DeviceService{
   getDevices2() {
     return this.http.get<Devices[]>(this.apiUrl+"/device/getAllUserDevices2");
   }
+
+
 }

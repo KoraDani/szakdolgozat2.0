@@ -1,49 +1,60 @@
-<div>
-  <div *ngFor="let key of this.mestList">
-    <div *ngIf="key[0].fieldType == '1'">
-      <form [formGroup]="ifThenFormGroup" (ngSubmit)="onClick()">
-        <mat-form-field>
-          <mat-label>{{key[0].payloadKey}}</mat-label>
-          <input matInput type="text" name="{{key[0].payloadKey}}If" formControlName="{{key[0].payloadKey}}If">
-        </mat-form-field>
-        <select *ngFor="let f of this.devicesByOutputField">
-          <option value="{{f.fieldId}}">{{f.fieldKey}}</option>
-        </select>
-        <mat-form-field>
-          <mat-label>Massage to send</mat-label>
-          <input matInput type="text" name="{{key[0].payloadKey}}Then" formControlName="{{key[0].payloadKey}}Then">
-        </mat-form-field>
-        <button mat-raised-button color="primary">Save</button>
-      </form>
-    </div>
-  </div>
-</div>
+<!--<div>-->
+<!--  <div *ngFor="let key of this.mestList">-->
+<!--    <div *ngIf="key[0].fieldType == '1'">-->
+<!--      <form [formGroup]="ifThenFormGroup" (ngSubmit)="onClick()">-->
+<!--        <mat-form-field>-->
+<!--          <mat-label>{{key[0].payloadKey}}</mat-label>-->
+<!--          <input matInput type="text" name="{{key[0].payloadKey}}If" formControlName="{{key[0].payloadKey}}If">-->
+<!--        </mat-form-field>-->
+<!--        <select *ngFor="let f of this.devicesByOutputField">-->
+<!--          <option value="{{f.fieldId}}">{{f.fieldKey}}</option>-->
+<!--        </select>-->
+<!--        <mat-form-field>-->
+<!--          <mat-label>Massage to send</mat-label>-->
+<!--          <input matInput type="text" name="{{key[0].payloadKey}}Then" formControlName="{{key[0].payloadKey}}Then">-->
+<!--        </mat-form-field>-->
+<!--        <button mat-raised-button color="primary">Save</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 
 
-<div>
+<div fxLayout="column" fxLayoutAlign="start center">
   <mat-label>If:</mat-label>
-  <select>
-    <option *ngFor="let key of this.selectOutputField(this.mestList)"
-            value="{{key.fieldType}}">{{key.payloadKey}}</option>
-  </select>
-  <mat-radio-group>
-    <mat-radio-button>Nagyon</mat-radio-button>
-    <mat-radio-button>Kisebb</mat-radio-button>
-    <mat-radio-button>Egyenlő</mat-radio-button>
+  <mat-form-field>
+    <mat-label>Input</mat-label>
+    <mat-select [(ngModel)]="ifInput">
+      <mat-option *ngFor="let key of this.selectOutputField(this.mestList)"
+                  [value]="key">{{key.payloadKey}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-radio-group [(ngModel)]="after">
+    <mat-radio-button value="gt">Nagyon</mat-radio-button>
+    <mat-radio-button value="lt">Kisebb</mat-radio-button>
+    <mat-radio-button value="eq">Egyenlő</mat-radio-button>
   </mat-radio-group>
   <mat-label>Then</mat-label>
-  <select>
-    <option>Device1</option>
-    <option>Device2</option>
-    <option>Device3</option>
-  </select>
-  <select>
-    <option>Output1</option>
-    <option>Output2</option>
-    <option>Output3</option>
-  </select>
+
+  <mat-form-field>
+    <mat-label>Device</mat-label>
+    <mat-select [(ngModel)]="thenDevice">
+      <mat-option *ngFor="let dev of this.devicesByOutputField" [value]="dev">{{dev.deviceName}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Output Field</mat-label>
+    <mat-select [(ngModel)]="thenOutput" [disabled]="thenDevice.deviceId == 0">
+      <mat-option [value]="thenDevice?.fieldId">{{this.thenDevice?.fieldKey}}</mat-option>
+    </mat-select>
+  </mat-form-field>
   <mat-form-field>
     <mat-label>Massage to send</mat-label>
-    <input matInput type="text" >
+    <form [formGroup]="messageFrom">
+      <input matInput type="text" formControlName="message">
+    </form>
   </mat-form-field>
+  <button mat-raised-button color="primary" (click)="saveIfThen()">Save</button>
 </div>

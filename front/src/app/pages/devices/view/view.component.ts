@@ -1,14 +1,10 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component,  OnDestroy, OnInit} from '@angular/core';
 import {DeviceService} from "../../../shared/service/device.service";
-import {MeasurementService} from "../../../shared/service/measurement.service";
-import {Measurement} from "../../../shared/model/Measurement";
-import {CanvasJS} from "@canvasjs/angular-charts";
 import {DeviceDTO2} from "../../../shared/model/dto/DeviceDTO2";
-import {Fields} from "../../../shared/model/Fields";
 import {MeasurementDTO} from "../../../shared/model/dto/MeasurementDTO";
-import {FormControl, FormGroup} from "@angular/forms";
 import {FieldDOT} from "../../../shared/model/dto/FieldDTO";
 import {FieldService} from "../../../shared/service/field.service";
+
 
 
 @Component({
@@ -115,7 +111,6 @@ export class ViewComponent implements OnInit, OnDestroy {
 
     return d;
   }
-
 
 
 }

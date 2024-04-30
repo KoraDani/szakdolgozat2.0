@@ -93,4 +93,7 @@ public class DeviceService {
     public Devices getDeviceById(int devicesId) {return this.deviceRepo.getDevicesById(devicesId);}
 
 
+    public Devices getDeviceTest() {
+        return this.deviceRepo.getDevicesById(23);
+    }
 }

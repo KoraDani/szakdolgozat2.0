@@ -89,5 +89,12 @@ public class DeviceController {
     }
 
 
+    /**
+     * Ez csak tesztelés céljából van itt
+     * */
+    @GetMapping("/getDeviceTest")
+    public ResponseEntity<Devices> getDeviceTest(){
+        return new ResponseEntity<>(this.deviceService.getDeviceTest(), HttpStatus.OK);
+    }
 
 }
