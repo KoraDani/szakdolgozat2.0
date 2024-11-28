@@ -1,49 +1,19 @@
 <div fxLayout="column" fxLayoutAlign="start center">
-  <div *ngFor="let key of this.measirmentList;">
-    <div *ngIf="key[0].fieldType =='1'" fxLayout="row" fxLayoutAlign="center center">
-      <label>{{key[0].payloadKey}}:&nbsp; </label>
-      <!--      <div *ngFor="let val of key">-->
-      <label>{{key[0].payloadValue | number:'1.0-0'}} &nbsp;</label>
-      <!--      </div>-->
-    </div>
-
-
-    <div *ngIf="key[0].fieldType =='2'" fxLayout="row" fxLayoutAlign="center center">
-      <div *ngFor="let val of key">
-        <mat-label>{{val.payloadKey}}</mat-label>
-        <mat-form-field>
-          <input matInput type="text" placeholder="Output">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div *ngIf="key[0].fieldType =='3'" fxLayout="row" fxLayoutAlign="center center">
-      <div *ngFor="let val of key">
-        <label>OnOff</label>
-        <!--      //TODO itt majd a be ki kapcsolást úgy is meg lehetne oldani hogy változzon a szöveg-->
-        <mat-slide-toggle>
-          {{val.payloadKey}}
-        </mat-slide-toggle>
-      </div>
-    </div>
-
-    <div *ngIf="key[0].fieldType =='4'" fxLayout="row" fxLayoutAlign="center center">
-      <div *ngFor="let val of key">
-        <label>RGB</label>
-        <input type="color" [(ngModel)]="colorPicker">
-      </div>
-    </div>
-
-    <div *ngIf="key[0].fieldType =='5'" fxLayout="row" fxLayoutAlign="center center">
-      <!--      //TODO most már működik de lehet külön kellene szedni azokat amikor csak kap értéket az oldal-->
-      <label>LineChart</label>
-      <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'400px'}"></canvasjs-chart>
-    </div>
+  <div>
+    <p>{{selectedDevice?.deviceName}}</p>
+    <p>{{selectedDevice?.location}}</p>
+    <!--    <div *ngFor="let sen of this.deviceSensor">-->
+    <!--      <div *ngFor="let meas of this.measuremntList">-->
+    <!--        <p *ngIf="sen == meas.sensorType">{{meas.sensorType}}:{{meas.value}}</p>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
-
-  <!--  //TODO if then befejezni-->
-
 </div>
-<app-if-then [mestList]="this.measirmentList" ></app-if-then>
 
-<!--//TODO ha mentés történik az adatbázisba akkor frissítse az adatokat angulárban-->
+<div *ngIf="category">
+  <div *ngFor="let cat of category">
+      <app-temperature *ngIf="cat === 'temp'" [deviceId]="selectedDevice?.deviceId"/>
+      <app-plug *ngIf="cat === 'plug'"  [deviceId]="selectedDevice?.deviceId" [topic]="selectedDevice!.topic"/>
+      <app-light *ngIf="cat === 'light'" [selectedDevice]="selectedDevice"></app-light>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 package hu.okosotthon.back.session;
 
-import hu.okosotthon.back.service.UsersService;
+import hu.okosotthon.back.Auth.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

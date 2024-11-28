@@ -1,8 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserDTO} from "../../shared/model/dto/UserDTO";
 import {Router} from "@angular/router";
-import {AuthService} from "../../shared/service/auth.service";
+import {AuthService} from "../../auth.service";
 
 @Component({
   selector: 'app-login',

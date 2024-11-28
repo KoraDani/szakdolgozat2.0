@@ -1,6 +1,6 @@
 package hu.okosotthon.back.config;
 
-import hu.okosotthon.back.service.UsersService;
+import hu.okosotthon.back.Auth.UsersService;
 import hu.okosotthon.back.session.SessionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

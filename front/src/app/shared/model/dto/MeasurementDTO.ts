@@ -1,9 +1,9 @@
+import {Devices} from "../Devices";
+
 export interface MeasurementDTO{
   measurementId: number;
-  payloadKey: string;
-  payloadValue: string;
+  sensorType: string;
+  value: string;
   time: string;
-  fieldId: number;
-  fieldType: string;
-  deviceId: number;
+  device: Devices;
 }

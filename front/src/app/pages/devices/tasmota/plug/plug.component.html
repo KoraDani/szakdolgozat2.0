@@ -1,0 +1,18 @@
+<div *ngIf="measurementList.length > 0">
+
+  <div *ngFor="let sensor of this.sensor">
+    <div *ngFor="let json of JSON.parse(sensor.fieldJSON)">
+      <div *ngFor="let meas of this.measurementList">
+        <p *ngIf="meas.sensorType == json">{{json}}: {{meas.value}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<section class="example-section">
+  <mat-slide-toggle
+    class="example-margin"
+    [checked]="switchStatus"
+    (click)="onToggle()">
+    ON/OFF
+  </mat-slide-toggle>
+</section>

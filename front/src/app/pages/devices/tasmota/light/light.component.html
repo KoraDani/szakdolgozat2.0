@@ -1,0 +1,93 @@
+<!--<mat-card class="example-card" appearance="outlined" fxLayout="column" fxLayoutAlign="space-evenly center"-->
+<!--          [style]="dimmer">-->
+<!--  <mat-card-header>-->
+<!--    <mat-card-title>Eszköz Neve</mat-card-title>-->
+<!--  </mat-card-header>-->
+<!--  <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">-->
+<!--    <mat-slide-toggle-->
+<!--      class="example-margin"-->
+<!--      [checked]="switchStatus"-->
+<!--      (click)="onToggle()">-->
+<!--      ON/OFF-->
+<!--    </mat-slide-toggle>-->
+<!--    <label>Dimmer</label>-->
+<!--    <mat-slider min="0" max="100" step="1" showTickMarks discrete>-->
+<!--      <input matSliderThumb [(ngModel)]="dimmerValue" (valueChange)="onChange($event)">-->
+<!--    </mat-slider>-->
+<!--  </mat-card-content>-->
+<!--  <mat-card-actions>-->
+<!--    <button mat-flat-button>View</button>-->
+<!--  </mat-card-actions>-->
+<!--</mat-card>-->
+
+<!--<mat-card class="example-card" appearance="outlined" [style]="dimmer2">-->
+<!--  <mat-card-header>-->
+<!--    <mat-card-title>Eszköz Neve</mat-card-title>-->
+<!--  </mat-card-header>-->
+<!--  <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">-->
+<!--    <mat-slide-toggle (click)="onClick()">{{power}}</mat-slide-toggle>-->
+<!--    <label>Dimmer</label>-->
+<!--    <mat-slider min="0" max="100" step="1" showTickMarks discrete>-->
+<!--      <input matSliderThumb [(ngModel)]="dimmerValue2" (valueChange)="onChange2($event)">-->
+<!--    </mat-slider>-->
+<!--    <label>Warmth</label>-->
+<!--    <mat-slider min="153" max="500" step="1" showTickMarks discrete>-->
+<!--      <input matSliderThumb (valueChange)="mapToWarmColor($event)">-->
+<!--    </mat-slider>-->
+<!--  </mat-card-content>-->
+<!--  <mat-card-actions>-->
+<!--    <button mat-flat-button>View</button>-->
+<!--  </mat-card-actions>-->
+<!--</mat-card>-->
+
+<!--<mat-card class="example-card" appearance="outlined" [style]="dimmer3">-->
+<!--  <mat-card-header>-->
+<!--    <mat-card-title>Eszköz Neve</mat-card-title>-->
+<!--  </mat-card-header>-->
+<!--  <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">-->
+<!--    <mat-slide-toggle (click)="onClick()">{{power}}</mat-slide-toggle>-->
+<!--    <label>White Dimmer1</label>-->
+<!--    <mat-slider min="0" max="100" step="1" showTickMarks discrete>-->
+<!--      <input matSliderThumb [(ngModel)]="dimmerValue4" (valueChange)="onChange4($event)">-->
+
+<!--    </mat-slider>-->
+<!--    <label>RGB Dimmer1</label>-->
+<!--    <mat-slider min="0" max="100" step="1" showTickMarks discrete>-->
+<!--      <input matSliderThumb [(ngModel)]="dimmerValue3" (valueChange)="onChange3($event)">-->
+
+<!--    </mat-slider>-->
+<!--    &lt;!&ndash;    <label>Warmth</label>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <mat-slider min="0" max="100" step="1" showTickMarks discrete>&ndash;&gt;-->
+<!--    &lt;!&ndash;      <input matSliderThumb (valueChange)="mapToWarmColor3($event)">&ndash;&gt;-->
+<!--    &lt;!&ndash;    </mat-slider>&ndash;&gt;-->
+<!--    &lt;!&ndash;<input [(colorPicker)]="color" [style.background]="color" [value]="color" />&ndash;&gt;-->
+<!--    <input type="color" [(ngModel)]="hexng" (ngModelChange)="onColorPick()">-->
+<!--  </mat-card-content>-->
+<!--  <mat-card-actions>-->
+<!--    <button mat-flat-button>View</button>-->
+<!--  </mat-card-actions>-->
+<!--</mat-card>-->
+
+  <mat-card class="example-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Eszköz Neve</mat-card-title>
+    </mat-card-header>
+    <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">
+      <mat-slide-toggle (click)="onClick()">{{power}}</mat-slide-toggle>
+      <label>Dimmer</label>
+      <mat-slider min="0" max="100" step="1" showTickMarks discrete>
+        <input matSliderThumb (valueChange)="changeDimmer($event)" [(value)]="dimmerValue4">
+      </mat-slider>
+      <!--    <label>RGB Dimmer1</label>-->
+      <!--    <mat-slider min="0" max="100" step="1" showTickMarks discrete>-->
+      <!--      <input matSliderThumb (valueChange)="rgbDimmer($event)">-->
+
+      <!--    </mat-slider>-->
+      <label>Warmth</label>
+      <mat-slider min="153" max="500" step="1" showTickMarks discrete>
+        <input matSliderThumb (valueChange)="changeCT($event)" [(value)]="ct">
+      </mat-slider>
+      <!--    <input type="color" [(ngModel)]="hexng1" (ngModelChange)="onColorPick()" value="#ffffff">-->
+    </mat-card-content>
+  </mat-card>
+

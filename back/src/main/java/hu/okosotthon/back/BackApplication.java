@@ -1,12 +1,13 @@
 package hu.okosotthon.back;
 
-import hu.okosotthon.back.service.MqttService;
+import hu.okosotthon.back.Mqtt.MqttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 public class BackApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
@@ -44,6 +46,8 @@ public class BackApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		mqttService.connectToBroker();
-		mqttService.subscribeToTopic("home/szoba/temp");
+//		mqttService.subscribeToTopic("tele/home/szoba/temp/SENSOR");
+//		mqttService.subscribeToTopic("tele/home/szoba/plug/SENSOR");
+//		mqttService.subscribeToTopic("stat/home/szoba/switch/RESULT");
 	}
 }

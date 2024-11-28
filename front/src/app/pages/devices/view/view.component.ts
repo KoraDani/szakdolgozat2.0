@@ -1,11 +1,11 @@
-import {Component,  OnDestroy, OnInit} from '@angular/core';
-import {DeviceService} from "../../../shared/service/device.service";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {DeviceService} from "../device.service";
 import {DeviceDTO2} from "../../../shared/model/dto/DeviceDTO2";
 import {MeasurementDTO} from "../../../shared/model/dto/MeasurementDTO";
-import {FieldDOT} from "../../../shared/model/dto/FieldDTO";
-import {FieldService} from "../../../shared/service/field.service";
-
-
+import {SensorService} from "../sensor.service";
+import {ActivatedRoute} from "@angular/router";
+import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
+import {MeasurementService} from "../measurement.service";
 
 @Component({
   selector: 'app-view',
@@ -13,26 +13,20 @@ import {FieldService} from "../../../shared/service/field.service";
   styleUrls: ['./view.component.scss']
 })
 
-//TODO hőmérőként megjelenítani a hőmérsékletett
-
 
 export class ViewComponent implements OnInit, OnDestroy {
 
-  colorPicker: any;
+  selectedDevice?: DeviceDTO;
+  deviceSensor: string[] = [];
+  category: string[] = [];
 
   // @ts-ignore
-  deviceInput = JSON.parse(localStorage.getItem("selectedDevice"));
+  meas: Map<any, any> = new Map<any,any>();
 
   number: any[] | undefined;
-  // @ts-ignore
-  measirmentList: Array<Array<MeasurementDTO>> = JSON.parse(localStorage.getItem("deviceListMeasrument"));
 
-  dataP: any = this.convertMeasurementIntoDataPoints();
+  constructor(private devServ: DeviceService, private sensorService: SensorService, private route: ActivatedRoute) {
 
-
-  devicesByOutputField: FieldDOT[] = [];
-
-  constructor(private devServ: DeviceService, private fieldServ: FieldService) {
   }
 
   ngOnDestroy(): void {
@@ -40,8 +34,29 @@ export class ViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.dataP);
+    const deviceId = this.route.snapshot.paramMap.get('deviceID');
+    console.log(deviceId);
+    if (deviceId != null) {
+      this.devServ.getDeviceDTOById(parseInt(deviceId)).subscribe(device => {
+        this.selectedDevice = device;
+        this.sensorService.getByIds(this.selectedDevice?.sensorId).subscribe(sensor => {
+          sensor.forEach(sen => {
+            //TODO ha itt a sensor nagyobb mint egy az nem biztos hogy jó lesz így
+            this.category.push(sen.category);
+            // this.deviceSensor = JSON.parse(sen.fieldJSON);
+          })
+          console.log(this.category)
+        }, error => {
+          console.error(error);
+        });
+      }, error => {
+        console.error(error)
+      })
+
+    }
+
   }
+
 
   deleteDevice(deviceId: number) {
     console.log("Eszköz törlés: " + deviceId);
@@ -62,55 +77,6 @@ export class ViewComponent implements OnInit, OnDestroy {
 
   }
 
-
-  chartOptions = {
-    animationEnabled: true,
-    theme: "light2",
-    title: {
-      text: this.deviceInput.deviceName
-    },
-    axisX: {
-      valueFormatString: "#,##"
-    },
-    axisY: {
-      title: "Valami"
-    },
-    toolTip: {
-      shared: true
-    },
-    data: this.dataP
-  }
-
-  convertMeasurementIntoDataPoints() {
-    let d: any = [];
-
-    let i: number = 0;
-    for (let val of this.measirmentList) {
-      let fieldName = val[0].payloadKey
-
-      if(val[0].fieldType == '1'){
-        d[i] = {
-          type: "line",
-          name: fieldName,
-          showInLegend: true,
-          yValueFormatString: "#,##",
-          dataPoints: []
-        };
-        // @ts-ignore
-        for (let k of val) {
-          if(k.fieldType == '1'){
-            fieldName = k.payloadKey
-            d[i].dataPoints.push({y: parseFloat(k.payloadValue)});
-          }
-        }
-      }
-      i++;
-    }
-
-    console.log(d);
-
-    return d;
-  }
 
 
 }

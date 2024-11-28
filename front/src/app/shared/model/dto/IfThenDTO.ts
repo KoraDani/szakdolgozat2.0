@@ -5,6 +5,7 @@ export interface IfThenDTO{
   thenDeviceId: any;
   thenDeviceName: any;
   ifFieldId: any;
+  ifValue: any;
   ifFieldName: any;
   thenFieldId: any;
   thenFieldName: any;

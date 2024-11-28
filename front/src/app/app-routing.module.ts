@@ -1,15 +1,48 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from "./pages/login/login.component";
+import {RegisterComponent} from "./pages/register/register.component";
+import {MainComponent} from "./pages/main/main.component";
+import {DevicesComponent} from "./pages/devices/devices.component";
+import {CreateDeviceComponent} from "./pages/devices/create-device/create-device.component";
+import {ViewComponent} from "./pages/devices/view/view.component";
+import {UserDataComponent} from "./pages/user-data/user-data.component";
+import {LightComponent} from "./pages/devices/tasmota/light/light.component";
 
 
 const routes: Routes = [
-  {path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule)},
-  {path: 'register', loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterModule)},
-  {path: 'main', loadChildren: () => import('./pages/main/main.module').then(m => m.MainModule)},
-  {path: 'devices', loadChildren: () => import('./pages/devices/devices.module').then(m => m.DevicesModule)/*, canActivate: [AuthenticationGuard]*/},
-  {path: 'create-device', loadChildren: () => import('./pages/devices/create-device/create-device.module').then(m => m.CreateDeviceModule)/*, canActivate: [AuthenticationGuard]*/},
-  {path: 'view', loadChildren: () => import('./pages/devices/view/view.module').then(m => m.ViewModule)/*, canActivate: [AuthenticationGuard]*/},
-  {path: 'user-data', loadChildren: () => import('./pages/user-data/user-data.module').then(m => m.UserDataModule)/*, canActivate: [AuthenticationGuard]*/},
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
+  },
+  {
+    path: 'main',
+    component: MainComponent
+  },
+  {
+    path: 'devices',
+    component: DevicesComponent
+  },
+  {
+    path: 'create-device',
+    component: CreateDeviceComponent
+  },
+  {
+    path: 'view/:deviceID',
+    component: ViewComponent
+  },
+  {
+    path: 'user-data',
+    component: UserDataComponent
+  },
+  {
+    path: 'light',
+    component: LightComponent,
+  },
   {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: '**', redirectTo: '/login'}
 ];

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Users} from "../../shared/model/Users";
-import {AuthService} from "../../shared/service/auth.service";
+import {AuthService} from "../../auth.service";
 import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({

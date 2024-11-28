@@ -9,24 +9,17 @@
 </div>
 
 <div fxLayout="row wrap" fxLayoutAlign="center center">
-  <div *ngFor="let device of devicesList2" class="max-div fontStlye">
+  <div *ngFor="let device of deviceList" class="max-div fontStlye">
     <mat-card class="example-card">
       <mat-card-header>
-        <mat-card-title>{{device.deviceName}}</mat-card-title>
+        <mat-card-title class="deviceName">{{device.deviceName}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-<!--        //TODO mivel más képpen küldöm a mért adatokat itt ezeket teljesen át kell dolgozni-->
-        <div *ngFor="let field of device.fields | keyvalue; index as i">
-          <div *ngFor="let payload of device.payload | keyvalue; index as i">
-              <p *ngIf="payload.key == field.key">{{payload.key}}:{{payload.value}}</p>
-          </div>
-        </div>
-<!--        <div *ngIf="device.f == '3' || device.deviceType == '2'">-->
-<!--          <section class="example-section">-->
-<!--&lt;!&ndash;            <mat-slide-toggle color="primary" class="example-margin" [(ngModel)]="device.status" (click)="changeDeviceStatus(device.devicesId)">On/Off</mat-slide-toggle>&ndash;&gt;-->
-<!--          </section>-->
-<!--        </div>-->
-        <button mat-raised-button color="primary" (click)="selectDevice(device)">View</button>
+        <p class="location">{{device.location}}</p>
+        <p class="topic">{{device.topic}}</p>
+        <p>{{device.deviceId}}</p>
+<!--        [routerLink]="['/view', device.devicesId]"-->
+        <button mat-raised-button color="primary" [routerLink]="['/view', device.deviceId]" (click)="sendStatus(device)">View</button>
       </mat-card-content>
     </mat-card>
   </div>

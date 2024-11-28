@@ -14,18 +14,33 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatCardModule} from "@angular/material/card";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {UserDataComponent} from './pages/user-data/user-data.component';
-import {ReactiveFormsModule, FormsModule } from "@angular/forms";
+import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RequestInterceptor} from "./request.interceptor";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatExpansionModule} from "@angular/material/expansion";
-import {DevicesModule} from "./pages/devices/devices.module";
-import { MenuComponent } from './shared/menu/menu.component';
+import {MenuComponent} from './shared/menu/menu.component';
 import {MatListModule} from "@angular/material/list";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {CdkDrag} from "@angular/cdk/drag-drop";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatSelectModule} from "@angular/material/select";
+import {MatStepperModule} from "@angular/material/stepper";
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {CreateDeviceComponent} from "./pages/devices/create-device/create-device.component";
+import {ViewComponent} from "./pages/devices/view/view.component";
+import {IfThenComponent} from "./pages/devices/if-then/if-then.component";
+import { TemperatureComponent } from './pages/devices/tasmota/temperature/temperature.component';
+import { RgbComponent } from './pages/devices/tasmota/rgb/rgb.component';
+import { SwitchComponent } from './pages/devices/tasmota/switch/switch.component';
+import { PlugComponent } from './pages/devices/tasmota/plug/plug.component';
+import { LightComponent } from './pages/devices/tasmota/light/light.component';
+import {MatSliderModule} from "@angular/material/slider";
 
 @NgModule({
   declarations: [
@@ -35,30 +50,46 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     RegisterComponent,
     MainComponent,
     UserDataComponent,
-    MenuComponent
+    MenuComponent,
+    CreateDeviceComponent,
+    ViewComponent,
+    IfThenComponent,
+    TemperatureComponent,
+    RgbComponent,
+    SwitchComponent,
+    PlugComponent,
+    LightComponent,
+
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatSidenavModule,
-        MatToolbarModule,
-        MatIconModule,
-        MatCardModule,
-        FlexLayoutModule,
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MatMenuModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatExpansionModule,
-        DevicesModule,
-        MatListModule,
-        MatSlideToggleModule
-    ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass:RequestInterceptor, multi:true}],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
+    FlexLayoutModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatMenuModule,
+    MatExpansionModule,
+    CdkDrag,
+    MatButtonModule,
+    MatListModule,
+    MatGridListModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatStepperModule,
+    CanvasJSAngularChartsModule,
+    MatSlideToggleModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatSliderModule
+  ],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
