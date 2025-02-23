@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit, signal} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {MqttService} from "../../mqtt.service";
 import {WebSocketService} from "../../WebSocketService";
 import {WebSocketModel} from "../../WebSocketModel";
 import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
 import {SensorService} from "../../sensor.service";
-import {Sensor} from "../../../../shared/model/Sensor";
 
 @Component({
   selector: 'app-light',
   templateUrl: './light.component.html',
-  styleUrls: ['./light.component.scss']
+  styleUrls: ['./light.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LightComponent implements OnInit {
 
@@ -19,7 +19,7 @@ export class LightComponent implements OnInit {
   hex = new FormControl('');
 
   color: any = '#ffffff';
-  power: string = 'OFF';
+  power = true;
   ct: number = 0;
 
   switchStatus!: boolean;
@@ -35,52 +35,53 @@ export class LightComponent implements OnInit {
   }
 
   onClick() {
-    this.power = this.power == "OFF" ? this.power = "ON" : this.power = "OFF";
+    this.power = !this.power;
   }
 
   ngOnInit(): void {
+    console.log("sending message to websocket " + this.selectedDevice?.topic)
+    this.getDeviceStatus();
+
+    this.websocket.listen('/topic/power', message => {
+      console.log(message)
+      this.setLightStatus(message);
+    });
+  }
+
+  getDeviceStatus(){
     this.webSocModel = {
-      destination: '/app/light',
-      listen: '/topic/light',
+      destination: '/app/power',
+      listen: '/topic/power',
       topic: this.selectedDevice?.topic + "",
       message: [{
         prefix: "cmnd/",
-        postfix: "/HSBColor",
+        postfix: "/HSBcolor",
         msg: " "
       }]
     };
     this.websocket.send(this.webSocModel);
-
-
-    console.log("sending message to websocket " + this.selectedDevice?.topic)
-
-    this.websocket.listen('/topic/light', message => {
-      this.setLightStatus(message);
-    });
   }
 
   setLightStatus(msg: string) {
     for (const msgElement of Object.entries(JSON.parse(msg))) {
       switch (msgElement[0]) {
         case 'POWER':
-          // @ts-ignore
-          this.power = msgElement[1] ? "OFF" : msgElement[1];
-          console.log(1)
+          this.power = msgElement[1] == "OFF" ? false : true;
+          console.log(this.power)
           break;
         case 'Dimmer':
           // @ts-ignore
           this.dimmerValue4 = msgElement[1];
-          console.log(2)
+          console.log(msgElement[1])
 
           break;
         case 'HSBColor':
           this.hexng1 = msgElement[1];
-          console.log(3)
-
+          console.log( msgElement[1])
           break;
         case 'CT':
           this.ct = Number(msgElement[1]);
-          console.log(4)
+          console.log(msgElement[1])
 
           break;
       }

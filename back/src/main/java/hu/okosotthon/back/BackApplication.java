@@ -49,5 +49,6 @@ public class BackApplication implements CommandLineRunner {
 //		mqttService.subscribeToTopic("tele/home/szoba/temp/SENSOR");
 //		mqttService.subscribeToTopic("tele/home/szoba/plug/SENSOR");
 //		mqttService.subscribeToTopic("stat/home/szoba/switch/RESULT");
+//		mqttService.subscribeToTopic("stat/home/szoba/switch/RESULT");
 	}
 }

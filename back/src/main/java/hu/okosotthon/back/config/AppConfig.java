@@ -46,6 +46,7 @@ public class AppConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/error").permitAll()
                 .antMatchers("/auth/saveUser").permitAll()
                 .antMatchers("/auth/login").permitAll()
+                .antMatchers("/app/**").permitAll()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class);

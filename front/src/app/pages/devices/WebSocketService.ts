@@ -12,7 +12,9 @@ export class WebSocketService implements OnDestroy {
 
   constructor() {
     this.connection = Stomp.client('ws://localhost:8080/websocket');
-    this.connection.connect({}, () => {});
+    /*if(this.connection.connected){
+      this.connection.connect({}, () => {});
+    }*/
   }
 
   public send(webSocModel: WebSocketModel): void {

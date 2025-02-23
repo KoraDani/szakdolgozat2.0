@@ -84,9 +84,15 @@ public class MqttService {
             for (MessageModel m : webSocModel.getMessage()) {
                 String tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
                 mqttClient.subscribe(tmpTopic);
+
+
                 if(m.getPrefix().contains("cmnd")){
+                    System.out.println(tmpTopic+" sndlfkjasnlkdf");
                     mqttClient.publish(tmpTopic, new MqttMessage(m.getMsg().getBytes()));
                 }
+                tmpTopic = "stat/"+webSocModel.getTopic()+"/RESULT";
+                System.out.println(tmpTopic);
+                mqttClient.subscribe(tmpTopic);
             }
         } catch (MqttException e) {
             throw new RuntimeException(e);
@@ -116,7 +122,7 @@ public class MqttService {
             @Async
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
-                System.out.println(topic);
+                System.out.println(message+"  Messasge arrived");
                 if (msg.length() > 2) {
                     try {
                         System.out.println(msg);
@@ -219,12 +225,10 @@ public class MqttService {
             for (Map.Entry<Object, Object> val : result.entrySet()) {
 
                 if (val.getValue() instanceof LinkedHashMap) {
-                    System.out.println(val.getValue());
                     Map<Object, Object> map = (Map<Object, Object>) val.getValue();
 
                     for (Map.Entry<Object, Object> mapVal : map.entrySet()) {
                         if (val.getKey().equals("Status") && mapVal.getKey().equals("DeviceName")) {
-                            System.out.println("STATUS " + mapVal.getValue());
                             detectedDevice.setDeviceName((String) mapVal.getValue());
                         }
                         if (val.getKey().equals("StatusSNS")) {
@@ -243,8 +247,11 @@ public class MqttService {
                             if (noStatusSNS && detectedDevice.getStatusSNS().isEmpty() && mapVal.getValue().toString().contains("PWM") ) {
                                 detectedDevice.setStatusSNS(pwmGPIO(result));
                             }
-                            System.out.println("GPIO   Key: " + val.getKey().toString() + ", Map Key: " + mapVal.getKey().toString() + ", Map Value: " + mapVal.getValue().toString());
-                            detectedDevice.setGpio(new GPIO(val.getKey().toString(), mapVal.getKey().toString(), mapVal.getValue().toString()));
+                            detectedDevice.setGpio(
+                                    new GPIO(
+                                            val.getKey().toString(),
+                                            mapVal.getKey().toString(),
+                                            mapVal.getValue().toString()));
                         }
                     }
                 }

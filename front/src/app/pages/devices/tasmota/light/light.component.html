@@ -73,7 +73,9 @@
       <mat-card-title>Eszköz Neve</mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">
-      <mat-slide-toggle (click)="onClick()">{{power}}</mat-slide-toggle>
+      <section>
+      <mat-slide-toggle (click)="onClick()" [checked]="power">{{power}}</mat-slide-toggle>
+      </section>
       <label>Dimmer</label>
       <mat-slider min="0" max="100" step="1" showTickMarks discrete>
         <input matSliderThumb (valueChange)="changeDimmer($event)" [(value)]="dimmerValue4">
