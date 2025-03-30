@@ -5,15 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 @EnableAsync
@@ -24,7 +18,7 @@ public class BackApplication implements CommandLineRunner {
 		SpringApplication.run(BackApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
 		corsConfiguration.setAllowCredentials(true);
@@ -38,7 +32,7 @@ public class BackApplication implements CommandLineRunner {
 		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 		return new CorsFilter(urlBasedCorsConfigurationSource);
-	}
+	}*/
 
 	@Autowired
 	private MqttService mqttService;

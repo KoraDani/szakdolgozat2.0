@@ -61,10 +61,6 @@ public class DeviceService {
         return this.deviceRepo.save(devices);
     }
 
-    public DeviceDTO getDeviceDTOByTopic(String topic) {
-        return this.deviceRepo.getDevicesDTOByTopic(topic);
-    }
-
     public Devices getDeviceByTopic(String topic) {
         return this.deviceRepo.getDevicesByTopic(topic);
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Measurement} from "../../shared/model/Measurement";
 import {MeasurementDTO} from "../../shared/model/dto/MeasurementDTO";
 import {Observable} from "rxjs";

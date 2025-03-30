@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, signal} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {MqttService} from "../../mqtt.service";
 import {WebSocketService} from "../../WebSocketService";
@@ -7,10 +7,11 @@ import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
 import {SensorService} from "../../sensor.service";
 
 @Component({
-  selector: 'app-light',
-  templateUrl: './light.component.html',
-  styleUrls: ['./light.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-light',
+    templateUrl: './light.component.html',
+    styleUrls: ['./light.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class LightComponent implements OnInit {
 
@@ -18,8 +19,13 @@ export class LightComponent implements OnInit {
 
   hex = new FormControl('');
 
+  isColor: boolean = false;
+  isHSBColor: boolean = false;
+  isWhite: boolean = false;
+  isCT: boolean = false;
+
   color: any = '#ffffff';
-  power = true;
+  power: boolean | true | false = false;
   ct: number = 0;
 
   switchStatus!: boolean;
@@ -30,25 +36,49 @@ export class LightComponent implements OnInit {
   //TODO light webSocModel befejezése
   webSocModel!: WebSocketModel;
   loading: boolean = true;
-  constructor(private sensorService: SensorService, private mqttService: MqttService, private websocket: WebSocketService) {
+
+  constructor(private cdr: ChangeDetectorRef, private sensorService: SensorService, private mqttService: MqttService, private websocket: WebSocketService) {
 
   }
 
   onClick() {
     this.power = !this.power;
+    this.webSocModel = {
+      destination: '/app/power',
+      listen: '/topic/power',
+      topic: this.selectedDevice?.topic + "",
+      message: [{
+        prefix: "cmnd/",
+        postfix: "/Power",
+        msg: this.power ? "ON" : "OFF"
+      }]
+    };
+    this.websocket.send(this.webSocModel);
   }
 
   ngOnInit(): void {
-    console.log("sending message to websocket " + this.selectedDevice?.topic)
+
+    console.log(this.selectedDevice?.sensorId)
+    this.sensorService.getByIds(this.selectedDevice?.sensorId).subscribe(sen => {
+      sen.forEach(s => {
+        this.setFields(s.fieldJSON);
+      })
+    })
     this.getDeviceStatus();
 
     this.websocket.listen('/topic/power', message => {
       console.log(message)
       this.setLightStatus(message);
     });
+
+    this.loading = false;
+
   }
 
-  getDeviceStatus(){
+
+  //console.log("sending message to websocket " + this.selectedDevice?.topic)
+
+  getDeviceStatus() {
     this.webSocModel = {
       destination: '/app/power',
       listen: '/topic/power',
@@ -62,11 +92,35 @@ export class LightComponent implements OnInit {
     this.websocket.send(this.webSocModel);
   }
 
+  setFields(str: string) {
+    for (const e of JSON.parse(str)) {
+      switch (e) {
+        case 'Color':
+          this.isColor = true;
+          console.log(this.isColor)
+          break;
+        case 'HSBColor':
+          this.isHSBColor = true;
+          console.log(this.isHSBColor)
+          break;
+        case 'White':
+          this.isWhite = true;
+          console.log(this.isWhite)
+          break;
+        case 'CT':
+          this.isCT = true;
+          console.log(this.isCT)
+          break;
+      }
+    }
+    this.cdr.detectChanges();
+  }
+
   setLightStatus(msg: string) {
     for (const msgElement of Object.entries(JSON.parse(msg))) {
       switch (msgElement[0]) {
         case 'POWER':
-          this.power = msgElement[1] == "OFF" ? false : true;
+          this.power = msgElement[1] != "OFF";
           console.log(this.power)
           break;
         case 'Dimmer':
@@ -77,7 +131,7 @@ export class LightComponent implements OnInit {
           break;
         case 'HSBColor':
           this.hexng1 = msgElement[1];
-          console.log( msgElement[1])
+          console.log(msgElement[1])
           break;
         case 'CT':
           this.ct = Number(msgElement[1]);
@@ -86,6 +140,7 @@ export class LightComponent implements OnInit {
           break;
       }
     }
+    this.cdr.detectChanges();
   }
 
   // //TODO webSocModelként átírni az ez alattlévőket

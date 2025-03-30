@@ -11,9 +11,10 @@ import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {WebSocketModel} from "../WebSocketModel";
 
 @Component({
-  selector: 'app-create-device',
-  templateUrl: './create-device.component.html',
-  styleUrls: ['./create-device.component.scss']
+    selector: 'app-create-device',
+    templateUrl: './create-device.component.html',
+    styleUrls: ['./create-device.component.scss'],
+    standalone: false
 })
 export class CreateDeviceComponent implements OnInit {
   deviceForm: FormGroup = new FormGroup({

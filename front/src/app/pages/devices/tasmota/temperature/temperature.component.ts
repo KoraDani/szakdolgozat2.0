@@ -12,9 +12,10 @@ interface DataPoint {
 }
 
 @Component({
-  selector: 'app-temperature',
-  templateUrl: './temperature.component.html',
-  styleUrls: ['./temperature.component.scss']
+    selector: 'app-temperature',
+    templateUrl: './temperature.component.html',
+    styleUrls: ['./temperature.component.scss'],
+    standalone: false
 })
 export class TemperatureComponent implements OnInit {
   @Input({required: true}) deviceId?: number;

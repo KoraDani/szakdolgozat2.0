@@ -2,13 +2,13 @@ package hu.okosotthon.back.Measurment;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import hu.okosotthon.back.Device.Devices;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 
 
 @Getter

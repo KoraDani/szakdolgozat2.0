@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {FieldDOT} from "../../shared/model/dto/FieldDTO";
 import {Sensor} from "../../shared/model/Sensor";
 
@@ -14,7 +14,7 @@ export class SensorService {
     return this.http.post<Sensor>(this.apiUrl+"/getByName", null, {params:{sensorName}});
   }
 
-  getByIds(sensorId: number[]) {
+    getByIds(sensorId: number[] | [] | undefined) {
     return this.http.post<Sensor[]>(this.apiUrl+"/getAllBySensorId", sensorId);
   }
 

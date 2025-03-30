@@ -36,7 +36,11 @@ public class MqttService {
     private MeasurementService measurementService;
 
     @Autowired
-    public MqttService(DeviceService deviceService, IfThenService ifThenService, SensorService sensorService, MeasurementService measurementService) {
+    public MqttService(
+            DeviceService deviceService,
+            IfThenService ifThenService,
+            SensorService sensorService,
+            MeasurementService measurementService) {
         this.deviceService = deviceService;
         this.ifThenService = ifThenService;
         this.sensorService = sensorService;

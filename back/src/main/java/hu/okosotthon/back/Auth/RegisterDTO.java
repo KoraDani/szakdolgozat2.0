@@ -27,7 +27,4 @@ public class RegisterDTO {
     private String password2;
     private String imageUrl;
 
-    public Users returnUser(){
-        return new Users(0,this.username,this.email,this.password1,this.imageUrl);
-    }
 }

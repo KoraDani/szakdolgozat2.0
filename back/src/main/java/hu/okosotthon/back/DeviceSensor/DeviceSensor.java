@@ -2,8 +2,8 @@ package hu.okosotthon.back.DeviceSensor;
 
 import hu.okosotthon.back.Device.Devices;
 import hu.okosotthon.back.Sensor.Sensor;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 
 @Entity
 @Table(name = "device_sensor")

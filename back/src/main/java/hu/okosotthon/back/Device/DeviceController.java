@@ -44,11 +44,6 @@ public class DeviceController {
         return new ResponseEntity<>(this.deviceService.getDeviceById(deviceId), HttpStatus.OK);
     }
 
-    @PostMapping("/getDeviceByTopic")
-    public ResponseEntity<DeviceDTO> getDeviceByTopic(@RequestParam String topic){
-        return new ResponseEntity<>(this.deviceService.getDeviceDTOByTopic(topic), HttpStatus.OK);
-    }
-
     //Update
     @PostMapping("/updateDevice")
     public ResponseEntity<Boolean> updateDevice(@RequestBody DeviceDTO deviceDTO) {

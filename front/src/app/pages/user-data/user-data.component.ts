@@ -4,9 +4,10 @@ import {AuthService} from "../../auth.service";
 import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
-  selector: 'app-user-data',
-  templateUrl: './user-data.component.html',
-  styleUrls: ['./user-data.component.scss']
+    selector: 'app-user-data',
+    templateUrl: './user-data.component.html',
+    styleUrls: ['./user-data.component.scss'],
+    standalone: false
 })
 export class UserDataComponent implements OnInit {
   user: Users| undefined;

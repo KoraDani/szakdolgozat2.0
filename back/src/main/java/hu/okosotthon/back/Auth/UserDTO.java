@@ -1,24 +1,20 @@
 package hu.okosotthon.back.Auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class UserDTO {
+    private int id;
     private String username;
     private String email;
-    private String password;
+    private String token;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

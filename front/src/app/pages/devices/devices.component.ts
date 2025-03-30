@@ -9,9 +9,10 @@ import {WebSocketService} from "./WebSocketService";
 import {WebSocketModel} from "./WebSocketModel";
 
 @Component({
-  selector: 'app-devices',
-  templateUrl: './devices.component.html',
-  styleUrls: ['./devices.component.scss']
+    selector: 'app-devices',
+    templateUrl: './devices.component.html',
+    styleUrls: ['./devices.component.scss'],
+    standalone: false
 })
 export class DevicesComponent implements OnInit {
 
@@ -31,17 +32,8 @@ export class DevicesComponent implements OnInit {
     });
   }
 
-  //TODO szerkesztést meg kell valósítani
-
-  loadDevice(device: any) {
-    this.chosenDevice = device;
-  }
-
   goToCreateDevice() {
     this.router.navigateByUrl("/create-device")
   }
 
-  sendStatus(device: DeviceDTO) {
-
-  }
 }

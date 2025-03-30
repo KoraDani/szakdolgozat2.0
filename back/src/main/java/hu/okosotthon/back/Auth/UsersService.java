@@ -1,57 +1,53 @@
 package hu.okosotthon.back.Auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+import java.nio.CharBuffer;
+
 
 @Service
-public class UsersService implements UserDetailsService {
+public class UsersService {
+
     private final UsersRepo usersRepo;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public UsersService(UsersRepo usersRepo) {
+    public UsersService(UsersRepo usersRepo,PasswordEncoder passwordEncoder) {
         this.usersRepo = usersRepo;
-    }
-
-    public Users addUser(Users users){
-//        users.setId(UUID.randomUUID().node());
-        return usersRepo.save(users);
-    }
-
-    public Users findUsersByUsername(String username) {
-        return usersRepo.findUsersByUsername(username);
-    }
-
-    public Users save(Users users) {
-        return this.usersRepo.save(users);
+        this.passwordEncoder = passwordEncoder;
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users currentUser = this.usersRepo.findUsersByUsername(username);
-        if(currentUser == null){
-            throw new UsernameNotFoundException("Faild to find user with username: " + username);
+    public UserDTO loginUsersByUsername(Users users) throws Exception {
+        Users u = usersRepo.findUsersByUsername(users.getUsername());
+
+        System.out.println(u.toString());
+
+        if(passwordEncoder.matches(CharBuffer.wrap(users.getPassword()), u.getPassword())){
+            return new UserDTO(u.getUserId(), u.getUsername(), u.getEmail(),"", u.getRole());
         }
-        return currentUser;
+
+        throw new Exception("No user found");
     }
 
-    public Users saveUser(@Valid RegisterDTO registerDTO){
-        return this.usersRepo.save(registerDTO.returnUser());
+    public UserDTO save(Users users) {
+        users.setPassword(passwordEncoder.encode(CharBuffer.wrap(users.getPassword())));
+        Users u = this.usersRepo.save(users);
+        return new UserDTO(u.getUserId(), u.getUsername(), u.getEmail(), "", u.getRole());
     }
 
 
-//    public List<String> getSubscribedTopicsFromUser(){
-//        return AuthController.currentUser;
-//    }
+    public Users changePassword(String username, String oldpwd, String newpwd1, String newpwd2) {
+        Users u = this.usersRepo.findUsersByUsername(username);
 
-
-    public void updateUsersById(Users currentUser, String topic) {
-//        currentUser.setSubscribedTopic(topic);
-        this.usersRepo.save(currentUser);
+        if(passwordEncoder.matches(CharBuffer.wrap(u.getPassword()), oldpwd)){
+            if (newpwd1.equals(newpwd2)){
+                u.setPassword(passwordEncoder.encode(CharBuffer.wrap(newpwd1)));
+            }
+        }
+        return this.usersRepo.save(u);
     }
 }

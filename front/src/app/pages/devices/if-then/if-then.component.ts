@@ -9,9 +9,10 @@ import {DeviceDTO2} from "../../../shared/model/dto/DeviceDTO2";
 import {IfThenDTO} from "../../../shared/model/dto/IfThenDTO";
 
 @Component({
-  selector: 'app-if-then',
-  templateUrl: './if-then.component.html',
-  styleUrls: ['./if-then.component.scss']
+    selector: 'app-if-then',
+    templateUrl: './if-then.component.html',
+    styleUrls: ['./if-then.component.scss'],
+    standalone: false
 })
 export class IfThenComponent  {
   ifThenDTO?: IfThenDTO;

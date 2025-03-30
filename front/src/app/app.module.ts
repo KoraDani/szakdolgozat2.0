@@ -15,8 +15,7 @@ import {MatCardModule} from "@angular/material/card";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {UserDataComponent} from './pages/user-data/user-data.component';
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {RequestInterceptor} from "./request.interceptor";
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
@@ -42,55 +41,47 @@ import { PlugComponent } from './pages/devices/tasmota/plug/plug.component';
 import { LightComponent } from './pages/devices/tasmota/light/light.component';
 import {MatSliderModule} from "@angular/material/slider";
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    DevicesComponent,
-    LoginComponent,
-    RegisterComponent,
-    MainComponent,
-    UserDataComponent,
-    MenuComponent,
-    CreateDeviceComponent,
-    ViewComponent,
-    IfThenComponent,
-    TemperatureComponent,
-    RgbComponent,
-    SwitchComponent,
-    PlugComponent,
-    LightComponent,
-
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatCardModule,
-    FlexLayoutModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatMenuModule,
-    MatExpansionModule,
-    CdkDrag,
-    MatButtonModule,
-    MatListModule,
-    MatGridListModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatStepperModule,
-    CanvasJSAngularChartsModule,
-    MatSlideToggleModule,
-    MatRadioModule,
-    MatCheckboxModule,
-    MatSliderModule
-  ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        DevicesComponent,
+        LoginComponent,
+        RegisterComponent,
+        MainComponent,
+        UserDataComponent,
+        MenuComponent,
+        CreateDeviceComponent,
+        ViewComponent,
+        IfThenComponent,
+        TemperatureComponent,
+        RgbComponent,
+        SwitchComponent,
+        PlugComponent,
+        LightComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatCardModule,
+        FlexLayoutModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatMenuModule,
+        MatExpansionModule,
+        CdkDrag,
+        MatButtonModule,
+        MatListModule,
+        MatGridListModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatStepperModule,
+        CanvasJSAngularChartsModule,
+        MatSlideToggleModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatSliderModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
 }

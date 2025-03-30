@@ -8,20 +8,18 @@ import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {MeasurementService} from "../measurement.service";
 
 @Component({
-  selector: 'app-view',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.scss']
+    selector: 'app-view',
+    templateUrl: './view.component.html',
+    styleUrls: ['./view.component.scss'],
+    standalone: false
 })
 
 
 export class ViewComponent implements OnInit, OnDestroy {
 
   selectedDevice?: DeviceDTO;
-  deviceSensor: string[] = [];
   category: string[] = [];
 
-  // @ts-ignore
-  meas: Map<any, any> = new Map<any,any>();
 
   number: any[] | undefined;
 

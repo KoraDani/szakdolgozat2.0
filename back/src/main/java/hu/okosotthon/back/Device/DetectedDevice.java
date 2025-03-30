@@ -1,9 +1,6 @@
 package hu.okosotthon.back.Device;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +11,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class DetectedDevice {
     private String deviceName = "";
     private List<GPIO> gpio = new ArrayList<>();
@@ -27,14 +25,4 @@ public class DetectedDevice {
         this.StatusSNS.add(statusSNS);
     }
 
-
-
-    @Override
-    public String toString() {
-        return "DetectedDevice{" +
-                "deviceName='" + deviceName + '\'' +
-                ", gpio=" + gpio +
-                ", StatusSNS=" + StatusSNS +
-                '}';
-    }
 }

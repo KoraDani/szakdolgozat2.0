@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {DeviceDTO} from "../../shared/model/dto/DeviceDTO";
 import {Devices} from "../../shared/model/Devices";
 import {FormArray} from "@angular/forms";
@@ -11,7 +11,7 @@ import {DeviceDTO2} from "../../shared/model/dto/DeviceDTO2";
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceService{
+export class DeviceService {
   private apiUrl = "http://localhost:8080";
   selectedDevice: any;
 
@@ -38,8 +38,4 @@ export class DeviceService{
     return this.http.post<DeviceDTO>(this.apiUrl+"/device/getDeviceDTOById",null,{params:{deviceId}});
   }
 
-
-  getDeviceById(deviceId: number) {
-    return this.http.post<Devices>(this.apiUrl+"/device/getDeviceById",null,{params:{deviceId}});
-  }
 }

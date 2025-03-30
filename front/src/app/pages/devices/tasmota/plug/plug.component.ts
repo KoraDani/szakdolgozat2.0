@@ -8,9 +8,10 @@ import {MqttService} from "../../mqtt.service";
 import {WebSocketModel} from "../../WebSocketModel";
 
 @Component({
-  selector: 'app-plug',
-  templateUrl: './plug.component.html',
-  styleUrls: ['./plug.component.scss']
+    selector: 'app-plug',
+    templateUrl: './plug.component.html',
+    styleUrls: ['./plug.component.scss'],
+    standalone: false
 })
 export class PlugComponent implements OnInit{
   measurementList: MeasurementDTO[] = [];

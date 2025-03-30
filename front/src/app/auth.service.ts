@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Users} from "./shared/model/Users";
 import {RegisterDTO} from "./shared/model/dto/RegisterDTO";
 import {UserDTO} from "./shared/model/dto/UserDTO";

@@ -4,13 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Auth.Users;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -19,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "devices")
+@ToString
 public class Devices {
 
     @Id
@@ -52,19 +50,5 @@ public class Devices {
         this.sensor = sensor;
         this.topic = topic;
         this.active = active;
-    }
-
-    @Override
-    public String toString() {
-        return "Devices{" +
-                "devicesId=" + devicesId +
-                ", deviceName='" + deviceName + '\'' +
-                ", location='" + location + '\'' +
-                ", users=" + users +
-                ", measurementList=" + measurementList +
-                ", sensor=" + sensor +
-                ", topic='" + topic + '\'' +
-                ", active=" + active +
-                '}';
     }
 }
