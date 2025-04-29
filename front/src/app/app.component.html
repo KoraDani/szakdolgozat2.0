@@ -16,30 +16,15 @@
       (onLogout)="logout($event)"
     ></app-menu>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <!--      <div fxHide.gt-xs>-->
-      <!--        <button mat-icon-button (click)="onToggleSidenav(sidenav)">-->
-      <!--          <mat-icon>menu</mat-icon>-->
-      <!--        </button>-->
-      <!--      </div>-->
-      <div></div>
-      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
-        <ul fxLayout fxLayoutGap="10px" class="navigation-items">
-          <li><a routerLink="/main">Fő oldal</a></li>
-          <!--          <li *ngIf="!loggedInUser"><a routerLink="/devices">Eszközök</a></li>-->
-          <!--          <li *ngIf="!loggedInUser"><a routerLink="/user-data">Felhasználói adatok</a></li>-->
-          <!--          <li *ngIf="!(loggedInUser)"><a routerLink="/login">Bejelentkezés</a></li>-->
-          <!--          <li *ngIf="!loggedInUser"><a routerLink="/login" (click)="logout()">Kijelentkezés</a></li>-->
-          <!--          <li *ngIf="!(loggedInUser)"><a routerLink="/register">Regisztráció</a></li>-->
-          <li><a routerLink="/devices">Eszközök</a></li>
-          <li><a routerLink="/user-data">Felhasználói adatok</a></li>
-          <li><a routerLink="/login">Bejelentkezés</a></li>
-          <li><a routerLink="/login" (click)="logout()">Kijelentkezés</a></li>
-          <li><a routerLink="/register">Regisztráció</a></li>
-        </ul>
-      </div>
-    </mat-toolbar>
+  <mat-sidenav-content class="sidenav-container">
+      <mat-toolbar class="toolbar-buttons" color="primary">
+        <button mat-button routerLink="/main" ><mat-icon>home</mat-icon><span>Main</span></button>
+        <button mat-button routerLink="/devices" *ngIf="loggedInUser" ><mat-icon>home</mat-icon><span>Eszközök</span></button>
+        <button mat-button routerLink="/user-data" *ngIf="loggedInUser"><mat-icon>home</mat-icon><span>Felhasználói adatok</span></button>
+        <button mat-button routerLink="/login" *ngIf="!(loggedInUser)"><mat-icon>login</mat-icon><span>Bejelentkezés</span></button>
+        <button mat-button routerLink="/login" *ngIf="loggedInUser" (click)="logout()"><mat-icon>logout</mat-icon><span>Kijelentkezés</span></button>
+        <button mat-button routerLink="/register" *ngIf="!(loggedInUser)"><mat-icon>app_registration</mat-icon><span>Regisztráció</span></button>
+      </mat-toolbar>
   </mat-sidenav-content>
 </mat-sidenav-container>
 <router-outlet></router-outlet>

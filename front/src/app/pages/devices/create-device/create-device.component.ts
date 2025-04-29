@@ -1,20 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, effect, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {DeviceService} from "../device.service";
 import {Router} from "@angular/router";
 import {WebSocketService} from "../WebSocketService";
 import {DetectedDevice} from "../../../shared/model/DetectedDevice";
 import {SensorService} from "../sensor.service";
 import {Sensor} from "../../../shared/model/Sensor";
-import {Devices} from "../../../shared/model/Devices";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {WebSocketModel} from "../WebSocketModel";
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {NgIf} from '@angular/common';
+import {MatStepLabel} from '@angular/material/stepper';
+import {MatButton} from '@angular/material/button';
+import {AuthService} from "../../../auth.service";
+import {UserDTO} from "../../../shared/model/dto/UserDTO";
 
 @Component({
-    selector: 'app-create-device',
-    templateUrl: './create-device.component.html',
-    styleUrls: ['./create-device.component.scss'],
-    standalone: false
+  selector: 'app-create-device',
+  standalone: true,
+  templateUrl: './create-device.component.html',
+  styleUrls: ['./create-device.component.scss'],
+  imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatStepLabel, MatButton]
 })
 export class CreateDeviceComponent implements OnInit {
   deviceForm: FormGroup = new FormGroup({
@@ -73,22 +80,33 @@ export class CreateDeviceComponent implements OnInit {
       }
     ]
   };
+  private user: UserDTO = {id: null, username: "", email: "", token: "", role: ""};
 
-  constructor(private deviceService: DeviceService, private fb: FormBuilder, private router: Router, private websocket: WebSocketService, private sensorService: SensorService) {
+  constructor(private deviceService: DeviceService, private fb: FormBuilder, private router: Router, private websocket: WebSocketService, private sensorService: SensorService, private authService: AuthService) {
     this.deviceForm = this.fb.group({
       deviceName: ['', [Validators.required]],
       deviceType: ['', [Validators.required]],
       location: ['', [Validators.required]],
       topic: ['', [Validators.required]]
     })
+
+    effect(() => {
+      this.user = this.authService.currentUser();
+      console.log(this.authService.currentUser().id)
+    })
   }
 
   jsonMessage: any;
 
   ngOnInit(): void {
-    this.websocket.listen(this.webSocModel.listen, message => {
-      console.log(message);
-      this.detectedDevice = JSON.parse(message);
+    const token = localStorage.getItem("token");
+    if (token != null) {
+      this.authService.getUserByToken("Bearer: " +token);
+    }
+
+    this.websocket.subscribeToMessages().subscribe(this.webSocModel.listen, (message) =>  {
+      console.log(message.body);
+      this.detectedDevice = JSON.parse(message.body);
       console.log(this.detectedDevice);
       this.deviceForm.get("deviceName")?.setValue(this.detectedDevice?.deviceName);
       // @ts-ignore
@@ -101,7 +119,7 @@ export class CreateDeviceComponent implements OnInit {
               this.detectedSensors?.push(s);
             });
           }
-          if(!this.detectedDevice?.statusSNS?.includes('PWM')){
+          if (!this.detectedDevice?.statusSNS?.includes('PWM')) {
             this.sensorService.getByName(val).subscribe(s => {
               console.log(s);
               this.detectedSensors?.push(s);
@@ -123,23 +141,23 @@ export class CreateDeviceComponent implements OnInit {
 
   saveDevice() {
     let sensorId: number[] = []
-    this.detectedSensors.forEach(s => {
+    /*this.detectedSensors.forEach(s => {
       sensorId.push(s.sensorId);
-    })
+    })*/
     let device: DeviceDTO = {
-      deviceId: 0,
+      deviceId: null,
       deviceName: this.deviceForm.get("deviceName")?.value,
-      sensorId: sensorId,
+      sensors: this.detectedSensors,
+      measurements: [],
       location: this.deviceForm.get("location")?.value,
       topic: this.deviceForm.get("topic")?.value,
       active: 1
     }
     console.log(device);
-    this.deviceService.saveDevice(device, 26).subscribe(() => {
-      console.log("Device Succesfully saved");
-    }, error => {
-      console.error(error);
-    })
+    // console.log(this.user.id);
+    if (this.user.id != undefined){
+      this.deviceService.saveDevice(device, this.user.id);
+    }
   }
 
 

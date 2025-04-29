@@ -40,10 +40,9 @@ public class WebSocketController {
     @SendTo("/topic/light")
     public String lightStatus(@Payload WebSocModel webSocModel) {
         System.out.println("LIGHT " + webSocModel.toString());
+        this.mqttService.setStatusCheck(true);
         mqttService.setWebSocModel(webSocModel);
         mqttService.subscribeToTopic(webSocModel);
-//        mqttService.subscribeToTopic("cmnd/"+webSocModel.getTopic()+"/POWER");
-//        mqttService.subscribeToTopic("stat/"+webSocModel.getTopic()+"/RESULT");
         return "null";
     }
 
@@ -51,10 +50,11 @@ public class WebSocketController {
     @SendTo("/topic/power")
     public String devicePower(@RequestBody WebSocModel webSocModel) {
         System.out.println("POWER " + webSocModel.getTopic());
+        this.mqttService.setStatusCheck(true);
         mqttService.setWebSocModel(webSocModel);
         mqttService.subscribeToTopic(webSocModel);
-//        mqttService.subscribeToTopic("cmnd/"+webSocModel.getTopic()+"/POWER");
-//        mqttService.subscribeToTopic("stat/"+webSocModel.getTopic()+"/RESULT");
         return "null";
     }
+
+
 }

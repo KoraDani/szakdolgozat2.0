@@ -1,41 +1,69 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {Injectable, signal} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {DeviceDTO} from "../../shared/model/dto/DeviceDTO";
 import {Devices} from "../../shared/model/Devices";
-import {FormArray} from "@angular/forms";
-import {argsArgArrayOrObject} from "rxjs/internal/util/argsArgArrayOrObject";
-import {Measurement} from "../../shared/model/Measurement";
-import {Topic} from "../../shared/model/Topic";
-import {DeviceDTO2} from "../../shared/model/dto/DeviceDTO2";
+import {AuthService} from "../../auth.service";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceService {
   private apiUrl = "http://localhost:8080";
-  selectedDevice: any;
 
+  devicesDTO = signal<DeviceDTO[]>([]);
+  chosenDevice= signal<DeviceDTO>({deviceId: null, deviceName: "", sensors: [], measurements: [], location: "", topic: "", active:""});
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
-  getUserDevices(userId: number){
-    return this.http.post<DeviceDTO[]>(this.apiUrl+"/device/getUserDevices", null, {params:{userId}});
+  getUserDevices() {
+    const userId = 1;
+    this.http.post<DeviceDTO[]>(this.apiUrl + "/device/getUserDevices", null, {params: {userId}}).subscribe(device => {
+      console.log(device)
+      this.devicesDTO.set(device)
+      console.log(this.devicesDTO())
+    });
   }
 
   saveDevice(deviceDTO: DeviceDTO, userId: number) {
-      return this.http.post<Devices>(this.apiUrl+"/device/saveDevice", deviceDTO, {params:{userId}});
+    console.log(userId)
+    if (userId != null) {
+      const header = new HttpHeaders();
+      header.set("Authorization", "Bearer: " + localStorage.getItem("token"))
+      this.http.post<Devices>(this.apiUrl + "/device/saveDevice", deviceDTO, {
+        headers: header,
+        params: {userId}
+      }).subscribe((device) => {
+        console.log(device);
+      }, error => {
+        console.error(error);
+      });
+    }
   }
+
   deleteDevice(deviceId: number) {
-    return this.http.post(this.apiUrl+"/device/deleteDevice", deviceId);
+    this.http.post(this.apiUrl + "/device/deleteDevice", deviceId).subscribe(() => {
+      console.log("Eszköz sikeresen törölve");
+    }, error => {
+      console.error(error);
+    });
   }
 
-  sendPayloadToDevice(device: DeviceDTO2, payloadKey: string, payload: any) {
+  sendPayloadToDevice(device: DeviceDTO, payloadKey: string, payload: any) {
     console.log(device)
-    return this.http.post(this.apiUrl+"/device/sendPayloadToDevice",device,{params:{payloadKey,payload}});
+    this.http.post(this.apiUrl + "/device/sendPayloadToDevice", device, {params: {payloadKey, payload}}).subscribe(() => {
+      console.log("sikeresen elkuldve");
+    }, error => {
+      console.error(error);
+    });
   }
 
+  //TODO ez itt valszeg nem fog kelleni mert megváltoztattam a deviceDTO-t
   getDeviceDTOById(deviceId: number) {
-    return this.http.post<DeviceDTO>(this.apiUrl+"/device/getDeviceDTOById",null,{params:{deviceId}});
+    this.http.post<DeviceDTO>(this.apiUrl + "/device/getDeviceDTOById", null, {params: {deviceId}}).subscribe(device => {
+
+    });
   }
 
 }

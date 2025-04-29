@@ -1,7 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MeasurementDTO} from "../../../../shared/model/dto/MeasurementDTO";
+import {Component, effect, Input, OnDestroy, OnInit} from '@angular/core';
 import {MeasurementService} from "../../measurement.service";
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import {CanvasJSAngularChartsModule} from '@canvasjs/angular-charts';
+import {WebSocketModel} from "../../WebSocketModel";
+import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
+import {WebSocketService} from "../../WebSocketService";
+import {MeasurementDTO} from "../../../../shared/model/dto/MeasurementDTO";
 
 interface DataPoint {
   type: string;
@@ -12,58 +15,108 @@ interface DataPoint {
 }
 
 @Component({
-    selector: 'app-temperature',
-    templateUrl: './temperature.component.html',
-    styleUrls: ['./temperature.component.scss'],
-    standalone: false
+  selector: 'app-temperature',
+  standalone: true,
+  templateUrl: './temperature.component.html',
+  styleUrls: ['./temperature.component.scss'],
+  imports: [CanvasJSAngularChartsModule]
 })
-export class TemperatureComponent implements OnInit {
-  @Input({required: true}) deviceId?: number;
+export class TemperatureComponent implements OnInit, OnDestroy {
+  @Input() selectedDevice?: DeviceDTO;
 
   tempList: { x: number, y: number }[] = []
   humiList: { x: number, y: number }[] = []
   dewList: { x: number, y: number }[] = []
+
   measurmentSize: number = 0;
+
   index: number = 1;
 
-  constructor(private measurementService: MeasurementService) {
+  tempStatus: string = "";
+  humidityStatus: string = "";
+  dewpointStatus: string = "";
+
+  webSocModel!: WebSocketModel;
+
+  statusElementList: string[] = ["Temperature", "Humidity","DewPoint"]
+
+  loading: boolean = false;
+
+  constructor(private measurementService: MeasurementService, private websocket: WebSocketService) {
   }
 
   ngOnInit() {
-    if (this.deviceId){
-      this.measurementService.getMeasurementByDeviceId(this.deviceId, 10).subscribe(meas => {
-        this.measurmentSize = meas.length;
-        meas.forEach(v => {
-          switch (v.sensorType) {
+    this.webSocModel = {
+      destination: '/app/power',
+      listen: '/topic/power',
+      topic: this.selectedDevice?.topic + "",
+      message: [{
+        prefix: "cmnd/",
+        postfix: "/STATUS",
+        msg: "8"
+      },
+        {
+          prefix: "stat/",
+          postfix: "/STATUS8",
+          msg: " "
+        }]
+    };
+
+    this.getDeviceStatus(this.webSocModel);
+
+    this.websocket.subscribeToMessages().subscribe(this.webSocModel.listen, (message) => {
+      this.tempStatus = JSON.stringify(JSON.parse(message.body)['StatusSNS']['DHT11']['Temperature']);
+      this.humidityStatus = JSON.stringify(JSON.parse(message.body)['StatusSNS']['DHT11']['Humidity']);
+      this.dewpointStatus = JSON.stringify(JSON.parse(message.body)['StatusSNS']['DHT11']['DewPoint']);
+
+    });
+
+
+    if (this.selectedDevice?.deviceId) {
+      this.statusElementList.forEach(type => {
+        // @ts-ignore
+        this.measurementService.getMeasurementByDevIdAndType(this.selectedDevice?.deviceId, type, 10).subscribe(measurment => {
+          switch (type) {
             case "Temperature":
-              this.tempList.push({x: this.index, y: +v.value});
-              this.index++;
+              this.setTempList(measurment);
               break;
             case "Humidity":
-              this.humiList.push({x: this.index - 10, y: +v.value});
-              this.index++;
+              this.setHumidityStatus(measurment);
               break;
-            case "DewPoint":
-              this.dewList.push({x: this.index - 20, y: +v.value});
-              this.index++;
-              break;
+            // case "DewPoint":
+            //   this.dewList.set(measurment);
+            //   break;
           }
-        })
-      }, error=> {
-        console.error(error);
+
+        });
       })
+
     }
+  }
 
+  setTempList(meas: MeasurementDTO[]){
+    meas.forEach((meas, index) => {
+      this.tempList.push({x: index+1, y: +meas.value});
+    })
+  }
 
-
+  setHumidityStatus(meas: MeasurementDTO[]){
+    meas.forEach((meas, index) => {
+      this.humiList.push({x: index+1, y: +meas.value});
+    })
   }
 
 
-  chartOptions = {
+  getDeviceStatus(webSocketModel: WebSocketModel) {
+    this.websocket.send(webSocketModel);
+  }
+
+
+  tempOptions = {
     animationEnabled: true,
     theme: "light2",
     title: {
-      text: "New York Climate - 2021"
+      text: "Temperature"
     },
     axisX: {
       valueFormatString: "#",
@@ -76,40 +129,49 @@ export class TemperatureComponent implements OnInit {
     toolTip: {
       shared: true
     },
-    legend: {
-      cursor: "pointer",
-      itemclick: function (e: any) {
-        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-          e.dataSeries.visible = false;
-        } else {
-          e.dataSeries.visible = true;
-        }
-        e.chart.render();
-      }
-    },
     data: [{
       type: "line",
       name: "Temperature",
       showInLegend: true,
-      yValueFormatString: "#,###°C",
+      yValueFormatString: "#,##°C",
       dataPoints: this.tempList
+    }
+    ]
+  }
+
+  humiOptions = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Humidity",
     },
+    axisX: {
+      valueFormatString: "#",
+      interval: 1
+    },
+    axisY: {
+      title: "Humidity",
+      suffix: "%"
+    },
+    toolTip: {
+      shared: true
+    },
+    data: [
       {
         type: "line",
         name: "Humidity",
         showInLegend: true,
         yValueFormatString: "#,##%",
         dataPoints: this.humiList
-      },
-      {
-        type: "line",
-        name: "DewPoint",
-        showInLegend: true,
-        yValueFormatString: "#,###°C",
-        dataPoints: this.dewList
       }
     ]
   }
 
 
+  protected readonly JSON = JSON;
+
+  ngOnDestroy(): void {
+    this.humiList = [];
+    this.tempList = [];
+  }
 }

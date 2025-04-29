@@ -1,10 +1,16 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf } from '@angular/common';
+import {MatToolbar} from "@angular/material/toolbar";
+import {MatButtonModule} from '@angular/material/button';
+
 
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
     styleUrls: ['./menu.component.scss'],
-    standalone: false
+  imports: [RouterLink, MatIcon, NgIf, MatToolbar,MatButtonModule]
 })
 export class MenuComponent {
 

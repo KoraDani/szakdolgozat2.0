@@ -1,28 +1,10 @@
-<!--<div class="wrapper">-->
-<!--  <div class="card-switch">-->
-<!--    <div class="flip-card__front">-->
-<!--      <div class="title">Log in</div>-->
-<!--      <form [formGroup]="loginForm" class="flip-card__form" (ngSubmit)="login()">-->
-<!--        <input class="flip-card__input" name="text" placeholder="Email" type="login" formControlName="email">-->
-<!--        <div *ngIf="this.userInputError">Felhasználónevet kötelező megadni</div>-->
-<!--        <input class="flip-card__input" name="password" placeholder="Password" type="password" formControlName="password">-->
-<!--        <div *ngIf="this.pwdInputError">Jelszót kötelező megadni</div>-->
-<!--        <button type="submit" class="flip-card__btn">Let`s go!</button>-->
-<!--        <div *ngIf="this.userExistError">Rossz Email cím vagy Jelszó!</div>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-
-<div fxLayout="column" fxLayoutAlign="start center" class="max-widht">
-
-  <mat-card class="example-card">
-    <mat-card-header fxLayoutAlign="center center">
-      <mat-card-title>Bejelentkezés</mat-card-title>
+<div class="flex-center">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title class="text-center">Bejelentkezés</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="login()" fxLayout="column">
+      <form [formGroup]="loginForm" (ngSubmit)="login()" >
         <mat-form-field appearance="outline">
           <mat-label>Felhasználónév</mat-label>
           <input matInput name="text" placeholder="Email" type="login" formControlName="email">
@@ -31,7 +13,7 @@
           <mat-label>Jelszó</mat-label>
           <input matInput name="email" placeholder="Password" type="password" formControlName="password">
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Bejelentkezés</button>
+          <button class="full-width" mat-raised-button color="primary" type="submit">Bejelentkezés</button>
       </form>
     </mat-card-content>
   </mat-card>

@@ -2,11 +2,17 @@ package hu.okosotthon.back.Device;
 
 import hu.okosotthon.back.Auth.Users;
 import hu.okosotthon.back.Auth.UsersRepo;
+import hu.okosotthon.back.Measurment.Measurement;
+import hu.okosotthon.back.Measurment.MeasurementRepo;
+import hu.okosotthon.back.Mqtt.MqttService;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Sensor.SensorRepo;
+import hu.okosotthon.back.config.UserAuthProvider;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.AuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,46 +22,42 @@ public class DeviceService {
     private DeviceRepo deviceRepo;
     private UsersRepo usersRepo;
     private SensorRepo sensorRepo;
+    private UserAuthProvider userAuthProvider;
+    private MeasurementRepo measurementRepo;
 
     @Autowired
-    public DeviceService(DeviceRepo deviceRepo, UsersRepo usersRepo, SensorRepo sensorRepo) {
+    public DeviceService(DeviceRepo deviceRepo, UsersRepo usersRepo, SensorRepo sensorRepo, UserAuthProvider userAuthProvider,MeasurementRepo measurementRepo) {
         this.deviceRepo = deviceRepo;
         this.usersRepo = usersRepo;
         this.sensorRepo = sensorRepo;
+        this.userAuthProvider = userAuthProvider;
+        this.measurementRepo = measurementRepo;
     }
 
-    public boolean save(DeviceDTO d, int userId){
-        Users user = this.usersRepo.getById(userId);
-        List<Sensor> sensors = new ArrayList<>();
+    public Devices save(DeviceDTO d, int userId) {
+        Users user = this.usersRepo.findUsersByUserId(userId);
 
-        for (int sensorId : d.getSensorId()) {
-            System.out.println("Sensor id: " + sensorId);
-            sensors.add(this.sensorRepo.findBySensorId(sensorId));
-        }
-
-        Devices devices = new Devices(d.getDeviceName(),d.getLocation(), user, sensors, d.getTopic(), 1);
-        System.out.println(devices.toString());
-        return this.deviceRepo.save(devices) != null;
-    }
-
-    public List<DeviceDTO> getUserDevices(int userId){
-        return this.deviceRepo.getAllByUserId(userId);
-    }
-
-    public Devices updateDevice(DeviceDTO deviceDTO){
-        Devices devices = this.deviceRepo.getById(deviceDTO.getDeviceId());
-        devices.setDeviceName(deviceDTO.getDeviceName());
-        devices.setLocation(deviceDTO.getLocation());
-        devices.setTopic(deviceDTO.getTopic());
-        List<Sensor> sensorList = new ArrayList<>();
-        for (int sensorId: deviceDTO.getSensorId()) {
-            sensorList.add(this.sensorRepo.findBySensorId(sensorId));
-        }
-        devices.setSensor(sensorList);
+        Devices devices = new Devices(d.getDeviceName(), d.getLocation(), user, d.getSensors(), d.getTopic(), 1);
         return this.deviceRepo.save(devices);
     }
 
-    public Devices deleteDevice(int devicesId){
+    public List<DeviceDTO> getUserDevices(int userId) {
+        List<DeviceDTO> deviceDTOList = this.deviceRepo.getAllByUserId(userId);
+        for (DeviceDTO d: deviceDTOList) {
+            d.setSensors(this.sensorRepo.findAllByDeviceId(d.getDeviceId()));
+        }
+
+        return deviceDTOList;
+    }
+
+    public Devices updateDevice(DeviceDTO deviceDTO, String token) {
+
+        Users users = this.usersRepo.findUsersByUserId(this.userAuthProvider.getUserId(token));
+
+        return this.deviceRepo.saveAndFlush(new Devices(deviceDTO.getDeviceId(), deviceDTO.getDeviceName(), deviceDTO.getLocation(), users, null, null, deviceDTO.getTopic(), deviceDTO.getActive()));
+    }
+
+    public Devices deleteDevice(int devicesId) {
         Devices devices = this.deviceRepo.getById(devicesId);
         devices.setActive(0);
         return this.deviceRepo.save(devices);
@@ -66,11 +68,11 @@ public class DeviceService {
     }
 
     public DeviceDTO getDeviceDTOById(int deviceId) {
-        return  this.deviceRepo.getDevicesByDevicesId(deviceId);
+        return this.deviceRepo.getDevicesByDevicesId(deviceId);
     }
 
     public Devices getDeviceById(int deviceId) {
-        return  this.deviceRepo.getDevicesByDevicesId2(deviceId);
+        return this.deviceRepo.getDevicesByDevicesId2(deviceId);
     }
 
 }

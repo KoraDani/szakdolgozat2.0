@@ -23,5 +23,6 @@ public interface SensorRepo extends JpaRepository<Sensor, Integer> {
     List<String> getAllSensorJSONByDeviceId(int deviceId);
 
     @Query("SELECT new hu.okosotthon.back.Sensor.Sensor(s.sensorId,s.sensorName,s.fieldJSON,s.category) FROM Sensor s INNER JOIN DeviceSensor ds ON s.sensorId=ds.sensor.sensorId WHERE ds.device.devicesId = ?1")
-    List<Sensor> getByDeviceId(int deviceId);
+    List<Sensor> findAllByDeviceId(int deviceId);
+
 }

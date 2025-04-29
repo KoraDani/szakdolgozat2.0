@@ -21,9 +21,10 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
-    @PostMapping("/getMeasurementByDevId")
-    public ResponseEntity<List<Measurement>> getMeasurementByDevId(@RequestParam int deviceId, @RequestParam int peagable){
-        List<Measurement> measurements = this.measurementService.getMeasurementByDevId(deviceId, peagable);
+    @PostMapping("/getMeasurementByDevIdAndType")
+    public ResponseEntity<List<Measurement>> getMeasurementByDevIdAndType(@RequestParam int deviceId, @RequestParam String type, @RequestParam int peagable){
+        System.out.println(deviceId);
+        List<Measurement> measurements = this.measurementService.getMeasurementByDevIdAndType(deviceId, type,peagable);
         if(!measurements.isEmpty()){
             return new ResponseEntity<>(measurements, HttpStatus.OK);
         }

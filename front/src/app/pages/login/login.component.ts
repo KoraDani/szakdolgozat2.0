@@ -1,25 +1,28 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserDTO} from "../../shared/model/dto/UserDTO";
+import {FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../auth.service";
+import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/material/card';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {Users} from "../../shared/model/Users";
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  standalone: true,
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  imports: [ MatCard, MatCardHeader, MatCardTitle, MatCardContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class LoginComponent {
-  sessionId: any;
   loginForm: FormGroup = new FormGroup({
     email: new FormControl,
     password: new FormControl
   });
 
   userInputError: boolean | undefined = false;
-  pwdInputError: boolean | undefined= false;
-  userExistError: boolean | undefined = false;
+  pwdInputError: boolean | undefined = false;
 
   constructor(private loginServ: AuthService, private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
@@ -28,27 +31,21 @@ export class LoginComponent {
     });
   }
 
-  login(){
-    let userDTO: UserDTO = {
-      username:this.loginForm.get("email")?.value,
-      email: this.loginForm.get("email")?.value,
-      password: this.loginForm.get("password")?.value
+  login() {
+    const user: Users = {
+      userId: null,
+      username: this.loginForm.get("email")?.value,
+      email: "",
+      password: this.loginForm.get("password")?.value,
+      imageUrl: "basic",
+      deviceList: null,
+      role: "USER"
     }
     console.log(this.loginForm.get("email")?.value);
-    if(this.loginForm.valid){
-      this.loginServ.loginUser(userDTO).subscribe(res =>{
-        console.log("Bejelentkeztetve");
-        console.log(res.sessionId);
-        this.sessionId = res.sessionId;
-        sessionStorage.setItem('token',this.sessionId);
-        sessionStorage.setItem('userId',res.userId);
-        sessionStorage.setItem('username',res.username);
-        this.router.navigateByUrl("/devices");
-      },error => {
-        console.error(error);
-        this.userExistError = true;
-      });
-    }else{
+    if (this.loginForm.valid) {
+      this.loginServ.loginUser(user);
+      this.router.navigateByUrl("/devices");
+    } else {
       this.userInputError = !this.loginForm.get("username")?.valid;
       this.pwdInputError = !this.loginForm.get("password")?.valid;
     }

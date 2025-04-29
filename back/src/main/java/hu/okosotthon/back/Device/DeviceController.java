@@ -1,5 +1,6 @@
 package hu.okosotthon.back.Device;
 
+import hu.okosotthon.back.Mqtt.MqttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,20 +14,19 @@ import java.util.List;
 public class DeviceController {
 
     private DeviceService deviceService;
+    private MqttService mqttService;
 
     @Autowired
-    public DeviceController(DeviceService deviceService) {
+    public DeviceController(DeviceService deviceService,MqttService mqttService) {
         this.deviceService = deviceService;
+        this.mqttService = mqttService;
     }
 
     //Creat
     @PostMapping("/saveDevice")
-    public ResponseEntity<Boolean> saveDevice(@RequestBody DeviceDTO deviceDTO, @RequestParam int userId) {
-        System.out.println(deviceDTO.getDeviceName());
-        if (this.deviceService.save(deviceDTO, userId)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Devices> saveDevice(@RequestBody DeviceDTO deviceDTO, @RequestParam int userId) {
+        this.mqttService.subscribeToTopic2(deviceDTO.getTopic());
+        return new ResponseEntity<>(this.deviceService.save(deviceDTO, userId), HttpStatus.OK);
     }
 
     //Read
@@ -46,8 +46,8 @@ public class DeviceController {
 
     //Update
     @PostMapping("/updateDevice")
-    public ResponseEntity<Boolean> updateDevice(@RequestBody DeviceDTO deviceDTO) {
-        if (this.deviceService.updateDevice(deviceDTO) != null){
+    public ResponseEntity<Boolean> updateDevice(@RequestBody DeviceDTO deviceDTO, @RequestHeader("Authorization") String token) {
+        if (this.deviceService.updateDevice(deviceDTO, token) != null){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

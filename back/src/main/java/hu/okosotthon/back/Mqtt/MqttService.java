@@ -28,6 +28,7 @@ public class MqttService {
 
     public static DetectedDevice detectedDevice = new DetectedDevice();
     private boolean autoDetection = false;
+    private boolean isStatusCheck = false;
 
 
     private DeviceService deviceService;
@@ -59,8 +60,11 @@ public class MqttService {
     public void connectToBroker() {
         try {
             mqttClient = new MqttClient(broker, clientId, new MemoryPersistence());
+
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
+            connOpts.setUserName("admin");
+            connOpts.setPassword(("admin").toCharArray());
             System.out.println("Connecting to broker: " + broker);
             mqttClient.connect(connOpts);
             System.out.println("Connected");
@@ -79,11 +83,16 @@ public class MqttService {
         this.autoDetection = val;
     }
 
+    public void setStatusCheck(boolean val) {
+        this.isStatusCheck = val;
+    }
+
     public void setWebSocModel(WebSocModel webSocModel) {
         this.webSocModel = webSocModel;
     }
 
     public void subscribeToTopic(WebSocModel webSocModel) {
+        System.out.println("Subscribing to websocket and topic");
         try {
             for (MessageModel m : webSocModel.getMessage()) {
                 String tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
@@ -91,13 +100,25 @@ public class MqttService {
 
 
                 if(m.getPrefix().contains("cmnd")){
-                    System.out.println(tmpTopic+" sndlfkjasnlkdf");
+                    tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
                     mqttClient.publish(tmpTopic, new MqttMessage(m.getMsg().getBytes()));
                 }
-                tmpTopic = "stat/"+webSocModel.getTopic()+"/RESULT";
-                System.out.println(tmpTopic);
-                mqttClient.subscribe(tmpTopic);
+
+                if(m.getPrefix().contains("stat")){
+                    tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
+                    System.out.println(tmpTopic);
+                    mqttClient.subscribe(tmpTopic);
+                }
+
             }
+        } catch (MqttException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void subscribeToTopic2(String topic) {
+        try {
+            mqttClient.subscribe("tele/"+topic+"/SENSOR");
         } catch (MqttException e) {
             throw new RuntimeException(e);
         }
@@ -126,15 +147,15 @@ public class MqttService {
             @Async
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
-                System.out.println(message+"  Messasge arrived");
+                System.out.println(msg+"  Messasge arrived");
                 if (msg.length() > 2) {
                     try {
                         System.out.println(msg);
                         new JSONObject(msg);
 
-                        if (!autoDetection) {
-                            System.out.println("Listen  " + webSocModel.getListen());
-                            messagingTemplate.convertAndSend(webSocModel.getListen(), message.toString());
+                        if (isStatusCheck) {
+                            statusCheck(message.toString());
+
                         }
 
                         if (topic.startsWith("stat/") && autoDetection) {
@@ -147,16 +168,7 @@ public class MqttService {
 
 
                         if (!detectedDevice.getGpio().isEmpty()) {
-                            if (detectedDevice.getDeviceName().isEmpty()) {
-                                detectedDevice.setDeviceName("Null");
-                            }
-                            System.out.println("device is not null");
-                            messagingTemplate.convertAndSend(webSocModel.getListen(), detectedDevice);
-                            System.out.println("Device is being cleard");
-                            System.out.println(detectedDevice.toString());
-                            detectedDevice = new DetectedDevice();
-                            webSocModel = new WebSocModel();
-                            autoDetection = false;
+                            sendDetectedDevice();
                         }
 
 
@@ -180,13 +192,26 @@ public class MqttService {
         });
     }
 
-    public String topicCutter(String topic) {
-        List<String> partsToCut = Arrays.asList("stat/", "/POWER", "/RESULT", "/SENSOR");
-        for (String part : partsToCut) {
-            topic.replace(part, "");
-        }
-        return topic;
+    public void statusCheck(String msg){
+        System.out.println("Listen  " + webSocModel.getListen());
+        System.out.println(webSocModel.toString());
+        messagingTemplate.convertAndSend(webSocModel.getListen(), msg);
+        setStatusCheck(false);
     }
+
+    public void sendDetectedDevice(){
+        if (detectedDevice.getDeviceName().isEmpty()) {
+            detectedDevice.setDeviceName("Null");
+        }
+        System.out.println("device is not null");
+        messagingTemplate.convertAndSend(webSocModel.getListen(), detectedDevice);
+        System.out.println("Device is being cleard");
+        System.out.println(detectedDevice.toString());
+        detectedDevice = new DetectedDevice();
+        webSocModel = new WebSocModel();
+        setAutoDetection(false);
+    }
+
 
     public void TELEMapper(String jsonObject, String topic) {
         List<Sensor> sensorList = this.sensorService.getAll();
@@ -280,16 +305,6 @@ public class MqttService {
         return "PWM" + max;
     }
 
-
-    @Async
-    public void handleAsyncMessage(String topic, String payload) {
-        // This method is called asynchronously to handle the received message
-        // Perform operations like saving data to the database or other time-consuming tasks
-        System.out.println("Handling message asynchronously...");
-        System.out.println("Topic: " + topic);
-        System.out.println("Payload: " + payload);
-        // Implement your database interaction logic here
-    }
 
     @Scheduled(fixedRate = 60 * 1000)
     public void checkForActions() {

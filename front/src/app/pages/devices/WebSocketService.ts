@@ -1,39 +1,41 @@
 import {Injectable, OnDestroy} from "@angular/core";
-import {CompatClient, Stomp, StompSubscription} from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 import {WebSocketModel} from "./WebSocketModel";
 
 @Injectable({
   providedIn: "root"
 })
 export class WebSocketService implements OnDestroy {
-  private connection: CompatClient | undefined = undefined;
-
-  private subscription: StompSubscription | undefined;
+  private readonly stompClient: Client;
 
   constructor() {
-    this.connection = Stomp.client('ws://localhost:8080/websocket');
-    /*if(this.connection.connected){
-      this.connection.connect({}, () => {});
-    }*/
+    this.stompClient = new Client({brokerURL:'ws://localhost:8080/websocket', reconnectDelay: 5000});
+    // this.connection = Stomp.client('ws://localhost:8080/websocket');
+    // this.connect();
+    if(!this.stompClient.active){
+      this.stompClient.onConnect = () => {
+        console.log("Connected to Websocket server");
+      }
+
+      this.stompClient.activate();
+    }
+
+  }
+
+
+  public subscribeToMessages(): Client {
+    return this.stompClient;
   }
 
   public send(webSocModel: WebSocketModel): void {
-    if (this.connection && this.connection.connected) {
-      this.connection.send(webSocModel.destination, {}, JSON.stringify(webSocModel));
-    }
+    this.stompClient.publish({destination: webSocModel.destination, body: JSON.stringify(webSocModel)});
   }
 
-  public listen(destination: string, fun: (message: string) => void): void {
-    if (this.connection) {
-      this.connection.connect({}, () => {
-        this.subscription = this.connection!.subscribe(destination, message => fun(message.body));
-      });
-    }
+  disconnect(): void {
+    this.stompClient.deactivate();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+
   }
 }

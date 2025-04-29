@@ -1,10 +1,8 @@
 package hu.okosotthon.back.Device;
 
+import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Sensor.Sensor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
@@ -14,21 +12,34 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class DeviceDTO {
     @Nullable
     private int deviceId;
     private String deviceName;
-    private List<Integer> sensorId = new ArrayList<>();
+    @Nullable
+    private List<Sensor> sensors = new ArrayList<>();
+    @Nullable
+    private List<Measurement> measurements = new ArrayList<>();
     private String location;
     private String topic;
+    private int active;
 
     public DeviceDTO(Devices devices) {
         this.deviceId = devices.getDevicesId();
         this.deviceName = devices.getDeviceName();
-        for (Sensor s : devices.getSensor()) {
-            this.sensorId.add(s.getSensorId());
-        }
+        this.sensors.addAll(devices.getSensor());
+        this.measurements.addAll(devices.getMeasurementList());
         this.location = devices.getLocation();
         this.topic = devices.getTopic();
+
+    }
+
+    public DeviceDTO(int deviceId, String deviceName, String location, String topic, int active) {
+        this.deviceId = deviceId;
+        this.deviceName = deviceName;
+        this.location = location;
+        this.topic = topic;
+        this.active = active;
     }
 }

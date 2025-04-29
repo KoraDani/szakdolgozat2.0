@@ -1,29 +1,24 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 30px">
-  <div fxLayout="column" fxLayoutAlign="space-around start">
+<div>
+  <form [formGroup]="deviceForm" fxLayout="column">
+    <mat-form-field appearance="outline">
+      <mat-label>Topic</mat-label>
+      <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
+    </mat-form-field>
+    @if (detectedDevice && detectedSensors) {
 
-    <div>
-      <form [formGroup]="deviceForm" fxLayout="column">
-        <mat-form-field appearance="outline">
-          <mat-label>Topic</mat-label>
-          <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
-        </mat-form-field>
-        <div *ngIf="detectedDevice && detectedSensors">
-          <ng-template matStepLabel>Eszköz általános adatai</ng-template>
-          <mat-form-field appearance="outline">
-            <mat-label>Eszköz neve</mat-label>
-            <input matInput name="deviceName" placeholder="Eszköz Neve" type="text" formControlName="deviceName">
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Elhelyezkedése</mat-label>
-            <input matInput name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
-          </mat-form-field>
-        </div>
-      </form>
-    </div>
-
-    <button mat-raised-button type="submit" color="primary" (click)="autoDetect()">Auto Detect</button>
-    <button mat-raised-button type="submit" color="primary" (click)="saveDevice()">Save</button>
-  </div>
-
+      <ng-template matStepLabel>Eszköz általános adatai</ng-template>
+      <mat-form-field appearance="outline">
+        <mat-label>Eszköz neve</mat-label>
+        <input matInput name="deviceName" placeholder="Eszköz Neve" type="text" formControlName="deviceName">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Elhelyezkedése</mat-label>
+        <input matInput name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+      </mat-form-field>
+    }
+  </form>
 </div>
+
+<button mat-raised-button type="submit" color="primary" (click)="autoDetect()">Auto Detect</button>
+<button mat-raised-button type="submit" color="primary" (click)="saveDevice()">Save</button>
 

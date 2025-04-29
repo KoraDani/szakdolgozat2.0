@@ -1,18 +1,18 @@
-<div *ngIf="measurementList.length > 0">
-
-  <div *ngFor="let sensor of this.sensor">
-    <div *ngFor="let json of JSON.parse(sensor.fieldJSON)">
-      <div *ngFor="let meas of this.measurementList">
-        <p *ngIf="meas.sensorType == json">{{json}}: {{meas.value}}</p>
-      </div>
-    </div>
-  </div>
+<div>
+  <p>Votlage: {{voltage}}</p>
+  <p>Current: {{current}}</p>
+  <p>Active Power: {{activePower}}</p>
+  <p>Energy Today: {{energyToday}}</p>
+  <p>Energy Yestarday: {{energyYestarday}}</p>
+  <p>Energy Total: {{enegyTotal}} </p>
 </div>
-<section class="example-section">
-  <mat-slide-toggle
-    class="example-margin"
-    [checked]="switchStatus"
-    (click)="onToggle()">
-    ON/OFF
-  </mat-slide-toggle>
+
+<section>
+  <mat-slide-toggle [checked]="power" (click)="onClick()">{{ power }}</mat-slide-toggle>
 </section>
+
+@if (measList.length > 0) {
+  <div>
+    <canvasjs-chart [options]="powerOption" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+  </div>
+}

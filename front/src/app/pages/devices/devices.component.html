@@ -1,28 +1,21 @@
-<!--<div fxLayout="colomn" fxLayoutAlign="start none">-->
-<!--<app-list [devicesObjectInput]="devicesList" (deviceObjectEmmiter)="loadDevice($event)"></app-list>-->
-<!--  <app-view [deviceInput]="chosenDevice" style="margin-left: 20px"></app-view>-->
-<!--</div>-->
 <div class="createDeviceButton">
   <button mat-fab color="primary" (click)="goToCreateDevice()">
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
-<div fxLayout="row wrap" fxLayoutAlign="center center">
-  <div *ngFor="let device of deviceList" class="max-div fontStlye">
-    <mat-card class="example-card">
-      <mat-card-header>
-        <mat-card-title class="deviceName">{{device.deviceName}}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="location">{{device.location}}</p>
-        <p class="topic">{{device.topic}}</p>
-        <p>{{device.deviceId}}</p>
-<!--        [routerLink]="['/view', device.devicesId]"-->
-        <button mat-raised-button color="primary" [routerLink]="['/view', device.deviceId]">View</button>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<div class="flex-div">
+    @for (device of deviceList; track $index) {
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title class="deviceName">{{ device.deviceName }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="location">{{ device.location }}</p>
+          <p class="topic">{{ device.topic }}</p>
+          <p>{{ device.deviceId }}</p>
+          <button mat-raised-button color="primary" (click)="viewDevice(device)">View</button>
+        </mat-card-content>
+      </mat-card>
+    }
 </div>
-<!--style="background-color: #CFD4EC" class="max-height"-->
-

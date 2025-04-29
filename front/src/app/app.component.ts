@@ -1,12 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {MatSidenav} from "@angular/material/sidenav";
+import { MatSidenav, MatSidenavContainer, MatSidenavContent } from "@angular/material/sidenav";
 import {AuthService} from "./auth.service";
+import { MenuComponent } from './shared/menu/menu.component';
+import { MatToolbar } from '@angular/material/toolbar';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import {NgIf} from "@angular/common";
+import {MatButton} from "@angular/material/button";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
     selector: 'app-root',
+    standalone: true,
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: false
+  imports: [MatSidenavContainer, MatSidenav, MenuComponent, MatSidenavContent, MatToolbar, RouterLink, RouterOutlet, NgIf, MatButton, MatIcon]
 })
 export class AppComponent implements OnInit{
   title = 'front';
@@ -34,6 +41,6 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loggedInUser = sessionStorage.getItem("username");
+    this.loggedInUser = localStorage.getItem("token");
   }
 }

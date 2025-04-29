@@ -32,7 +32,7 @@ const routes: Routes = [
     component: CreateDeviceComponent
   },
   {
-    path: 'view/:deviceID',
+    path: 'view',
     component: ViewComponent
   },
   {

@@ -6,69 +6,173 @@ import {MeasurementService} from "../../measurement.service";
 import {WebSocketService} from "../../WebSocketService";
 import {MqttService} from "../../mqtt.service";
 import {WebSocketModel} from "../../WebSocketModel";
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
 
 @Component({
-    selector: 'app-plug',
-    templateUrl: './plug.component.html',
-    styleUrls: ['./plug.component.scss'],
-    standalone: false
+  selector: 'app-plug',
+  standalone: true,
+
+  templateUrl: './plug.component.html',
+  styleUrls: ['./plug.component.scss'],
+  imports: [MatSlideToggle, CanvasJSAngularChartsModule]
 })
-export class PlugComponent implements OnInit{
+export class PlugComponent implements OnInit {
   measurementList: MeasurementDTO[] = [];
-  @Input({required: true}) deviceId?: number;
-  @Input({required: true}) topic!: string;
+
+  measList: { x: number, y: number }[] = []
+
+  @Input() selectedDevice?: DeviceDTO;
   sensor: Sensor[] = [];
-  switchStatus!: boolean;
-  status!: "ON" |"OFF";
+  power!: boolean;
+  status!: "ON" | "OFF";
 
   //TODO plug webSocModel befejezése
   webSocModel: WebSocketModel = {
-    destination: '/app/switch',
-    listen: '/topic/switch',
-    topic: this.topic,
+    destination: '/app/power',
+    listen: '/topic/power',
+    topic: "",
     message: []
   };
 
-  constructor(private sensorService: SensorService, private measusermentService: MeasurementService, private websocket: WebSocketService, private  mqttService: MqttService) {
+  voltage: number = -1;
+  current: number = 0;
+  activePower: number = 0;
+  energyToday: number = 0;
+  energyYestarday: number = 0;
+  enegyTotal: number = 0;
+
+  constructor(private sensorService: SensorService, private measusermentService: MeasurementService, private websocket: WebSocketService, private mqttService: MqttService) {
 
   }
 
   ngOnInit(): void {
-    if (this.deviceId != null) {
-      this.measusermentService.getMeasurementByDeviceId(this.deviceId, 1).subscribe(meas => {
-        this.measurementList = meas;
-        console.log(this.measurementList)
-      }, error => {
-        console.error(error);
-      })
-      this.sensorService.getByDeviceId(this.deviceId).subscribe(sen => {
-        this.sensor = sen;
-        console.log(this.sensor)
-      }, error => {
-        console.error(error);
-      });
-      if (this.topic != null) {
-        console.log("sending message to websocket " + this.topic)
-        this.websocket.send(this.webSocModel);
+    console.log(this.selectedDevice)
+    this.getDevicesStatus();
+
+    this.websocket.subscribeToMessages().subscribe(this.webSocModel.listen, (message) => {
+      if(message.body != undefined){
+        this.setDeviceStatus(message.body);
       }
-      this.websocket.listen(this.webSocModel.listen, message => {
-        this.switchStatus = message.includes("ON");
-        console.log(this.switchStatus)
+    })
+    if (this.selectedDevice?.deviceId) {
+      this.measusermentService.getMeasurementByDevIdAndType(this.selectedDevice?.deviceId, "Power", 10).subscribe(measurement => {
+        measurement.forEach((m, index) => {
+          this.measList.push({x: index + 1, y: +m.value});
+        })
+        // console.log(this.measList)
       });
+
     }
   }
 
-  onToggle() {
-    // this.mqttService.sendMessageToDevice("cmnd/"+this.topic+"/POWER", "toggle").subscribe(val => {
-    this.mqttService.sendMessageToDevice(this.webSocModel).subscribe(val => {
-      console.log(val);
-    }, error => {
-      console.error(error);
-    });
+  setDeviceStatus(msg: string) {
+      for (let m of Object.entries(JSON.parse(msg)["StatusSNS"]["ENERGY"])) {
+        switch (m[0]) {
+          case "Voltage":
+            console.log(m[1]);
+            // @ts-ignore
+            this.voltage = +m[1];
+            break;
+          case "Current":
+            // @ts-ignore
+            this.current = +m[1];
+            break;
+          case "Active Power":
+            // @ts-ignore
+            this.activePower = +m[1];
+            break;
+          case "Energy Today":
+            // @ts-ignore
+            this.energyToday = +m[1];
+            break;
+          case "Energy Yestarday":
+            // @ts-ignore
+            this.energyYestarday = +m[1];
+            break;
+          case "Energy Total":
+            // @ts-ignore
+            this.enegyTotal = +m[1];
+            break;
+        }
+      }
+
+  }
+
+  getDevicesStatus() {
+    if (this.selectedDevice?.deviceId != null) {
+      this.webSocModel.topic = this.selectedDevice.topic + "";
+      this.webSocModel.message =
+        [
+          {
+            prefix: "cmnd/",
+            postfix: "/STATUS",
+            msg: "8"
+          },
+          {
+            prefix: "cmnd/",
+            postfix: "/POWER",
+            msg: " "
+          },
+          {
+            prefix: "stat/",
+            postfix: "/STATUS8",
+            msg: " "
+          },
+          {
+            prefix: "stat/",
+            postfix: "/RESULT",
+            msg: " "
+          }
+        ];
+      this.websocket.send(this.webSocModel);
+    }
+
+  }
+
+  onClick() {
+    this.power = !this.power;
+
+    this.webSocModel.message = [{
+      prefix: "cmnd/",
+      postfix: "/Power",
+      msg: this.power ? "ON" : "OFF"
+    }]
+    this.websocket.send(this.webSocModel);
+  }
+
+  powerOption = {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Power Usage"
+    },
+    axisX: {
+      valueFormatString: "#",
+      interval: 1
+    },
+    axisY: {
+      title: "Power",
+      suffix: "W"
+    },
+    toolTip: {
+      shared: true
+    },
+    data: [{
+      type: "line",
+      name: "Temperature",
+      showInLegend: true,
+      yValueFormatString: "#,## W",
+      dataPoints: this.measList
+    }
+    ]
   }
 
 
   protected readonly Object = Object;
 
   protected readonly JSON = JSON;
+
+
 }

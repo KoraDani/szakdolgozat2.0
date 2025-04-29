@@ -1,3 +1,12 @@
+.flex-div{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+
 .createDeviceButton{
   padding: 20px;
   z-index: 1000;
@@ -15,6 +24,7 @@
   width: 300px;
   height: auto;
   padding: 25px;
+  margin: 10px;
   border-radius: 20px;
   box-shadow: 10px 10px 34px 1px rgba(0,0,0,0.61);
   -webkit-box-shadow: 10px 10px 34px 1px rgba(0,0,0,0.61);

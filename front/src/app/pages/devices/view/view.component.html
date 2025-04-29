@@ -1,19 +1,25 @@
-<div fxLayout="column" fxLayoutAlign="start center">
+@if (isLoaded) {
   <div>
-    <p>{{selectedDevice?.deviceName}}</p>
-    <p>{{selectedDevice?.location}}</p>
-    <!--    <div *ngFor="let sen of this.deviceSensor">-->
-    <!--      <div *ngFor="let meas of this.measuremntList">-->
-    <!--        <p *ngIf="sen == meas.sensorType">{{meas.sensorType}}:{{meas.value}}</p>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <p>{{ selectedDevice.deviceName }}</p>
+    <p>{{ selectedDevice.location }}</p>
   </div>
-</div>
 
-<div *ngIf="category">
-  <div *ngFor="let cat of category">
-      <app-temperature *ngIf="cat === 'temp'" [deviceId]="selectedDevice?.deviceId"/>
-      <app-plug *ngIf="cat === 'plug'"  [deviceId]="selectedDevice?.deviceId" [topic]="selectedDevice!.topic"/>
-      <app-light *ngIf="cat === 'light'" [selectedDevice]="selectedDevice"></app-light>
-  </div>
-</div>
+
+
+    @for (sensor of this.selectedDevice.sensors; track $index) {
+
+      @if (sensor.category === 'temp') {
+        <app-temperature [selectedDevice]="selectedDevice"/>
+      }
+      @if (sensor.category === 'plug') {
+        <app-plug [selectedDevice]="selectedDevice"/>
+      }
+      @if (sensor.category === 'light') {
+        <app-light [selectedDevice]="selectedDevice"></app-light>
+      }
+      @if (sensor.category === 'switch') {
+        <app-switch [selectedDevice]="selectedDevice"></app-switch>
+      }
+    }
+}
+

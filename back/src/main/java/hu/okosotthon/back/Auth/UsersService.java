@@ -24,8 +24,6 @@ public class UsersService {
     public UserDTO loginUsersByUsername(Users users) throws Exception {
         Users u = usersRepo.findUsersByUsername(users.getUsername());
 
-        System.out.println(u.toString());
-
         if(passwordEncoder.matches(CharBuffer.wrap(users.getPassword()), u.getPassword())){
             return new UserDTO(u.getUserId(), u.getUsername(), u.getEmail(),"", u.getRole());
         }
@@ -49,5 +47,10 @@ public class UsersService {
             }
         }
         return this.usersRepo.save(u);
+    }
+
+    public UserDTO getCurrentUser(int userId) {
+        Users users = this.usersRepo.findUsersByUserId(userId);
+        return new UserDTO(users.getUserId(), users.getUsername(), users.getEmail(), "", users.getRole());
     }
 }

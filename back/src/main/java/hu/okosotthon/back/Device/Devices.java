@@ -1,5 +1,6 @@
 package hu.okosotthon.back.Device;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Measurment.Measurement;
@@ -27,7 +28,7 @@ public class Devices {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    @JsonManagedReference
+    @JsonBackReference
     private Users users;
     @Nullable
     @OneToMany(mappedBy = "devices", cascade = CascadeType.ALL)
@@ -36,12 +37,21 @@ public class Devices {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "device_sensor",
-              joinColumns = @JoinColumn(name = "deviceId"),
-    inverseJoinColumns = @JoinColumn(name = "sensorId"))
+            joinColumns = @JoinColumn(name = "deviceId"),
+            inverseJoinColumns = @JoinColumn(name = "sensorId"))
+    @Nullable
     private List<Sensor> sensor;
 
     private String topic;
+    @Nullable
     private int active;
+
+    public Devices(int devicesId, String deviceName, String location, String topic) {
+        this.devicesId = devicesId;
+        this.deviceName = deviceName;
+        this.location = location;
+        this.topic = topic;
+    }
 
     public Devices(String deviceName, String location, Users users, List<Sensor> sensor, String topic, int active) {
         this.deviceName = deviceName;

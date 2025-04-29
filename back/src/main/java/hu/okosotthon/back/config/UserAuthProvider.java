@@ -28,11 +28,11 @@ public class UserAuthProvider {
     private String secretKey;
 
     @PostConstruct
-    protected void init(){
+    protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(UserDTO user){
+    public String createToken(UserDTO user) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + 3_600_000);
 
@@ -40,12 +40,13 @@ public class UserAuthProvider {
                 .withIssuer(user.getUsername())
                 .withIssuedAt(Instant.now())
                 .withExpiresAt(validity)
-                .withClaim("username",user.getUsername())
+                .withClaim("userId", user.getId())
+                .withClaim("username", user.getUsername())
                 .withClaim("role", user.getRole().name())
                 .sign(Algorithm.HMAC256(secretKey));
     }
 
-    public Authentication validateToken(String token){
+    public Authentication validateToken(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm).build();
@@ -56,5 +57,23 @@ public class UserAuthProvider {
                 .username(decoded.getClaim("username").asString())
                 .build();
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+    }
+
+    public int getUserId(String token) {
+
+        String[] authElements = token.split(" ");
+
+        System.out.println(authElements[1]);
+
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+
+        DecodedJWT decoded = verifier.verify(authElements[1]);
+        Users users = Users.builder()
+                .userId(decoded.getClaim("userId").asInt()).build();
+
+        return users.getUserId();
+
     }
 }

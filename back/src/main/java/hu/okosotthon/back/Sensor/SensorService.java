@@ -45,6 +45,6 @@ public class SensorService {
     }
 
     public List<Sensor> getByDeviceId(int deviceId) {
-        return this.sensorRepo.getByDeviceId(deviceId);
+        return this.sensorRepo.findAllByDeviceId(deviceId);
     }
 }

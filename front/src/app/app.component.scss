@@ -13,6 +13,20 @@ a:hover, a:active{
 mat-sidenav{
   width: 250px;
 }
+
+.toolbar-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.toolbar-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
 //app-root{
 //  height: 100%;
 //}
