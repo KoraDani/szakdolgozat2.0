@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.okosotthon.back.Device.*;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Sensor.SensorService;
-import hu.okosotthon.back.IfThen.IfThen;
-import hu.okosotthon.back.IfThen.IfThenService;
+import hu.okosotthon.back.scheduleTask.ScheduleTask;
+import hu.okosotthon.back.scheduleTask.ScheduleTaskService;
 import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Measurment.MeasurementService;
 import org.eclipse.paho.client.mqttv3.*;
@@ -32,18 +32,18 @@ public class MqttService {
 
 
     private DeviceService deviceService;
-    private IfThenService ifThenService;
+    private ScheduleTaskService scheduleTaskService;
     private SensorService sensorService;
     private MeasurementService measurementService;
 
     @Autowired
     public MqttService(
             DeviceService deviceService,
-            IfThenService ifThenService,
+            ScheduleTaskService scheduleTaskService,
             SensorService sensorService,
             MeasurementService measurementService) {
         this.deviceService = deviceService;
-        this.ifThenService = ifThenService;
+        this.scheduleTaskService = scheduleTaskService;
         this.sensorService = sensorService;
         this.measurementService = measurementService;
     }
@@ -309,16 +309,6 @@ public class MqttService {
     @Scheduled(fixedRate = 60 * 1000)
     public void checkForActions() {
 
-        //TODO itt majd úgy kell lekérdezni az autómatizációt hogy az adott időre szűrünk és akkor kevesebb soron kell végig menni
-        List<IfThen> ifThenList = this.ifThenService.getAllIfThen();
-
-        ifThenList.forEach(ifThen -> {
-            //TODO itt majd azt kell hogy amikor lefut akkor nézze meg hány óra van és ha matchel valamivel akkor küldjön egy üzenetett
-            if (ifThen.getWhenToCheck().equals("10:10")) {
-//                publishDataToDevice();
-                System.out.println(ifThen.getMessage());
-            }
-        });
     }
 }
 

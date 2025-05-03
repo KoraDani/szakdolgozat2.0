@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Auth.Users;
+import hu.okosotthon.back.scheduleTask.ScheduleTask;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.config.ScheduledTask;
 
 import java.util.List;
 
@@ -41,6 +43,11 @@ public class Devices {
             inverseJoinColumns = @JoinColumn(name = "sensorId"))
     @Nullable
     private List<Sensor> sensor;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    @Nullable
+    @JsonManagedReference
+    private List<ScheduleTask> scheduledTasks;
 
     private String topic;
     @Nullable

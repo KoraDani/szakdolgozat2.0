@@ -1,7 +1,7 @@
-<div fxLayout="column" fxLayoutAlign="start center" class="max-widht">
+<div class="flex-div">
 
 
-  <mat-accordion>
+  <mat-accordion class="max-width">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -18,7 +18,7 @@
           Jelszó módosítás
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <form [formGroup]="newPwdForm" (ngSubmit)="changePassword()" fxLayout="column">
+      <form [formGroup]="newPwdForm" (ngSubmit)="changePassword()" class="flex-div">
         <mat-form-field appearance="outline">
           <mat-label>Régi jelszó:</mat-label>
           <input matInput type="password" placeholder="Password" name="text" class="input" formControlName="oldpwd">

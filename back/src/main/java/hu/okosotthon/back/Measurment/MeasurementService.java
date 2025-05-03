@@ -1,16 +1,13 @@
 package hu.okosotthon.back.Measurment;
 
-import com.google.gson.Gson;
-import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Sensor.SensorRepo;
-import hu.okosotthon.back.IfThen.IfThenService;
+import hu.okosotthon.back.scheduleTask.ScheduleTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,13 +15,13 @@ public class MeasurementService {
 
     private MeasurementRepo measurementRepo;
     private SensorRepo sensorRepo;
-    private IfThenService ifThenService;
+    private ScheduleTaskService scheduleTaskService;
 
     @Autowired
-    public MeasurementService(MeasurementRepo measurementRepo, SensorRepo sensorRepo, IfThenService ifThenService) {
+    public MeasurementService(MeasurementRepo measurementRepo, SensorRepo sensorRepo, ScheduleTaskService scheduleTaskService) {
         this.measurementRepo = measurementRepo;
         this.sensorRepo = sensorRepo;
-        this.ifThenService = ifThenService;
+        this.scheduleTaskService = scheduleTaskService;
     }
 
     public List<Measurement> getMeasurementByDevIdAndType( int devicesId, String type, int peagable) {

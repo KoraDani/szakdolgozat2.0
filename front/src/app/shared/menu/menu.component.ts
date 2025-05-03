@@ -14,7 +14,7 @@ import {MatButtonModule} from '@angular/material/button';
 })
 export class MenuComponent {
 
-  @Input() loggedInUser: any;
+  @Input() loggedInUser: boolean = false;
   @Output() onCloseSideNav: EventEmitter<boolean> = new EventEmitter();
   @Output() onLogout: EventEmitter<boolean> = new EventEmitter();
   close(logout?: boolean){

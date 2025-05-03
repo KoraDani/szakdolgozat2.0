@@ -8,6 +8,19 @@ import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/mat
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import convert from "color-convert";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {MatInput} from "@angular/material/input";
+import {
+  MatTimepicker,
+  MatTimepickerInput,
+  MatTimepickerOption,
+  MatTimepickerToggle
+} from "@angular/material/timepicker";
+import {MatIcon} from "@angular/material/icon";
+import {provideNativeDateAdapter} from '@angular/material/core';
+
 
 @Component({
   selector: 'app-light',
@@ -15,7 +28,8 @@ import convert from "color-convert";
   templateUrl: './light.component.html',
   styleUrls: ['./light.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatSlideToggle, MatSlider, MatSliderThumb, FormsModule]
+  providers: [provideNativeDateAdapter()],
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatSlideToggle, MatSlider, MatSliderThumb, FormsModule, MatFormField, MatSelect, MatOption, MatFormField, MatLabel, MatRadioButton, MatRadioGroup, MatInput, MatTimepickerInput, MatTimepickerToggle, MatTimepicker, MatIcon]
 })
 export class LightComponent implements OnInit, OnDestroy {
 
@@ -36,6 +50,30 @@ export class LightComponent implements OnInit, OnDestroy {
   //TODO light webSocModel befejezése
   webSocModel!: WebSocketModel;
   loading: boolean = true;
+
+  frequency: string = "";
+  scheduleOnOff: string | "ON" | "OFF" = "ON";
+
+  weaklyOptions: MatTimepickerOption<string>[] = [
+    
+  ]
+
+  monthsOptions: MatTimepickerOption<string>[] = [
+    {label: 'January', value: "January" },
+    {label: 'February', value: "February"},
+    {label: 'March', value: "March"},
+    {label: 'April', value: "April"},
+    {label: 'May', value: "May"},
+    {label: 'June', value: "June"},
+    {label: 'July', value: "July"},
+    {label: 'August', value: "August"},
+    {label: 'September', value: "September"},
+    {label: 'October', value: "October"},
+    {label: 'November', value: "November"},
+    {label: 'December', value: "December"},
+  ];
+  monthlyDay: any;
+
 
   constructor(private cdr: ChangeDetectorRef, private mqttService: MqttService, private websocket: WebSocketService) {
 

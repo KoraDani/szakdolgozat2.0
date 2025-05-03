@@ -54,7 +54,7 @@ public class DeviceService {
 
         Users users = this.usersRepo.findUsersByUserId(this.userAuthProvider.getUserId(token));
 
-        return this.deviceRepo.saveAndFlush(new Devices(deviceDTO.getDeviceId(), deviceDTO.getDeviceName(), deviceDTO.getLocation(), users, null, null, deviceDTO.getTopic(), deviceDTO.getActive()));
+        return this.deviceRepo.saveAndFlush(new Devices(deviceDTO.getDeviceId(), deviceDTO.getDeviceName(), deviceDTO.getLocation(), users, null, null, null,deviceDTO.getTopic(),  deviceDTO.getActive()));
     }
 
     public Devices deleteDevice(int devicesId) {
