@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TasmotaCommandRepo extends JpaRepository<TasmotaCommand, Integer> {
+    TasmotaCommand findTasmotaCommandByCommand(String command);
 }

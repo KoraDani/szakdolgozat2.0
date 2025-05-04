@@ -2,18 +2,12 @@ package hu.okosotthon.back.Device;
 
 import hu.okosotthon.back.Auth.Users;
 import hu.okosotthon.back.Auth.UsersRepo;
-import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Measurment.MeasurementRepo;
-import hu.okosotthon.back.Mqtt.MqttService;
-import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Sensor.SensorRepo;
 import hu.okosotthon.back.config.UserAuthProvider;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.AuthProvider;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,7 +38,7 @@ public class DeviceService {
     public List<DeviceDTO> getUserDevices(int userId) {
         List<DeviceDTO> deviceDTOList = this.deviceRepo.getAllByUserId(userId);
         for (DeviceDTO d: deviceDTOList) {
-            d.setSensors(this.sensorRepo.findAllByDeviceId(d.getDeviceId()));
+            d.setSensors(this.sensorRepo.findAllByDeviceId(d.getDevicesId()));
         }
 
         return deviceDTOList;
@@ -54,7 +48,7 @@ public class DeviceService {
 
         Users users = this.usersRepo.findUsersByUserId(this.userAuthProvider.getUserId(token));
 
-        return this.deviceRepo.saveAndFlush(new Devices(deviceDTO.getDeviceId(), deviceDTO.getDeviceName(), deviceDTO.getLocation(), users, null, null, null,deviceDTO.getTopic(),  deviceDTO.getActive()));
+        return this.deviceRepo.saveAndFlush(new Devices(deviceDTO.getDevicesId(), deviceDTO.getDeviceName(), deviceDTO.getLocation(), users, null, null, null,deviceDTO.getTopic(),  deviceDTO.getActive()));
     }
 
     public Devices deleteDevice(int devicesId) {

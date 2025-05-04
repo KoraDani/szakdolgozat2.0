@@ -32,7 +32,7 @@ public class ScheduleTask {
     private boolean active;
 
     @ManyToOne
-    @JoinColumn(name = "device_id")
+    @JoinColumn(name = "devices_id")
     @JsonBackReference
     private Devices device;
 
@@ -41,6 +41,16 @@ public class ScheduleTask {
     private TasmotaCommand command;
 
     public ScheduleTask(ScheduleTaskDTO scheduleTask, Devices devices, TasmotaCommand tasmotaCommand) {
+        this.scheduledTime = scheduleTask.getScheduledTime();
+        this.dailySchedule = scheduleTask.isDailySchedule();
+        this.weeklySchedule = scheduleTask.isWeeklySchedule();
+        this.monthlySchedule = scheduleTask.isMonthlySchedule();
+        this.active = scheduleTask.isActive();
+        this.device = devices;
+        this.command = tasmotaCommand;
+    }
+
+    public ScheduleTask(ScheduleTask scheduleTask, Devices devices, TasmotaCommand tasmotaCommand) {
         this.scheduledTime = scheduleTask.getScheduledTime();
         this.dailySchedule = scheduleTask.isDailySchedule();
         this.weeklySchedule = scheduleTask.isWeeklySchedule();

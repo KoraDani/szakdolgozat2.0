@@ -7,20 +7,21 @@ import {TemperatureComponent} from '../tasmota/temperature/temperature.component
 import {PlugComponent} from '../tasmota/plug/plug.component';
 import {LightComponent} from '../tasmota/light/light.component';
 import {SwitchComponent} from "../tasmota/switch/switch.component";
+import {ScheduleComponent} from "../tasmota/schedule/schedule.component";
 
 @Component({
   selector: 'app-view',
   standalone: true,
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss'],
-  imports: [TemperatureComponent, PlugComponent, LightComponent, SwitchComponent]
+    imports: [TemperatureComponent, PlugComponent, LightComponent, SwitchComponent, ScheduleComponent]
 })
 
 
 export class ViewComponent implements OnInit, OnDestroy {
 
   selectedDevice: DeviceDTO = {
-    deviceId: -1,
+    devicesId: -1,
     deviceName: "",
     sensors: [],
     measurements: [],
@@ -53,7 +54,7 @@ export class ViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.devServ.chosenDevice.set({
-      deviceId: 0,
+      devicesId: 0,
       deviceName: "",
       sensors: [],
       measurements: [],

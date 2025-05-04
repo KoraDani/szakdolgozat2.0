@@ -15,4 +15,8 @@ public class TasmotaCommandService {
     public TasmotaCommand getCommandById(int commandId) {
         return this.tasmotaCommandRepo.findById(commandId).get();
     }
+
+    public TasmotaCommand findByCommand(String command) {
+        return this.tasmotaCommandRepo.findTasmotaCommandByCommand(command);
+    }
 }

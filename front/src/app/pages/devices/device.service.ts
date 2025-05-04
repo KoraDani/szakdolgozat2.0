@@ -12,7 +12,7 @@ export class DeviceService {
   private apiUrl = "http://localhost:8080";
 
   devicesDTO = signal<DeviceDTO[]>([]);
-  chosenDevice= signal<DeviceDTO>({deviceId: null, deviceName: "", sensors: [], measurements: [], location: "", topic: "", active:""});
+  chosenDevice= signal<DeviceDTO>({devicesId: null, deviceName: "", sensors: [], measurements: [], location: "", topic: "", active:""});
 
   constructor(private http: HttpClient, private authService: AuthService) {
   }

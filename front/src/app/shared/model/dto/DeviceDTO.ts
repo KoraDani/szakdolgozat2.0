@@ -2,7 +2,7 @@ import {Sensor} from "../Sensor";
 import {Measurement} from "../Measurement";
 
 export interface DeviceDTO{
-  deviceId: number | null;
+  devicesId: number | null;
   deviceName: string | "";
   sensors: Sensor[] | [];
   measurements: Measurement[] | [];

@@ -25,12 +25,13 @@ public class ScheduleTaskController {
     }
 
     @PostMapping("/saveSchedule")
-    public ResponseEntity<ScheduleTask> scheduleTask(@RequestBody ScheduleTaskDTO scheduleTask){
+    public ResponseEntity<ScheduleTask> scheduleTask(@RequestBody ScheduleTask scheduleTask){
+        System.out.println(scheduleTask.toString());
         return new ResponseEntity<>(this.scheduleTaskService.saveScheduleTask(scheduleTask), HttpStatus.OK);
     }
 
     @PutMapping("/updateSchedule")
-    public ResponseEntity<ScheduleTask> updateSchedule(@RequestBody ScheduleTaskDTO scheduleTask){
+    public ResponseEntity<ScheduleTask> updateSchedule(@RequestBody ScheduleTask scheduleTask){
         return new ResponseEntity<>(this.scheduleTaskService.saveScheduleTask(scheduleTask), HttpStatus.OK);
     }
 

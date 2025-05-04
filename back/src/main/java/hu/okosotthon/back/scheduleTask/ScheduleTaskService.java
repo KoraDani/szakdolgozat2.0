@@ -29,9 +29,9 @@ public class ScheduleTaskService {
     }
 
 
-    public ScheduleTask saveScheduleTask(ScheduleTaskDTO scheduleTask) {
-        Devices devices = this.deviceService.getDeviceById(scheduleTask.getDevices_id());
-        TasmotaCommand tasmotaCommand = tasmotaCommandService.getCommandById(scheduleTask.getCommand_id());
+    public ScheduleTask saveScheduleTask(ScheduleTask scheduleTask) {
+        Devices devices = this.deviceService.getDeviceById(scheduleTask.getDevice().getDevicesId());
+        TasmotaCommand tasmotaCommand = tasmotaCommandService.findByCommand(scheduleTask.getCommand().getCommand());
         return this.scheduleTaskRepo.save(new ScheduleTask(scheduleTask, devices, tasmotaCommand));
     }
 

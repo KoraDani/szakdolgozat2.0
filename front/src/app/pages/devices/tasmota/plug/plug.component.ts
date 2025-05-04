@@ -56,8 +56,8 @@ export class PlugComponent implements OnInit {
         this.setDeviceStatus(message.body);
       }
     })
-    if (this.selectedDevice?.deviceId) {
-      this.measusermentService.getMeasurementByDevIdAndType(this.selectedDevice?.deviceId, "Power", 10).subscribe(measurement => {
+    if (this.selectedDevice?.devicesId) {
+      this.measusermentService.getMeasurementByDevIdAndType(this.selectedDevice?.devicesId, "Power", 10).subscribe(measurement => {
         measurement.forEach((m, index) => {
           this.measList.push({x: index + 1, y: +m.value});
         })
@@ -101,7 +101,7 @@ export class PlugComponent implements OnInit {
   }
 
   getDevicesStatus() {
-    if (this.selectedDevice?.deviceId != null) {
+    if (this.selectedDevice?.devicesId != null) {
       this.webSocModel.topic = this.selectedDevice.topic + "";
       this.webSocModel.message =
         [

@@ -72,10 +72,10 @@ export class TemperatureComponent implements OnInit, OnDestroy {
     });
 
 
-    if (this.selectedDevice?.deviceId) {
+    if (this.selectedDevice?.devicesId) {
       this.statusElementList.forEach(type => {
         // @ts-ignore
-        this.measurementService.getMeasurementByDevIdAndType(this.selectedDevice?.deviceId, type, 10).subscribe(measurment => {
+        this.measurementService.getMeasurementByDevIdAndType(this.selectedDevice?.devicesId, type, 10).subscribe(measurment => {
           switch (type) {
             case "Temperature":
               this.setTempList(measurment);

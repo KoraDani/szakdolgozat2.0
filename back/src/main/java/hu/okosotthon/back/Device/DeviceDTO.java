@@ -15,7 +15,7 @@ import java.util.List;
 @ToString
 public class DeviceDTO {
     @Nullable
-    private int deviceId;
+    private int devicesId;
     private String deviceName;
     @Nullable
     private List<Sensor> sensors = new ArrayList<>();
@@ -26,7 +26,7 @@ public class DeviceDTO {
     private int active;
 
     public DeviceDTO(Devices devices) {
-        this.deviceId = devices.getDevicesId();
+        this.devicesId = devices.getDevicesId();
         this.deviceName = devices.getDeviceName();
         this.sensors.addAll(devices.getSensor());
         this.measurements.addAll(devices.getMeasurementList());
@@ -36,7 +36,7 @@ public class DeviceDTO {
     }
 
     public DeviceDTO(int deviceId, String deviceName, String location, String topic, int active) {
-        this.deviceId = deviceId;
+        this.devicesId = deviceId;
         this.deviceName = deviceName;
         this.location = location;
         this.topic = topic;

@@ -26,6 +26,7 @@
     "@types/uuid": "^9.0.7",
     "axios": "^1.5.1",
     "color-convert": "^3.0.1",
+    "ngx-mat-timepicker": "^19.0.0",
     "rxjs": "~7.8.0",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",

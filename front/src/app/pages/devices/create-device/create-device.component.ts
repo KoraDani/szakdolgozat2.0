@@ -145,7 +145,7 @@ export class CreateDeviceComponent implements OnInit {
       sensorId.push(s.sensorId);
     })*/
     let device: DeviceDTO = {
-      deviceId: null,
+      devicesId: null,
       deviceName: this.deviceForm.get("deviceName")?.value,
       sensors: this.detectedSensors,
       measurements: [],
