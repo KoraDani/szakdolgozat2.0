@@ -1,0 +1,26 @@
+
+
+.flex-div {
+  display: flex;
+  flex-direction: column;
+  gap:0.5rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    label {
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+  }
+
+  section {
+    margin-bottom: 1rem;
+  }
+}
+
+.centered-card {
+  max-width: 400px;
+  margin: 2rem auto; // vertical spacing + horizontal centering
+  width: 100%;
+}

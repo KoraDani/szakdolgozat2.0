@@ -7,14 +7,15 @@ import {TemperatureComponent} from '../tasmota/temperature/temperature.component
 import {PlugComponent} from '../tasmota/plug/plug.component';
 import {LightComponent} from '../tasmota/light/light.component';
 import {SwitchComponent} from "../tasmota/switch/switch.component";
-import {ScheduleComponent} from "../tasmota/schedule/schedule.component";
+import {ScheduleTimeComponent} from "../tasmota/schedule-time/schedule-time.component";
+import {ScheduleDeviceComponent} from "../tasmota/schedule-device/schedule-device.component";
 
 @Component({
   selector: 'app-view',
   standalone: true,
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss'],
-    imports: [TemperatureComponent, PlugComponent, LightComponent, SwitchComponent, ScheduleComponent]
+  imports: [TemperatureComponent, PlugComponent, LightComponent, SwitchComponent, ScheduleTimeComponent, ScheduleDeviceComponent]
 })
 
 

@@ -1,27 +1,7 @@
-.blue{
-  background-color: aqua;
-}
-.red{
-  background-color: indianred;
-}
-.green{
-  background-color: lightgreen;
-}
-.yellow{
-  background-color: yellow;
-}
-
-.example-h2 {
-  margin: 10px;
-}
-
-.example-section {
+.flex-div{
   display: flex;
-  align-content: center;
-  align-items: center;
-  height: 60px;
-}
-
-.example-margin {
+  flex-direction: column;
+  //flex-wrap: wrap;
+  justify-content: space-around;
   margin: 10px;
 }

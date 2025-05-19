@@ -1,17 +1,14 @@
 package hu.okosotthon.back.scheduleTask;
 
-import hu.okosotthon.back.Device.DeviceRepo;
 import hu.okosotthon.back.Device.DeviceService;
 import hu.okosotthon.back.Device.Devices;
-import hu.okosotthon.back.Sensor.SensorRepo;
 import hu.okosotthon.back.tasmotaCommand.TasmotaCommand;
 import hu.okosotthon.back.tasmotaCommand.TasmotaCommandService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -30,17 +27,31 @@ public class ScheduleTaskService {
 
 
     public ScheduleTask saveScheduleTask(ScheduleTask scheduleTask) {
+        if(scheduleTask.getId() > -1){
+            return this.scheduleTaskRepo.save(scheduleTask);
+        }
         Devices devices = this.deviceService.getDeviceById(scheduleTask.getDevice().getDevicesId());
-        TasmotaCommand tasmotaCommand = tasmotaCommandService.findByCommand(scheduleTask.getCommand().getCommand());
+        TasmotaCommand tasmotaCommand = tasmotaCommandService.findByCommandId(scheduleTask.getCommand().getId());
         return this.scheduleTaskRepo.save(new ScheduleTask(scheduleTask, devices, tasmotaCommand));
     }
 
-    public List<ScheduleTask> getAllSchedule() {
-        return this.scheduleTaskRepo.findAll();
+    public List<ScheduleTaskDTO> getAllScheduleForTime() {
+        return this.scheduleTaskRepo.findAllScheduleTasksForTime( LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
     }
 
-    public void deleteSchedule(ScheduleTaskDTO scheduleTask) {
-        this.scheduleTaskRepo.deleteById(scheduleTask.getId());
+    public List<ScheduleTaskDTO> getAllScheduleForCondition() {
+        return this.scheduleTaskRepo.findAllScheduleTasksForCondition();
     }
 
+    public void deleteSchedule(int id) {
+        this.scheduleTaskRepo.deleteById(id);
+    }
+
+    public List<ScheduleTask> getAllDeviceSchedule(int deviceId) {
+        return this.scheduleTaskRepo.getScheduleTaskByDeviceIs(deviceId);
+    }
+
+    public List<ScheduleTaskDTO> getAllSchedule() {
+        return this.scheduleTaskRepo.findAllScheduleTasks();
+    }
 }

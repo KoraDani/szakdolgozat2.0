@@ -117,9 +117,9 @@ export class CreateDeviceComponent implements OnInit {
             this.sensorService.getByName("PWM" + this.detectedDevice?.statusSNS?.length + 1).subscribe(s => {
               console.log(s);
               this.detectedSensors?.push(s);
+
             });
-          }
-          if (!this.detectedDevice?.statusSNS?.includes('PWM')) {
+          } else {
             this.sensorService.getByName(val).subscribe(s => {
               console.log(s);
               this.detectedSensors?.push(s);

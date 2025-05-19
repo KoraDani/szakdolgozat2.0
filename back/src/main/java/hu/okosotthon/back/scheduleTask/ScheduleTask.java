@@ -3,10 +3,9 @@ package hu.okosotthon.back.scheduleTask;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import hu.okosotthon.back.Device.Devices;
 import hu.okosotthon.back.tasmotaCommand.TasmotaCommand;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -23,13 +22,21 @@ public class ScheduleTask {
 
     private String scheduledTime;
 
-    private boolean dailySchedule;
+    private Frequency frequency;
 
-    private boolean weeklySchedule;
+    private int targetDeviceId;
 
-    private boolean monthlySchedule;
+    @Nullable
+    private String whichValue;
+
+    @Nullable
+    private String conditionOperator;
+
+    @Nullable
+    private int whenCondition;
 
     private boolean active;
+
 
     @ManyToOne
     @JoinColumn(name = "devices_id")
@@ -40,21 +47,13 @@ public class ScheduleTask {
     @JoinColumn(name = "command_id")
     private TasmotaCommand command;
 
-    public ScheduleTask(ScheduleTaskDTO scheduleTask, Devices devices, TasmotaCommand tasmotaCommand) {
-        this.scheduledTime = scheduleTask.getScheduledTime();
-        this.dailySchedule = scheduleTask.isDailySchedule();
-        this.weeklySchedule = scheduleTask.isWeeklySchedule();
-        this.monthlySchedule = scheduleTask.isMonthlySchedule();
-        this.active = scheduleTask.isActive();
-        this.device = devices;
-        this.command = tasmotaCommand;
-    }
-
     public ScheduleTask(ScheduleTask scheduleTask, Devices devices, TasmotaCommand tasmotaCommand) {
         this.scheduledTime = scheduleTask.getScheduledTime();
-        this.dailySchedule = scheduleTask.isDailySchedule();
-        this.weeklySchedule = scheduleTask.isWeeklySchedule();
-        this.monthlySchedule = scheduleTask.isMonthlySchedule();
+        this.frequency = scheduleTask.getFrequency();
+        this.targetDeviceId = scheduleTask.getTargetDeviceId();
+        this.whichValue = scheduleTask.getWhichValue();
+        this.conditionOperator = scheduleTask.getConditionOperator();
+        this.whenCondition = scheduleTask.getWhenCondition();
         this.active = scheduleTask.isActive();
         this.device = devices;
         this.command = tasmotaCommand;

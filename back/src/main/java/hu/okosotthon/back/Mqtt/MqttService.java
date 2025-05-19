@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.okosotthon.back.Device.*;
 import hu.okosotthon.back.Sensor.Sensor;
 import hu.okosotthon.back.Sensor.SensorService;
+import hu.okosotthon.back.scheduleTask.Frequency;
 import hu.okosotthon.back.scheduleTask.ScheduleTask;
+import hu.okosotthon.back.scheduleTask.ScheduleTaskDTO;
 import hu.okosotthon.back.scheduleTask.ScheduleTaskService;
 import hu.okosotthon.back.Measurment.Measurement;
 import hu.okosotthon.back.Measurment.MeasurementService;
+import hu.okosotthon.back.tasmotaCommand.TasmotaCommand;
+import hu.okosotthon.back.tasmotaCommand.TasmotaCommandService;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.JSONException;
@@ -19,9 +23,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @Service
 public class MqttService {
@@ -30,32 +37,37 @@ public class MqttService {
     private boolean autoDetection = false;
     private boolean isStatusCheck = false;
 
+    private List<WebSocModel> webSocModel = new ArrayList<>();
+
+    List<ScheduleTaskDTO> scheduleTask = new ArrayList<>();
+
 
     private DeviceService deviceService;
     private ScheduleTaskService scheduleTaskService;
     private SensorService sensorService;
     private MeasurementService measurementService;
+    private TasmotaCommandService tasmotaCommandService;
 
     @Autowired
     public MqttService(
             DeviceService deviceService,
             ScheduleTaskService scheduleTaskService,
             SensorService sensorService,
-            MeasurementService measurementService) {
+            MeasurementService measurementService,
+            TasmotaCommandService tasmotaCommandService) {
         this.deviceService = deviceService;
         this.scheduleTaskService = scheduleTaskService;
         this.sensorService = sensorService;
         this.measurementService = measurementService;
+        this.tasmotaCommandService = tasmotaCommandService;
     }
 
-    private WebSocModel webSocModel;
 
     String broker = "tcp://192.168.0.28:1883";
     //A ClientId az lehetne aki ben van jelentkezve
     String clientId = "SpringBootSubscriber";
     MqttClient mqttClient;
 
-    String topicSearch = "";
 
     public void connectToBroker() {
         try {
@@ -79,7 +91,7 @@ public class MqttService {
         }
     }
 
-    public void setAutoDetection(boolean val){
+    public void setAutoDetection(boolean val) {
         this.autoDetection = val;
     }
 
@@ -88,24 +100,24 @@ public class MqttService {
     }
 
     public void setWebSocModel(WebSocModel webSocModel) {
-        this.webSocModel = webSocModel;
+        this.webSocModel.add(webSocModel);
     }
 
     public void subscribeToTopic(WebSocModel webSocModel) {
         System.out.println("Subscribing to websocket and topic");
         try {
             for (MessageModel m : webSocModel.getMessage()) {
-                String tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
+                String tmpTopic = m.getPrefix() + webSocModel.getTopic() + m.getPostfix();
                 mqttClient.subscribe(tmpTopic);
 
 
-                if(m.getPrefix().contains("cmnd")){
-                    tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
+                if (m.getPrefix().contains("cmnd")) {
+                    tmpTopic = m.getPrefix() + webSocModel.getTopic() + m.getPostfix();
                     mqttClient.publish(tmpTopic, new MqttMessage(m.getMsg().getBytes()));
                 }
 
-                if(m.getPrefix().contains("stat")){
-                    tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
+                if (m.getPrefix().contains("stat")) {
+                    tmpTopic = m.getPrefix() + webSocModel.getTopic() + m.getPostfix();
                     System.out.println(tmpTopic);
                     mqttClient.subscribe(tmpTopic);
                 }
@@ -118,7 +130,7 @@ public class MqttService {
 
     public void subscribeToTopic2(String topic) {
         try {
-            mqttClient.subscribe("tele/"+topic+"/SENSOR");
+            mqttClient.subscribe("tele/" + topic + "/SENSOR");
         } catch (MqttException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +139,7 @@ public class MqttService {
     public boolean sendMessageToDevice(WebSocModel webSocModel) {
         try {
             for (MessageModel m : webSocModel.getMessage()) {
-                String tmpTopic = m.getPrefix()+webSocModel.getTopic()+m.getPostfix();
+                String tmpTopic = m.getPrefix() + webSocModel.getTopic() + m.getPostfix();
                 mqttClient.publish(tmpTopic, new MqttMessage(m.getMsg().getBytes()));
             }
             return true;
@@ -147,15 +159,14 @@ public class MqttService {
             @Async
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String msg = new String(message.getPayload());
-                System.out.println(msg+"  Messasge arrived");
+                System.out.println(msg + "  Messasge arrived");
                 if (msg.length() > 2) {
                     try {
                         System.out.println(msg);
                         new JSONObject(msg);
 
                         if (isStatusCheck) {
-                            statusCheck(message.toString());
-
+                            statusCheck(topic, message.toString());
                         }
 
                         if (topic.startsWith("stat/") && autoDetection) {
@@ -168,7 +179,7 @@ public class MqttService {
 
 
                         if (!detectedDevice.getGpio().isEmpty()) {
-                            sendDetectedDevice();
+                            sendDetectedDevice(topic);
                         }
 
 
@@ -192,25 +203,38 @@ public class MqttService {
         });
     }
 
-    public void statusCheck(String msg){
-        System.out.println("Listen  " + webSocModel.getListen());
-        System.out.println(webSocModel.toString());
-        messagingTemplate.convertAndSend(webSocModel.getListen(), msg);
+    public void statusCheck(String topic, String msg) {
+        for (WebSocModel ws : this.webSocModel) {
+            if (topic.contains(ws.getTopic())) {
+                messagingTemplate.convertAndSend(ws.getListen(), msg);
+                this.webSocModel.remove(ws);
+            }
+        }
         setStatusCheck(false);
     }
 
-    public void sendDetectedDevice(){
+    public void sendDetectedDevice(String topic) {
         if (detectedDevice.getDeviceName().isEmpty()) {
             detectedDevice.setDeviceName("Null");
         }
         System.out.println("device is not null");
-        messagingTemplate.convertAndSend(webSocModel.getListen(), detectedDevice);
+        WebSocModel tmp = new WebSocModel();
+        for (WebSocModel ws : this.webSocModel) {
+            if (topic.contains(ws.getTopic())) {
+                messagingTemplate.convertAndSend(ws.getListen(), detectedDevice);
+                detectedDevice = new DetectedDevice();
+                tmp = ws;
+                break;
+            }
+        }
+        this.webSocModel.remove(tmp);
+        System.out.println(this.webSocModel.toString());
         System.out.println("Device is being cleard");
         System.out.println(detectedDevice.toString());
-        detectedDevice = new DetectedDevice();
-        webSocModel = new WebSocModel();
         setAutoDetection(false);
     }
+
+    boolean automation = false;
 
 
     public void TELEMapper(String jsonObject, String topic) {
@@ -231,7 +255,9 @@ public class MqttService {
                         LinkedHashMap<Object, Object> sensor = (LinkedHashMap<Object, Object>) val.getValue();
                         for (Map.Entry<Object, Object> senVal : sensor.entrySet()) {
                             this.measurementService.save(new Measurement(senVal.getKey().toString(), senVal.getValue().toString(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString(), d));
-
+                            if (automation) {
+                                checkCondition(senVal.getKey().toString() + " " + senVal.getValue().toString());
+                            }
                         }
 
 
@@ -268,12 +294,12 @@ public class MqttService {
                                     keys.add(tmp.getKey());
                                 }
                                 detectedDevice.setStatusSNS(mapVal.getKey().toString());
-                            }else {
+                            } else {
                                 noStatusSNS = true;
                             }
                         }
                         if (val.getKey().toString().contains("GPIO") && mapVal.getKey() != "0" && mapVal.getValue() != "None") {
-                            if (noStatusSNS && detectedDevice.getStatusSNS().isEmpty() && mapVal.getValue().toString().contains("PWM") ) {
+                            if (noStatusSNS && detectedDevice.getStatusSNS().isEmpty() && mapVal.getValue().toString().contains("PWM")) {
                                 detectedDevice.setStatusSNS(pwmGPIO(result));
                             }
                             detectedDevice.setGpio(
@@ -306,10 +332,111 @@ public class MqttService {
     }
 
 
-    @Scheduled(fixedRate = 60 * 1000)
-    public void checkForActions() {
+    @Scheduled(cron = "0 * * * * *")
+    public void checkForTimeActions() {
+        //TODO scheduleing ot megcsinálni
+        System.out.println("checkForActions");
+        List<ScheduleTaskDTO> scheduleTask = this.scheduleTaskService.getAllScheduleForTime();
+        if (!scheduleTask.isEmpty()) {
+            scheduleTask.forEach(task -> {
+                Devices d = this.deviceService.getDeviceById(task.getDevices_id());
+                TasmotaCommand tc = this.tasmotaCommandService.getCommandById(task.getCommand_id());
+                System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                if (task.getScheduledTime().equals(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm")))) {
+                    if (task.getFrequency() == Frequency.DAILY) {
+                        sendMessagetoDevice(d.getTopic(), tc.getCommand(), tc.getArgument());
+                    } else if (task.getFrequency() == Frequency.WEEKLY) {
+                        sendMessagetoDevice(d.getTopic(), tc.getCommand(), tc.getArgument());
+                    } else if (task.getFrequency() == Frequency.MONTHLY) {
+                        sendMessagetoDevice(d.getTopic(), tc.getCommand(), tc.getArgument());
+                    }
+                }
+            });
+        }
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void checkForConditionActions() {
+        automation = true;
+        System.out.println("checkForConditionActions");
+        scheduleTask = this.scheduleTaskService.getAllScheduleForCondition();
+        if (!scheduleTask.isEmpty()) {
+            scheduleTask.forEach(task -> {
+                Devices d = this.deviceService.getDeviceById(task.getDevices_id());
+
+                subscribeToTopic2(d.getTopic());
+                sendMessagetoDevice(d.getTopic(), "STATUS", "8");
+
+                unsubscribeFromTopic(d.getTopic(), "STATUS");
+            });
+        }
+    }
+
+    public void checkCondition(String status){
+
+        this.scheduleTask.forEach(task -> {
+            Devices targetDevice = this.deviceService.getDeviceById(task.getTargetDeviceId());
+
+            TasmotaCommand tasmotaCommand = this.tasmotaCommandService.getCommandById(task.getCommand_id());
+            String[] tmp = status.split(" ");
+            System.out.println(tmp[0] + " " + tmp[1]);
+            System.out.println(task.getCondition());
+            switch (task.getCondition()) {
+                case "lt":
+                    if (tmp[0].equals(task.getWhichValue()) && Float.parseFloat(tmp[1]) < task.getWhen()) {
+                        sendMessagetoDevice(targetDevice.getTopic(), tasmotaCommand.getCommand(), tasmotaCommand.getArgument());
+                        System.out.println("LT message send");
+                    }
+                    break;
+                case "gt":
+                    if (tmp[0].equals(task.getWhichValue()) && Float.parseFloat(tmp[1]) > task.getWhen()) {
+                        sendMessagetoDevice(targetDevice.getTopic(), tasmotaCommand.getCommand(), tasmotaCommand.getArgument());
+                        System.out.println("GT message send");
+                    }
+                    break;
+                case "eq":
+                    if (tmp[0].equals(task.getWhichValue()) && Float.parseFloat(tmp[1]) == task.getWhen()) {
+                        sendMessagetoDevice(targetDevice.getTopic(), tasmotaCommand.getCommand(), tasmotaCommand.getArgument());
+                        System.out.println("EQ message send");
+                    }
+                    break;
+            }
+        });
+        automation = false;
 
     }
+
+    public void sendMessagetoDevice(String topic, String cmnd, String argument) {
+        try {
+            System.out.println("cmnd/" + topic + "/" + cmnd);
+            this.mqttClient.publish("cmnd/" + topic + "/" + cmnd, new MqttMessage(argument.getBytes()));
+        } catch (MqttException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void unsubscribeFromTopic(String topic, String cmnd) {
+        try {
+            this.mqttClient.unsubscribe("cmnd/"+ topic + "/"+cmnd);
+        } catch (MqttException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+//    public void sendCommandToDevice(String topic,String cmnd, String msg){
+//        try {
+//            MqttClient mqttClient = new MqttClient(
+//                    "Broker IP",
+//                    "clientID",
+//                    new MemoryPersistence());
+//
+//            mqttClient.publish("cmnd/"+topic+"/"+cmnd, new MqttMessage(msg.getBytes()));
+//        } catch (MqttException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
 }
 
 

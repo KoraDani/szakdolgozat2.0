@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, effect, Input, OnInit} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {MatTimepickerOption} from "@angular/material/timepicker";
@@ -11,9 +11,13 @@ import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
 import {ScheduleService} from "./schedule.service";
 import {ScheduleTaskModel} from "./ScheduleTaskModel";
 import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
+import {DeviceService} from "../../device.service";
+import {Frequency} from "./frequency.enum";
+import {TasmotaCommand} from "./TasmotaCommand";
+import {CommandService} from "./command.service";
 
 @Component({
-  selector: 'app-schedule',
+  selector: 'app-schedule-time',
   imports: [
     MatCard,
     MatCardContent,
@@ -30,11 +34,18 @@ import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
     NgxMatTimepickerFieldComponent
   ],
   providers: [provideNativeDateAdapter()],
-  templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.scss'
+  templateUrl: './schedule-time.component.html',
+  styleUrl: './schedule-time.component.scss'
 })
-export class ScheduleComponent implements OnInit {
-  weeklyOptions: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+export class ScheduleTimeComponent implements OnInit {
+  weeklyOptions: {key: number, value: string}[] = [
+    {key: 1, value:'Monday'},
+    {key: 2, value:'Tuesday'},
+    {key: 3, value:'Wednesday'},
+    {key: 4, value:'Thursday'},
+    {key: 5, value:'Friday'},
+    {key: 6, value:'Saturday'},
+    {key: 7, value:'Sunday'}];
 
 
   monthlyOptions: MatTimepickerOption<string>[] = [
@@ -52,16 +63,15 @@ export class ScheduleComponent implements OnInit {
     {label: 'December', value: "December"},
   ];
 
-  frequency: string = "";
-  selectedCommand: string = "";
+  frequency!: Frequency;
+  selectedCommand: number = -1;
 
   @Input() selectedDevice?: DeviceDTO;
-  weekPicker: string = "";
-  monthDayPicker: any;
+  weekPicker: number = -1;
+  monthDayPicker: number = -1;
   timePicker: any = "00:00";
 
-
-  constructor(private scheduleService: ScheduleService) {
+  constructor(private scheduleService: ScheduleService, private deviceService: DeviceService) {
   }
 
   ngOnInit(): void {
@@ -76,16 +86,19 @@ export class ScheduleComponent implements OnInit {
     console.log(this.selectedDevice);
     if (this.selectedDevice) {
       const schedule: ScheduleTaskModel = {
-        id: null,
-        scheduledTime: this.scheduleFormat(this.frequency),
-        dailySchedule: this.frequency == 'daily',
-        weeklySchedule: this.frequency == 'weekly',
-        monthlySchedule: this.frequency == "monthly",
+        id: -1,
+        scheduledTime: this.timePicker,
+        frequency: this.frequency,
+        targetDeviceId: -1,
+        whichValue: "",
+        conditionOperator: "",
+        whenCondition: null,
         active: true,
         device: this.selectedDevice,
         command: {
-          id: -1,
-          command: this.selectedCommand,
+          id: this.selectedCommand,
+          command: "",
+          argument: "",
           description: ""
         }
       }
@@ -107,8 +120,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   onChange() {
-    this.weekPicker = "";
-    this.monthDayPicker = "";
+    this.weekPicker = -1;
+    this.monthDayPicker = -1;
     this.timePicker = "00:00";
   }
+
+  protected readonly Frequency = Frequency;
+  protected readonly Object = Object;
 }

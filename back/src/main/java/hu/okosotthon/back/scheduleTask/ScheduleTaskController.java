@@ -20,14 +20,20 @@ public class ScheduleTaskController {
     }
 
     @GetMapping("/getAllSchedule")
-    public ResponseEntity<List<ScheduleTask>> getAllSchedule() {
+    public ResponseEntity<List<ScheduleTaskDTO>> getAllSchedule() {
         return new ResponseEntity<>(this.scheduleTaskService.getAllSchedule(), HttpStatus.OK);
+    }
+
+    @PostMapping("/getAllDeviceSchedule")
+    public ResponseEntity<List<ScheduleTask>> getAllDeviceSchedule(@RequestParam int deviceId) {
+        return new ResponseEntity<>(this.scheduleTaskService.getAllDeviceSchedule(deviceId), HttpStatus.OK);
     }
 
     @PostMapping("/saveSchedule")
     public ResponseEntity<ScheduleTask> scheduleTask(@RequestBody ScheduleTask scheduleTask){
         System.out.println(scheduleTask.toString());
         return new ResponseEntity<>(this.scheduleTaskService.saveScheduleTask(scheduleTask), HttpStatus.OK);
+//        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @PutMapping("/updateSchedule")
@@ -36,8 +42,8 @@ public class ScheduleTaskController {
     }
 
     @DeleteMapping("/delteSchedule")
-    public ResponseEntity<ScheduleTask> delteSchedule(@RequestBody ScheduleTaskDTO scheduleTask){
-        this.scheduleTaskService.deleteSchedule(scheduleTask);
+    public ResponseEntity<ScheduleTask> delteSchedule(@RequestParam int id){
+        this.scheduleTaskService.deleteSchedule(id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 

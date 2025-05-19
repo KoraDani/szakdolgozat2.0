@@ -1,26 +1,30 @@
-@if (isLoaded) {
-  <div>
-    <p>{{ selectedDevice.deviceName }}</p>
-    <p>{{ selectedDevice.location }}</p>
-  </div>
+<div class="flex-div">
+  @if (isLoaded) {
 
 
+    <div>
+      @for (sensor of this.selectedDevice.sensors; track $index) {
 
-    @for (sensor of this.selectedDevice.sensors; track $index) {
-
-      @if (sensor.category === 'temp') {
-        <app-temperature [selectedDevice]="selectedDevice"/>
+        @if (sensor.category === 'temp') {
+          <app-temperature [selectedDevice]="selectedDevice"/>
+        }
+        @if (sensor.category === 'plug') {
+          <app-plug [selectedDevice]="selectedDevice"/>
+        }
+        @if (sensor.category === 'light') {
+          <app-light [selectedDevice]="selectedDevice"></app-light>
+        }
+        @if (sensor.category === 'switch') {
+          <app-switch [selectedDevice]="selectedDevice"></app-switch>
+        }
       }
-      @if (sensor.category === 'plug') {
-        <app-plug [selectedDevice]="selectedDevice"/>
-      }
-      @if (sensor.category === 'light') {
-        <app-light [selectedDevice]="selectedDevice"></app-light>
-      }
-      @if (sensor.category === 'switch') {
-        <app-switch [selectedDevice]="selectedDevice"></app-switch>
-      }
-    }
-  <app-schedule [selectedDevice]="selectedDevice"></app-schedule>
-}
+    </div>
+    <div>
+      <app-schedule-time [selectedDevice]="selectedDevice"></app-schedule-time>
+    </div>
+    <div>
+      <app-schedule-device [selectedDevice]="selectedDevice"></app-schedule-device>
+    </div>
+  }
 
+</div>

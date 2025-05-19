@@ -1,41 +1,48 @@
 <!--@if (loading) {-->
 <!--  <p>Loading...</p>-->
 <!--} @else {-->
-  <mat-card class="example-card" appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Eszköz Neve</mat-card-title>
-    </mat-card-header>
-    <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly center">
-      <section>
-        <mat-slide-toggle [checked]="power" (click)="onClick()">{{ power }}</mat-slide-toggle>
-      </section>
+<mat-card class="centered-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Device: {{selectedDevice?.deviceName}}&nbsp;</mat-card-title>
+    <mat-card-subtitle>Location: {{selectedDevice?.location}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="flex-div">
+    <br>
+    <section>
+      <mat-slide-toggle [checked]="power" (click)="onClick()">{{ power ? 'ON' : 'OFF' }}</mat-slide-toggle>
+    </section>
+    <div>
       <label>Dimmer</label>
       <mat-slider min="0" max="100" step="1" showTickMarks discrete>
         <input matSliderThumb (valueChange)="changeDimmer($event)" [(value)]="dimmer">
       </mat-slider>
+    </div>
 
-      @if (isWhite) {
-        <label>White</label>
-        <button (click)="changeToWhite()">White</button>
-      }
+    @if (isWhite) {
+      <div>
+        <label>Make It White</label>
+        <button mat-raised-button color="primary" (click)="changeToWhite()">White</button>
+      </div>
+    }
 
-      @if (isCT) {
+    @if (isCT) {
+      <div>
         <label>Warmth CT</label>
         <mat-slider min="153" max="500" step="1" showTickMarks discrete>
           <input matSliderThumb (valueChange)="changeCT($event)" [(value)]="ct">
         </mat-slider>
-      }
+      </div>
+    }
 
-      @if (isHSBColor) {
+    @if (isHSBColor) {
+      <div>
         <label>Color Picker</label><br>
         <input type="color" [(ngModel)]="rgb" (ngModelChange)="onColorPick()" value="#ffffff">
-      }
+      </div>
+    }
 
-    </mat-card-content>
-  </mat-card>
-
-
-
+  </mat-card-content>
+</mat-card>
 
 
 <!--}-->

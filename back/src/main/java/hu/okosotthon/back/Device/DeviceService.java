@@ -31,6 +31,8 @@ public class DeviceService {
     public Devices save(DeviceDTO d, int userId) {
         Users user = this.usersRepo.findUsersByUserId(userId);
 
+        System.out.println("DeviceDTO Sensors: " + d.getSensors());
+
         Devices devices = new Devices(d.getDeviceName(), d.getLocation(), user, d.getSensors(), d.getTopic(), 1);
         return this.deviceRepo.save(devices);
     }

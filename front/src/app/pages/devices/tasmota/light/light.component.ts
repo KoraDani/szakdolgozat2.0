@@ -4,12 +4,13 @@ import {MqttService} from "../../mqtt.service";
 import {WebSocketService} from "../../WebSocketService";
 import {WebSocketModel} from "../../WebSocketModel";
 import {DeviceDTO} from "../../../../shared/model/dto/DeviceDTO";
-import {MatCard, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/material/card';
+import {MatCardModule, MatCardHeader, MatCardTitle, MatCardContent} from '@angular/material/card';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import convert from "color-convert";
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {ScheduleComponent} from "../schedule/schedule.component";
+import {ScheduleTimeComponent} from "../schedule-time/schedule-time.component";
+import {MatLabel} from "@angular/material/form-field";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @Component({
@@ -18,12 +19,11 @@ import {ScheduleComponent} from "../schedule/schedule.component";
   templateUrl: './light.component.html',
   styleUrls: ['./light.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatSlideToggle, MatSlider, MatSliderThumb, FormsModule, ScheduleComponent]
+  imports: [MatCardModule, MatCardHeader, MatCardTitle, MatCardContent, MatSlideToggle, MatSlider, MatSliderThumb, FormsModule, MatButtonModule]
 })
 export class LightComponent implements OnInit, OnDestroy {
 
   @Input({required: true}) selectedDevice?: DeviceDTO;
-
 
   isColor: boolean = false;
   isHSBColor: boolean = false;
@@ -39,9 +39,6 @@ export class LightComponent implements OnInit, OnDestroy {
   //TODO light webSocModel befejezése
   webSocModel!: WebSocketModel;
   loading: boolean = true;
-
-
-
 
   constructor(private cdr: ChangeDetectorRef, private mqttService: MqttService, private websocket: WebSocketService) {
 

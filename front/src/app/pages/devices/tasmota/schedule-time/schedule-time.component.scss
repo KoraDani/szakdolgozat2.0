@@ -1,0 +1,23 @@
+mat-card {
+  max-width: 400px;
+  margin: 2rem auto; // center card
+  padding: 1rem;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // space between form fields
+}
+
+mat-form-field,
+ngx-mat-timepicker-field,
+mat-radio-group {
+  width: 100%;
+}
+
+mat-radio-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

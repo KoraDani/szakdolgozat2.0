@@ -22,5 +22,7 @@ public class TasmotaCommand {
 
     private String command;
 
+    private String argument;
+
     private String description;
 }

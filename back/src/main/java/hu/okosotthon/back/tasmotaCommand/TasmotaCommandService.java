@@ -3,6 +3,8 @@ package hu.okosotthon.back.tasmotaCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TasmotaCommandService {
     private TasmotaCommandRepo tasmotaCommandRepo;
@@ -13,10 +15,14 @@ public class TasmotaCommandService {
     }
 
     public TasmotaCommand getCommandById(int commandId) {
-        return this.tasmotaCommandRepo.findById(commandId).get();
+        return this.tasmotaCommandRepo.findById(commandId).orElse(null);
     }
 
-    public TasmotaCommand findByCommand(String command) {
-        return this.tasmotaCommandRepo.findTasmotaCommandByCommand(command);
+    public TasmotaCommand findByCommandId(int id) {
+        return this.tasmotaCommandRepo.findTasmotaCommandById(id);
+    }
+
+    public List<TasmotaCommand> getAllCommand() {
+        return this.tasmotaCommandRepo.findAll();
     }
 }
