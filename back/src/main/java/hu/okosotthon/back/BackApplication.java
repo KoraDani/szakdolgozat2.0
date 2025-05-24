@@ -1,6 +1,5 @@
 package hu.okosotthon.back;
 
-import hu.okosotthon.back.Mqtt.MqttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -34,12 +33,9 @@ public class BackApplication implements CommandLineRunner {
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}*/
 
-	@Autowired
-	private MqttService mqttService;
-
 	@Override
 	public void run(String... args) throws Exception {
-		mqttService.connectToBroker();
+//		mqttService.connectToBroker();
 //		mqttService.subscribeToTopic("tele/home/szoba/temp/SENSOR");
 //		mqttService.subscribeToTopic("tele/home/szoba/plug/SENSOR");
 //		mqttService.subscribeToTopic("stat/home/szoba/switch/RESULT");

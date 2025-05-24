@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Automation</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="custom-material-table">
+      <thead>
+      <tr>
+        <th>Frequency</th>
+        <th>Action</th>
+        <th>Time</th>
+        <th>Target Device</th>
+        <th>Operation</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (st of scheduleTask; track $index) {
+          <tr>
+            <td>{{ st.frequency }}</td>
+            <td>{{ st.command.command }}&nbsp;{{ st.command.argument }}</td>
+            <td>{{ st.scheduledTime != "" ? st.scheduledTime : 'No time set' }}</td>
+            @if (st.targetDeviceId != -1) {
+              <td>{{ st.targetDeviceId }}</td>
+            } @else {
+              <td> No target device</td>
+            }
+            <td>
+              <button mat-mini-fab color="primary" (click)="onEdit(st)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              &nbsp;
+              <button mat-mini-fab color="primary" (click)="onDelete(st)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </mat-card-content>
+</mat-card>

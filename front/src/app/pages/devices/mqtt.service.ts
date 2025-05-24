@@ -6,10 +6,10 @@ import {WebSocketModel} from "./WebSocketModel";
   providedIn: 'root'
 })
 export class MqttService {
-  private apiUrl = "http://localhost:8080/mqtt";
+  private apiUrl = "http://localhost:8080/mqttMessaging";
   constructor(private http: HttpClient) { }
 
   sendMessageToDevice(webSocModel: WebSocketModel){
-    return this.http.post<boolean>(this.apiUrl+"/sendMessageToDevice", webSocModel);
+    return this.http.post<boolean>(this.apiUrl+"/sendMessage", webSocModel);
   }
 }

@@ -13,6 +13,7 @@ export class DeviceService {
 
   devicesDTO = signal<DeviceDTO[]>([]);
   chosenDevice= signal<DeviceDTO>({devicesId: null, deviceName: "", sensors: [], measurements: [], location: "", topic: "", active:""});
+  errorMessage = signal<number>(0);
 
   constructor(private http: HttpClient, private authService: AuthService) {
   }
@@ -36,17 +37,22 @@ export class DeviceService {
         params: {userId}
       }).subscribe((device) => {
         console.log(device);
+        this.http.post(this.apiUrl + "/mqttMessaging/subscribeToTopic", deviceDTO).subscribe(topic => {
+          console.log(topic);
+        })
       }, error => {
-        console.error(error);
+        console.log(error.status);
+        this.errorMessage.set(error.status);
       });
     }
   }
 
-  deleteDevice(deviceId: number) {
-    this.http.post(this.apiUrl + "/device/deleteDevice", deviceId).subscribe(() => {
+  deleteDevice(devicesId: number) {
+    this.http.post(this.apiUrl + "/device/deleteDevice", devicesId).subscribe(() => {
       console.log("Eszköz sikeresen törölve");
     }, error => {
       console.error(error);
+
     });
   }
 
@@ -66,4 +72,14 @@ export class DeviceService {
     });
   }
 
+  updateDevice(deviceDTO: DeviceDTO, userId: number) {
+    const header = new HttpHeaders();
+    header.set("Authorization", "Bearer: " + localStorage.getItem("token"))
+    this.http.post<Devices>(this.apiUrl + "/device/updateDevice", deviceDTO, {
+      headers: header,
+      params: {userId}
+    }).subscribe(device => {
+      console.log(device)
+    })
+  }
 }

@@ -19,12 +19,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> loginUsers(@RequestBody Users user) throws Exception {
-        System.out.println(user.toString());
-
-        UserDTO userDTO = this.usersService.loginUsersByUsername(user);
-
+        UserDTO userDTO = this.usersService.loginUserByEmail(user);
         userDTO.setToken(userAuthProvider.createToken(userDTO));
-
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -42,8 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/currentUser")
-    public ResponseEntity<UserDTO> getCurrentUser(@RequestParam String token){
-        System.out.println(token);
-        return new ResponseEntity<>(this.usersService.getCurrentUser(userAuthProvider.getUserId(token)), HttpStatus.OK);
+    public ResponseEntity<UserDTO> getCurrentUser(@RequestHeader("Authorization") String header){
+        System.out.println(header);
+        return new ResponseEntity<>(this.usersService.getCurrentUser(userAuthProvider.getUserId(header)), HttpStatus.OK);
     }
 }

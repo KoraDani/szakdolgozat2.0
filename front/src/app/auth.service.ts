@@ -1,5 +1,5 @@
 import {Injectable, signal} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Users} from "./shared/model/Users";
 import {UserDTO} from "./shared/model/dto/UserDTO";
 import {ResponseDTO} from "./shared/model/dto/ResponseDTO";
@@ -24,22 +24,26 @@ export class AuthService {
     });
   }
 
-  getUserByToken(token: string) {
-    this.http.post<UserDTO>(this.apiUrl + "/auth/currentUser", null, {params: {token}}).subscribe(user => {
-      console.log(user)
-      this.currentUser.set(user);
-    }, error => {
-      console.error(error);
-    });
+  getUserByToken() {
+    const token = localStorage.getItem("token");
+    if(token) {
+      const header = new HttpHeaders({"Authorization":"Bearer " + token});
+
+      this.http.post<UserDTO>(this.apiUrl + "/auth/currentUser", null, {headers: header}).subscribe(user => {
+        console.log(user)
+        this.currentUser.set(user);
+      }, error => {
+        console.error(error);
+      });
+    }
   }
 
   saveUser(user: Users) {
     return this.http.post<UserDTO>(this.apiUrl + "/auth/saveUser", user).subscribe(user => {
-      console.log(user);
       localStorage.setItem("token", user.token);
     }, error => {
       if (error.status === 400) {
-        console.log("Valamelyik mező üres b+");
+        console.log("Something is not right");
       }
     });
   }

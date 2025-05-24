@@ -10,6 +10,8 @@ export class ScheduleService {
   scheduleTask = signal<ScheduleTaskModel[]>([]);
   deviceId = signal(-1);
 
+  selectedScheduleTask = signal<ScheduleTaskModel | null>(null);
+
   url: string = 'http://localhost:8080/scheduleTask';
 
   constructor(private http: HttpClient) {

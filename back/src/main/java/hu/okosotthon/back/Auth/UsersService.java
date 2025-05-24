@@ -21,13 +21,11 @@ public class UsersService {
     }
 
 
-    public UserDTO loginUsersByUsername(Users users) throws Exception {
+    public UserDTO loginUserByEmail(Users users) throws Exception {
         Users u = usersRepo.findUsersByUsername(users.getUsername());
-
         if(passwordEncoder.matches(CharBuffer.wrap(users.getPassword()), u.getPassword())){
             return new UserDTO(u.getUserId(), u.getUsername(), u.getEmail(),"", u.getRole());
         }
-
         throw new Exception("No user found");
     }
 

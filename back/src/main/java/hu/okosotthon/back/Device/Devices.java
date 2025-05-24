@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "devices")
-@ToString
 public class Devices {
 
     @Id
@@ -49,6 +48,7 @@ public class Devices {
     @JsonManagedReference
     private List<ScheduleTask> scheduledTasks;
 
+    @Column(unique=true)
     private String topic;
     @Nullable
     private int active;
@@ -67,5 +67,28 @@ public class Devices {
         this.sensor = sensor;
         this.topic = topic;
         this.active = active;
+    }
+
+    public Devices(Devices device) {
+        this.devicesId = device.getDevicesId();
+        this.deviceName = device.getDeviceName();
+        this.location = device.getLocation();
+        this.sensor = device.getSensor();
+        this.topic = device.getTopic();
+        this.active = device.getActive();
+    }
+
+    @Override
+    public String toString() {
+        return "Devices{" +
+                "devicesId=" + devicesId +
+                ", deviceName='" + deviceName + '\'' +
+                ", location='" + location + '\'' +
+                ", measurementList=" + measurementList +
+                ", sensor=" + sensor +
+                ", scheduledTasks=" + scheduledTasks +
+                ", topic='" + topic + '\'' +
+                ", active=" + active +
+                '}';
     }
 }

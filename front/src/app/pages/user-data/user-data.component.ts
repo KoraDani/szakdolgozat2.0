@@ -17,7 +17,7 @@ import {UserDTO} from "../../shared/model/dto/UserDTO";
   standalone: true,
   templateUrl: './user-data.component.html',
   styleUrls: ['./user-data.component.scss'],
-  imports: [ MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
+  imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
 export class UserDataComponent implements OnInit {
   user: UserDTO | undefined;
@@ -35,10 +35,8 @@ export class UserDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem("token");
-    if(token != null){
-      this.userSer.getUserByToken(token);
-    }
+    this.userSer.getUserByToken();
+
   }
 
   changePassword() {

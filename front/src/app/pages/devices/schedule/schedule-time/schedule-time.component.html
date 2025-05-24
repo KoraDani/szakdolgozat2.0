@@ -1,0 +1,54 @@
+<form [formGroup]="scheduleTimeForm">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Scheduled Actions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Frequency</mat-label>
+        <mat-select formControlName="frequency" (selectionChange)="onChange()">
+          @for (freq of Object.values(Frequency); track $index) {
+            <mat-option value="{{freq}}">{{ freq }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (this.scheduleTimeForm.get("frequency")?.value != "NONE"){
+        <mat-radio-group formControlName="selectedCommand">
+          <mat-radio-button [value]="1">On</mat-radio-button>
+          <mat-radio-button [value]="2">Off</mat-radio-button>
+        </mat-radio-group>
+      }
+      @if (this.scheduleTimeForm.get("frequency")?.value == "DAILY") {
+        <ngx-mat-timepicker-field color="primary"
+                                  [format]="24"
+                                  [defaultTime]="'00:00'" formControlName="scheduledTime"></ngx-mat-timepicker-field>
+      } @else if (this.scheduleTimeForm.get("frequency")?.value == "WEEKLY") {
+        <mat-form-field>
+          <mat-label>Pick a Day</mat-label>
+          <mat-select formControlName="weekPicker">
+            @for (week of weeklyOptions; track week) {
+              <mat-option [value]="week.key">{{ week.value }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <ngx-mat-timepicker-field color="primary"
+                                  [format]="24"
+                                  [defaultTime]="'00:00'" formControlName="scheduledTime"></ngx-mat-timepicker-field>
+      } @else if (this.scheduleTimeForm.get("frequency")?.value == "MONTHLY") {
+        <mat-form-field>
+          <mat-label>Pick a day</mat-label>
+          <mat-select formControlName="monthDayPicker">
+            @for (item of [].constructor(31); track $index) {
+              <mat-option [value]="$index+1">{{ $index + 1 }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <ngx-mat-timepicker-field color="primary"
+                                  [format]="24"
+                                  [defaultTime]="'00:00'" formControlName="scheduledTime"></ngx-mat-timepicker-field>
+      }
+
+      <button mat-flat-button color="primary" [disabled]="!scheduleTimeForm.valid" (click)="onSave()">Save</button>
+    </mat-card-content>
+  </mat-card>
+</form>

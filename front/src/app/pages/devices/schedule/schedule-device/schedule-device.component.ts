@@ -7,7 +7,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {CommandService} from "../schedule-time/command.service";
 import {TasmotaCommand} from "../schedule-time/TasmotaCommand";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {FormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import {ScheduleTaskModel} from "../schedule-time/ScheduleTaskModel";
@@ -32,6 +32,7 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './schedule-device.component.html',
   styleUrl: './schedule-device.component.scss'
@@ -40,19 +41,20 @@ export class ScheduleDeviceComponent implements OnInit {
 
   @Input() selectedDevice?: DeviceDTO;
 
-  scheduleId: number = -1;
+  scheduleId: number | null = -1;
   userDevices: DeviceDTO[] = [];
   tasmotaCommands: TasmotaCommand[] = [];
-  selectedTrigger: string = "";
-  targetDeviceId: number = -1;
-  operation: string | null = null;
-  triggerValue: number | null = null;
-  selectedCommand: string = "";
-  whichValue: string | null = null;
+
+  scheduleDeviceForm: FormGroup = new FormGroup({
+    targetDeviceId: new FormControl(0, [Validators.required]),
+    whichValue: new FormControl("", [Validators.required]),
+    operation: new FormControl("", [Validators.required]),
+    triggerValue: new FormControl(0, [Validators.required]),
+    selectedCommand: new FormControl("", [Validators.required])
+  });
+
 
   scheduleTask?: ScheduleTaskModel[] = [];
-
-
 
 
   constructor(private scheduleService: ScheduleService, private commandService: CommandService, private deviceService: DeviceService) {
@@ -62,13 +64,14 @@ export class ScheduleDeviceComponent implements OnInit {
       console.log(this.userDevices);
       this.tasmotaCommands = this.commandService.tasmotaCommand();
       console.log(this.tasmotaCommands);
-      this.scheduleTask = this.scheduleService.scheduleTask();
-      console.log(this.scheduleTask);
+      if(this.scheduleService.selectedScheduleTask() && this.scheduleService.selectedScheduleTask()?.frequency == "NONE") {
+        this.onEdit(this.scheduleService.selectedScheduleTask());
+      }
     });
   }
 
   ngOnInit(): void {
-    if(this.selectedDevice?.devicesId){
+    if (this.selectedDevice?.devicesId) {
       this.scheduleService.deviceId.set(this.selectedDevice.devicesId);
       console.log(this.scheduleService.deviceId())
       this.scheduleService.getAllDeviceSchedule();
@@ -77,40 +80,43 @@ export class ScheduleDeviceComponent implements OnInit {
     this.commandService.getAllTasmotaCommand();
   }
 
-  onSave(){
-    const schedule: ScheduleTaskModel= {
-      id: this.scheduleId,
-      scheduledTime: "",
-      frequency: Frequency.NONE,
-      targetDeviceId: this.targetDeviceId,
-      whichValue: this.whichValue,
-      conditionOperator: this.operation,
-      whenCondition: this.triggerValue,
-      active: true,
-      // @ts-ignore
-      device: this.selectedDevice,
-      command: {
-        id: +this.selectedCommand,
-        command: "",
-        argument: "",
-        description: ""
+  onSave() {
+    console.log(this.selectedDevice);
+    if (this.scheduleDeviceForm.valid) {
+      const schedule: ScheduleTaskModel = {
+        id: this.scheduleId,
+        scheduledTime: "",
+        frequency: Frequency.NONE,
+        targetDeviceId: this.scheduleDeviceForm.get("targetDeviceId")?.value,
+        whichValue: this.scheduleDeviceForm.get("whichValue")?.value,
+        conditionOperator: this.scheduleDeviceForm.get("operation")?.value,
+        whenCondition: this.scheduleDeviceForm.get("triggerValue")?.value,
+        active: true,
+        // @ts-ignore
+        device: this.selectedDevice,
+        command: {
+          id: +this.scheduleDeviceForm.get("targetDeviceId")?.value,
+          command: "",
+          argument: "",
+          description: ""
+        }
       }
+      console.log("save " + schedule.device)
+      this.scheduleService.saveSchedule(schedule);
     }
-    console.log(schedule)
-    this.scheduleService.saveSchedule(schedule);
+
   }
 
-  onEdit(st: ScheduleTaskModel) {
-    if(st.id && st.whichValue && st.conditionOperator){
-      this.scheduleId = st.id;
-      this.targetDeviceId = st.targetDeviceId;
-      this.whichValue = st.whichValue;
-      this.operation = st.conditionOperator;
-      this.triggerValue = st.whenCondition;
-      this.selectedDevice = st.device;
-      this.selectedCommand = st.command.id+"";
+  onEdit(st: ScheduleTaskModel | null) {
+    if (st != null) {
+      this.scheduleId = st?.id;
+      this.scheduleDeviceForm.get("targetDeviceId")?.setValue(st?.targetDeviceId)
+      this.scheduleDeviceForm.get("whichValue")?.setValue(st?.whichValue)
+      this.scheduleDeviceForm.get("operation")?.setValue(st?.conditionOperator)
+      this.scheduleDeviceForm.get("triggerValue")?.setValue(st?.whenCondition)
+      this.scheduleDeviceForm.get("selectedCommand")?.setValue(+st?.command.id)
     }
-
+    console.log(this.selectedDevice)
   }
 
   onDelete(st: ScheduleTaskModel) {

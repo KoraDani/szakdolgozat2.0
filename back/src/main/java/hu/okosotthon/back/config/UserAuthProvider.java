@@ -63,8 +63,6 @@ public class UserAuthProvider {
 
         String[] authElements = token.split(" ");
 
-        System.out.println(authElements[1]);
-
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         JWTVerifier verifier = JWT.require(algorithm).build();

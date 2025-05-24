@@ -11,21 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/mqtt")
 public class MQTTController {
 
-    @Autowired
-    private MqttService mqttService;
+//    @Autowired
+//    private MqttService mqttService;
 
-    @GetMapping("/testAutoDetect")
-    public ResponseEntity<DeviceDTO> getCurrentUser(@RequestParam String topic){
-//        mqttService.subscribeToTopic("cmnd/"+topic+"/STATUS");
-//        mqttService.subscribeToTopic("cmnd/"+topic+"/GPIO");
-//        mqttService.subscribeToTopic("stat/"+topic+"/RESULT");
-//        mqttService.subscribeToTopic("stat/"+topic+"/STATUS8");
-        return null;
-    }
-
-    @PostMapping("/sendMessageToDevice")
-    public ResponseEntity<Boolean> sendMessageToDevice(@RequestBody WebSocModel webSocModel){
-        mqttService.setWebSocModel(webSocModel);
-        return new ResponseEntity<>(this.mqttService.sendMessageToDevice(webSocModel), HttpStatus.OK);
-    }
+//    @PostMapping("/sendMessageToDevice")
+//    public ResponseEntity<Boolean> sendMessageToDevice(@RequestBody WebSocModel webSocModel){
+//        mqttService.setWebSocModel(webSocModel);
+//        return new ResponseEntity<>(this.mqttService.sendMessageToDevice(webSocModel), HttpStatus.OK);
+//    }
 }

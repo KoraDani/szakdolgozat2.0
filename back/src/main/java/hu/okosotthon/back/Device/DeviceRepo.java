@@ -15,16 +15,13 @@ public interface DeviceRepo extends JpaRepository<Devices, Integer> {
     @Query("SELECT new hu.okosotthon.back.Device.DeviceDTO(d.devicesId,d.deviceName,d.location, d.topic,d.active) FROM Devices d WHERE d.users.userId = ?1 AND d.active = 1")
     List<DeviceDTO> getAllByUserId(int userId);
 
-//    @Query("SELECT new hu.okosotthon.back.Device.DeviceDTO(d) FROM Devices d WHERE d.topic = ?1 AND d.active = 1")
-//    DeviceDTO getDevicesDTOByTopic(String topic);
-
     @Query("SELECT d FROM Devices d WHERE d.topic = ?1 AND d.active = 1")
     Devices getDevicesByTopic(String topic);
 
     @Query("SELECT new hu.okosotthon.back.Device.DeviceDTO(d) FROM Devices d WHERE d.devicesId = ?1 AND d.active = 1")
     DeviceDTO getDevicesByDevicesId(int deviceId);
 
-    @Query("SELECT d FROM Devices d WHERE d.devicesId = ?1")
+    @Query("SELECT new hu.okosotthon.back.Device.Devices(d) FROM Devices d WHERE d.devicesId = ?1")
     Devices getDevicesByDevicesId2(int deviceId);
 }
 

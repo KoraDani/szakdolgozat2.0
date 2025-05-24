@@ -6,6 +6,8 @@ import hu.okosotthon.back.tasmotaCommand.TasmotaCommand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -41,6 +43,7 @@ public class ScheduleTask {
     @ManyToOne
     @JoinColumn(name = "devices_id")
     @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Devices device;
 
     @ManyToOne

@@ -1,6 +1,7 @@
 package hu.okosotthon.back.Device;
 
-import hu.okosotthon.back.Mqtt.MqttService;
+import hu.okosotthon.back.Mqtt.MqttMessagingService;
+import hu.okosotthon.back.Mqtt.WebSocModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +15,15 @@ import java.util.List;
 public class DeviceController {
 
     private DeviceService deviceService;
-    private MqttService mqttService;
 
     @Autowired
-    public DeviceController(DeviceService deviceService,MqttService mqttService) {
+    public DeviceController(DeviceService deviceService) {
         this.deviceService = deviceService;
-        this.mqttService = mqttService;
     }
 
     //Creat
     @PostMapping("/saveDevice")
     public ResponseEntity<Devices> saveDevice(@RequestBody DeviceDTO deviceDTO, @RequestParam int userId) {
-        this.mqttService.subscribeToTopic2(deviceDTO.getTopic());
         return new ResponseEntity<>(this.deviceService.save(deviceDTO, userId), HttpStatus.OK);
     }
 
@@ -46,16 +44,16 @@ public class DeviceController {
 
     //Update
     @PostMapping("/updateDevice")
-    public ResponseEntity<Boolean> updateDevice(@RequestBody DeviceDTO deviceDTO, @RequestHeader("Authorization") String token) {
-        if (this.deviceService.updateDevice(deviceDTO, token) != null){
+    public ResponseEntity<Boolean> updateDevice(@RequestBody DeviceDTO deviceDTO, @RequestParam int userId) {
+        if (this.deviceService.updateDevice(deviceDTO, userId) != null){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
         return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 
     //Delete
-    @DeleteMapping("/deleteDevice")
-    public ResponseEntity<Boolean> deleteDevice(@RequestParam int devicesId) {
+    @PostMapping("/deleteDevice")
+    public ResponseEntity<Boolean> deleteDevice(@RequestBody int devicesId) {
         if(this.deviceService.deleteDevice(devicesId).getActive() == 0){
             return new ResponseEntity<>(true, HttpStatus.OK);
         }

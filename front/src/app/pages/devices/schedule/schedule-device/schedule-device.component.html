@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Scheduled Actions</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="scheduleDeviceForm">
+      <mat-form-field>
+        <mat-label>Target Device</mat-label>
+        <mat-select formControlName="targetDeviceId">
+          @for (device of userDevices; track $index) {
+            <mat-option [value]="device.devicesId">{{ device.deviceName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-radio-group formControlName="whichValue">
+        <mat-radio-button value="Temperature">Temperature</mat-radio-button>
+        <mat-radio-button value="Humidity">Humidity</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field>
+        <mat-label>Condition</mat-label>
+        <mat-select formControlName="operation">
+          <mat-option value="lt">Lower</mat-option>
+          <mat-option value="eq">Equal</mat-option>
+          <mat-option value="gt">Upper</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>When?</mat-label>
+        @if (scheduleDeviceForm.get("whichValue")?.value == "Humidity") {
+          <input matInput type="number" formControlName="triggerValue" min="0" max="100">
+        } @else {
+          <input matInput type="number" formControlName="triggerValue">
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Action</mat-label>
+        <mat-select formControlName="selectedCommand">
+          @for (cmd of tasmotaCommands; track $index) {
+            <mat-option [value]="cmd.id">{{ cmd.argument }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!scheduleDeviceForm.valid" (click)="onSave()">Save</button>
+    </form>
+
+
+  </mat-card-content>
+</mat-card>

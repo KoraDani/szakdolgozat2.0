@@ -8,7 +8,7 @@ import {MatCardModule, MatCardHeader, MatCardTitle, MatCardContent} from '@angul
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import convert from "color-convert";
-import {ScheduleTimeComponent} from "../schedule-time/schedule-time.component";
+import {ScheduleTimeComponent} from "../../schedule/schedule-time/schedule-time.component";
 import {MatLabel} from "@angular/material/form-field";
 import {MatButtonModule} from "@angular/material/button";
 
@@ -60,50 +60,33 @@ export class LightComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-//TODO beleírni hogy milyen topicocra iratkozzon fel a státus megszerzéséhez
-    this.webSocModel = {
-      destination: '/app/power',
-      listen: '/topic/power',
-      topic: this.selectedDevice?.topic + "",
-      message: [{
-        prefix: "cmnd/",
-        postfix: "/Power",
-        msg: " "
-      },{
-        prefix: "cmnd/",
-        postfix: "/Dimmer",
-        msg: " "
-      },{
-        prefix: "cmnd/",
-        postfix: "/CT",
-        msg: " "
-      },{
+    if (this.selectedDevice) {
+      this.webSocModel = {
+        destination: '/app/power',
+        listen: '/topic/power',
+        topic: this.selectedDevice?.topic,
+        message: [{
           prefix: "cmnd/",
-          postfix: "/White",
+          postfix: "/HSBColor",
           msg: " "
-      },{
-        prefix: "cmnd/",
-        postfix: "/HSBColor",
-        msg: " "
-      }]
-    };
-
+        }, {
+          prefix: "stat/",
+          postfix: "/RESULT",
+          msg: " "
+        }]
+      };
+    }
     this.getDeviceStatus(this.webSocModel);
-
     this.selectedDevice?.sensors.forEach(sensor => {
-      console.log(sensor)
       this.setFields(sensor.fieldJSON);
     })
-
-    this.websocket.subscribeToMessages().subscribe(this.webSocModel.listen, (message) => {
-      console.log('Received:', message.body);
-      this.setLightStatus(message.body);
-      this.loading = false;
-
-    });
-
-
+    this.websocket.subscribeToMessages()
+      .subscribe(
+        this.webSocModel.listen,
+        (message) => {
+          this.setLightStatus(message.body);
+          this.loading = false;
+        });
   }
 
 
@@ -143,8 +126,7 @@ export class LightComponent implements OnInit, OnDestroy {
           break;
         case 'HSBColor':
           // @ts-ignore
-          const hsl: string[] = msgElement[1].split(',');
-          this.rgb = "#" + convert.hsv.hex(+hsl[0], +hsl[1], +hsl[2]).toString();
+          this.rgb = this.convertHSBtoHex(msgElement[1].split(','))
           break;
         case 'CT':
           this.ct = Number(msgElement[1]);
@@ -152,6 +134,10 @@ export class LightComponent implements OnInit, OnDestroy {
       }
     }
     this.cdr.detectChanges();
+  }
+
+  convertHSBtoHex(hsb: string[]) {
+    return "#" + convert.hsv.hex(+hsb[0], +hsb[1], +hsb[2]).toString();
   }
 
   changeDimmer(n: number) {
@@ -167,12 +153,12 @@ export class LightComponent implements OnInit, OnDestroy {
       }]
     };
     this.mqttService.sendMessageToDevice(this.webSocModel).subscribe(val => {
-      console.log(val)
+      // console.log(val)
     });
   }
 
   onColorPick() {
-    console.log(this.rgb)
+    // console.log(this.rgb)
     // this.mqttService.sendMessageToDevice("cmnd/"+this.topic+"/Color", this.hexng1 + "").subscribe(val => {
     this.webSocModel = {
       destination: '/app/light',
@@ -190,7 +176,7 @@ export class LightComponent implements OnInit, OnDestroy {
         }]
     };
     this.mqttService.sendMessageToDevice(this.webSocModel).subscribe(val => {
-      console.log(val)
+      // console.log(val)
     });
   }
 
@@ -207,7 +193,7 @@ export class LightComponent implements OnInit, OnDestroy {
       }]
     };
     this.mqttService.sendMessageToDevice(this.webSocModel).subscribe(val => {
-      console.log(val);
+      // console.log(val);
     }, error => {
       console.error(error);
     });
@@ -226,7 +212,7 @@ export class LightComponent implements OnInit, OnDestroy {
       }]
     };
     this.mqttService.sendMessageToDevice(this.webSocModel).subscribe(val => {
-      console.log(val);
+      // console.log(val);
     }, error => {
       console.error(error);
     });

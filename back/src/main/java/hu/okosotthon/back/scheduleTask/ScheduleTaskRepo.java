@@ -15,9 +15,10 @@ public interface ScheduleTaskRepo extends JpaRepository<ScheduleTask, Integer> {
     @Query("SELECT st FROM ScheduleTask st WHERE st.device.devicesId = ?1")
     List<ScheduleTask> getScheduleTaskByDeviceIs(int deviceId);
 
-    @Query("SELECT new hu.okosotthon.back.scheduleTask.ScheduleTaskDTO(st) FROM ScheduleTask st WHERE st.scheduledTime = ?1")
+    @Query("SELECT new hu.okosotthon.back.scheduleTask.ScheduleTaskDTO(st) FROM ScheduleTask st WHERE st.scheduledTime = ?1 AND st.device IS NOT NULL")
     List<ScheduleTaskDTO> findAllScheduleTasksForTime(String time);
 
     @Query("SELECT new hu.okosotthon.back.scheduleTask.ScheduleTaskDTO(st) FROM ScheduleTask st WHERE st.frequency = 0")
     List<ScheduleTaskDTO> findAllScheduleTasksForCondition();
+
 }

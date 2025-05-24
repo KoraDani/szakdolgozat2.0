@@ -1,30 +1,35 @@
 <div class="flex-div">
-  @if (isLoaded) {
-
+<!--  @if (isLoaded) {-->
 
     <div>
       @for (sensor of this.selectedDevice.sensors; track $index) {
 
+        @switch (sensor.category){
+          @case ('temp'){
+            <app-temperature [selectedDevice]="selectedDevice"/>
+          }
+          @case ('plug'){
+            <app-plug [selectedDevice]="selectedDevice"/>
+          }
+          @case ('light'){
+            <app-light [selectedDevice]="selectedDevice"></app-light>
+          }
+          @case ('switch'){
+            <app-switch [selectedDevice]="selectedDevice"></app-switch>
+          }
+        }
+
         @if (sensor.category === 'temp') {
-          <app-temperature [selectedDevice]="selectedDevice"/>
+          <app-schedule-device [selectedDevice]="selectedDevice"></app-schedule-device>
         }
-        @if (sensor.category === 'plug') {
-          <app-plug [selectedDevice]="selectedDevice"/>
-        }
-        @if (sensor.category === 'light') {
-          <app-light [selectedDevice]="selectedDevice"></app-light>
-        }
-        @if (sensor.category === 'switch') {
-          <app-switch [selectedDevice]="selectedDevice"></app-switch>
+        @if (sensor.category === 'plug' || sensor.category === 'light' || sensor.category === 'switch') {
+          <app-schedule-time [selectedDevice]="selectedDevice"></app-schedule-time>
         }
       }
     </div>
     <div>
-      <app-schedule-time [selectedDevice]="selectedDevice"></app-schedule-time>
+      <app-schedule-table [selectedDevice]="selectedDevice"></app-schedule-table>
     </div>
-    <div>
-      <app-schedule-device [selectedDevice]="selectedDevice"></app-schedule-device>
-    </div>
-  }
+<!--  }-->
 
 </div>

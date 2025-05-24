@@ -1,24 +1,41 @@
-<div>
-  <form [formGroup]="deviceForm" fxLayout="column">
-    <mat-form-field appearance="outline">
-      <mat-label>Topic</mat-label>
-      <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
-    </mat-form-field>
-    @if (detectedDevice && detectedSensors) {
 
-      <ng-template matStepLabel>Eszköz általános adatai</ng-template>
-      <mat-form-field appearance="outline">
-        <mat-label>Eszköz neve</mat-label>
-        <input matInput name="deviceName" placeholder="Eszköz Neve" type="text" formControlName="deviceName">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Elhelyezkedése</mat-label>
-        <input matInput name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
-      </mat-form-field>
+<mat-card>
+  <mat-card-title>{{isUpdate ? "Update Device" : "Add Device"}}</mat-card-title>
+  <mat-card-content>
+    <div>
+      <form [formGroup]="deviceForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Topic</mat-label>
+          <input matInput name="topic" placeholder="Topic" type="text" formControlName="topic">
+
+        </mat-form-field>
+        @if ((detectedDevice && detectedSensors) || isUpdate) {
+
+          <ng-template matStepLabel>Eszköz általános adatai</ng-template>
+          <mat-form-field appearance="outline">
+            <mat-label>Device Name</mat-label>
+            <input matInput name="deviceName" placeholder="Eszköz Neve" type="text" formControlName="deviceName">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input matInput name="location" placeholder="Elhelyezkedése" type="text" formControlName="location">
+          </mat-form-field>
+        }
+      </form>
+    </div>
+
+    @if (this.errorStatus == 409) {
+      <p>Topic already in use, Please use another topic</p>
     }
-  </form>
-</div>
 
-<button mat-raised-button type="submit" color="primary" (click)="autoDetect()">Auto Detect</button>
-<button mat-raised-button type="submit" color="primary" (click)="saveDevice()">Save</button>
+    @if (isUpdate) {
+      <button mat-raised-button type="submit" color="primary" (click)="updateDevice()">Save</button>
+    } @else {
+      <button mat-raised-button type="submit" color="primary" (click)="autoDetect()">Auto Detect</button>
+      <button mat-raised-button type="submit" color="primary" (click)="saveDevice()">Save</button>
+
+    }
+  </mat-card-content>
+</mat-card>
+
 

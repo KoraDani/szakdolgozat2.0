@@ -1,5 +1,13 @@
 import {Component, effect, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroupDirective, NgForm
+} from "@angular/forms";
 import {DeviceService} from "../device.service";
 import {Router} from "@angular/router";
 import {WebSocketService} from "../WebSocketService";
@@ -8,20 +16,22 @@ import {SensorService} from "../sensor.service";
 import {Sensor} from "../../../shared/model/Sensor";
 import {DeviceDTO} from "../../../shared/model/dto/DeviceDTO";
 import {WebSocketModel} from "../WebSocketModel";
-import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {NgIf} from '@angular/common';
 import {MatStepLabel} from '@angular/material/stepper';
 import {MatButton} from '@angular/material/button';
 import {AuthService} from "../../../auth.service";
 import {UserDTO} from "../../../shared/model/dto/UserDTO";
+import {ErrorStateMatcher} from '@angular/material/core';
+import {MatCardModule} from "@angular/material/card";
 
 @Component({
   selector: 'app-create-device',
   standalone: true,
   templateUrl: './create-device.component.html',
   styleUrls: ['./create-device.component.scss'],
-  imports: [FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatStepLabel, MatButton]
+  imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatLabel, MatInput, MatStepLabel, MatButton, MatCardModule]
 })
 export class CreateDeviceComponent implements OnInit {
   deviceForm: FormGroup = new FormGroup({
@@ -42,6 +52,7 @@ export class CreateDeviceComponent implements OnInit {
   detectedDevice?: DetectedDevice;
   detectedSensors: Sensor[] = [];
   json?: Map<any, any>;
+  errorStatus: number = 0;
 
   webSocModel: WebSocketModel = {
     destination: '/app/request',
@@ -82,6 +93,18 @@ export class CreateDeviceComponent implements OnInit {
   };
   private user: UserDTO = {id: null, username: "", email: "", token: "", role: ""};
 
+  deviceUpdate: DeviceDTO = {
+    devicesId: -1,
+    deviceName: "",
+    sensors: [],
+    measurements: [],
+    location: "",
+    topic: "",
+    active: ""
+  };
+
+  isUpdate: boolean = false;
+
   constructor(private deviceService: DeviceService, private fb: FormBuilder, private router: Router, private websocket: WebSocketService, private sensorService: SensorService, private authService: AuthService) {
     this.deviceForm = this.fb.group({
       deviceName: ['', [Validators.required]],
@@ -93,16 +116,25 @@ export class CreateDeviceComponent implements OnInit {
     effect(() => {
       this.user = this.authService.currentUser();
       console.log(this.authService.currentUser().id)
+      this.errorStatus = this.deviceService.errorMessage();
     })
+
+    const nav = this.router.getCurrentNavigation();
+    if (nav?.extras?.state?.['device']) {
+      this.deviceUpdate = nav.extras.state['device'];
+      this.isUpdate = true;
+      this.deviceForm.get("topic")?.setValue(this.deviceUpdate.topic);
+      this.deviceForm.get("deviceName")?.setValue(this.deviceUpdate.deviceName);
+      this.deviceForm.get("location")?.setValue(this.deviceUpdate.location);
+    }
   }
 
   jsonMessage: any;
 
   ngOnInit(): void {
-    const token = localStorage.getItem("token");
-    if (token != null) {
-      this.authService.getUserByToken("Bearer: " +token);
-    }
+
+      this.authService.getUserByToken();
+
 
     this.websocket.subscribeToMessages().subscribe(this.webSocModel.listen, (message) =>  {
       console.log(message.body);
@@ -159,26 +191,6 @@ export class CreateDeviceComponent implements OnInit {
       this.deviceService.saveDevice(device, this.user.id);
     }
   }
-
-
-  /**
-   * Első lehetőség: drag&droppal úgy hogy a felhasználónak meg van addva milyen inputokat tud
-   *                  használni és az alapján rakja össze
-   *
-   * Második lehetőség: mint ahogy MySQL-ben beírja az input nevét, megadja típusát, stb. és így össze állítja
-   *                  és így le lesz generálva naki hogy miket szeretne fogadni a saját eszközétől
-   *
-   * Harmadik lehetőség: JSON-ként eltárolom azt hogy a felhasználó miket akar megjeleníteni és az alapján fogom
-   *                  legenerálni a monitorozást.
-   *
-   *
-   *    Mind a háromban ez az egy funkció közös: Miután ez megtörént és a monitor oldalon van akkor a felhasználó funkciókat adhat hozzá hogy ha
-   *                  felkapcsolja a lámpát történjen, ez meg az, vagy a szoba hőmérséklete elér egy pontott akkor történyen más dolog
-   * */
-    // saveInputData() {
-    //   console.log(this.fields.value);
-    // }
-    // protected readonly onfocus = onfocus;
   protected readonly Object = Object;
 
 
@@ -197,4 +209,21 @@ export class CreateDeviceComponent implements OnInit {
   }
 
   protected readonly Array = Array;
+
+  updateDevice() {
+    let device: DeviceDTO = {
+      devicesId: this.deviceUpdate.devicesId,
+      deviceName: this.deviceForm.get("deviceName")?.value,
+      sensors: this.deviceUpdate.sensors,
+      measurements: [],
+      location: this.deviceForm.get("location")?.value,
+      topic: this.deviceForm.get("topic")?.value,
+      active: 1
+    }
+    console.log(device);
+    // console.log(this.user.id);
+    if (this.user.id != undefined){
+      this.deviceService.updateDevice(device, this.user.id);
+    }
+  }
 }

@@ -16,6 +16,19 @@
           <p class="topic">{{ device.topic }}</p>
 <!--          <p>{{ device.devicesId }}</p>-->
           <button mat-raised-button color="primary" (click)="viewDevice(device)">View</button>
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onEdit(device)">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="onDelete(device)">
+              <mat-icon>delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
         </mat-card-content>
       </mat-card>
     }
